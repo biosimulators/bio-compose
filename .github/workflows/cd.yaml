@@ -1,0 +1,37 @@
+name: Continuous Deployment
+
+on:
+  release:
+    types: [created]
+
+jobs:
+  run_redundant_test:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Set up Python
+      uses: actions/setup-python@v2
+      with:
+        python-version: '3.10'
+
+    # this CD assumes that CI has already been run (on each push to main), and thus tests have passed.
+    - name: Test BioCompose API
+      run: |
+        pytest
+
+  release_new_version:
+    needs: run_redundant_test
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Release new version on PyPI
+      run: |
+        echo "Run pypi_release.sh here"
+      # run: ./push.sh
+
+    - name: Notify Deployment
+      run: echo "Deployment successful on release ${{ github.ref }}"

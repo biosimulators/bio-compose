@@ -3,11 +3,9 @@ import os
 import abc
 from typing import * 
 
-import requests
-from requests.exceptions import RequestException
 from requests_toolbelt.multipart.encoder import MultipartEncoder
 
-from bio_compose.data_model import RequestError, Api
+from bio_compose.data_model import Api
 
 
 class SimulationRunner(Api):
@@ -23,11 +21,13 @@ class SimulationRunner(Api):
 
     def run_smoldyn_simulation(self, smoldyn_configuration_filepath: str, duration: int = None, dt: float = None):
         endpoint = self._format_endpoint(f'run-smoldyn')
+        
+        # multipart
         input_fp = (smoldyn_configuration_filepath.split('/')[-1], open(smoldyn_configuration_filepath, 'rb'), 'application/octet-stream')
-
         encoder_fields = {'uploaded_file': input_fp}
         multidata = MultipartEncoder(fields=encoder_fields)
 
+        # query and headers
         query_params = {'duration': str(duration), 'dt': str(dt)}
         headers = {'Content-Type': multidata.content_type}
 
