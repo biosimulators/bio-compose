@@ -1,6 +1,6 @@
 import os
 
-from bio_check.verifier import Verifier
+from bio_compose.verifier import Verifier
 
 
 current_dir = os.path.dirname(__file__)
