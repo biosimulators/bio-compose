@@ -20,8 +20,8 @@ from bio_compose.processing_tools import generate_color_gradient
 from bio_compose.data_model import Api, RequestError
 
 
-class Verifier:
-    """Quasi-proxy object that is used to represent the content of the BioCheck REST API and its methods therein."""
+class Verifier(Api):
+    """Quasi-proxy object that is used to represent the content of the BioCompose REST API and its methods therein."""
     endpoint_root: str
     data: Dict
     submitted_jobs: List[Dict]
@@ -30,11 +30,7 @@ class Verifier:
         """A new instance of the Verifier class. NOTE: this may clash with your record keeping in a notebook, so it is highly recommended that users
             treat instances of this class as quasi-singletons, although not necessary for fundamental interaction.
         """
-        self.endpoint_root = "https://biochecknet.biosimulations.org"
-        root_response = self._test_root()
-        print(root_response)
-        self.data: Dict = {}
-        self.submitted_jobs: List[Dict] = []
+        super().__init__()
 
     # -- api calls
     def verify_omex(
