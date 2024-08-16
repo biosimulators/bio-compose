@@ -5,7 +5,7 @@ version = "0.1.0"
 description = "Create, execute, and introspect reproducible composite simulations of dynamic biological systems."
 authors = ["Alex Patrie <alexanderpatrie@gmail.com>"]
 readme = "README.md"
-packages = [{include = "bio_compose"}]
+packages = [{include = "bio_compose"}, {include = "tests"}]
 
 [tool.poetry.dependencies]
 python = ">=3.10"
