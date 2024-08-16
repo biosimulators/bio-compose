@@ -1,0 +1,27 @@
+# This project configuration should relate only to the high level notebook api (as primary deps).
+[tool.poetry]
+name = "bio-compose"
+version = "0.1.0"
+description = "Create, execute, and introspect reproducible composite simulations of dynamic biological systems."
+authors = ["Alex Patrie <alexanderpatrie@gmail.com>"]
+readme = "README.md"
+packages = [{include = "bio_compose"}]
+
+[tool.poetry.dependencies]
+python = ">=3.10"
+requests-toolbelt = "^1.0.0"
+seaborn = "^0.13.2"
+antimony = "^2.15.0"
+process-bigraph = "^0.0.19"
+
+[tool.poetry.group.dev.dependencies]
+pytest = "^8.3.2"
+
+[tool.pytest.ini_options]
+testpaths = ["bio_compose"]
+addopts = "--ignore=setup.py"
+python_files = "tests.py"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
