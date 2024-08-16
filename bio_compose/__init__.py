@@ -1,7 +1,5 @@
 import os
 
-from bio_compose.verifier import Verifier
-
 
 current_dir = os.path.dirname(__file__)
 version_file_path = os.path.join(current_dir, '_VERSION')

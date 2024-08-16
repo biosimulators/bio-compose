@@ -17,7 +17,7 @@ from requests.exceptions import RequestException
 from requests_toolbelt.multipart.encoder import MultipartEncoder
 
 from bio_compose.processing_tools import generate_color_gradient
-from bio_compose.data_model import Api
+from bio_compose.data_model import Api, RequestError
 
 
 class Verifier:
