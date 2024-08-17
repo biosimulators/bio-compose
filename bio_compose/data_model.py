@@ -1,5 +1,5 @@
 from dataclasses import asdict, dataclass
-from typing import Dict, List
+from typing import Dict, List, Union
 
 import requests
 
@@ -58,4 +58,28 @@ class Api:
             return resp.json()
         except requests.RequestException as e:
             return {'bio-check-error': f"A connection to that endpoint could not be established: {e}"}
+        
+    def get_output(self, job_id: str) -> Union[Dict[str, Union[str, Dict]], RequestError]:
+        """Fetch the current state of the job referenced with `cjob_id`. If the job has not yet been processed, it will return a `status` of `PENDING`. If the job is being processed by
+            the service at the time of return, `status` will read `IN_PROGRESS`. If the job is complete, the job state will be returned, optionally with included result data.
+
+            Args:
+                job_id:`str`: The id of the ob submission.
+
+            Returns:
+                The job state of the task referenced by `comparison_id`. If the job has not yet been processed, it will return a `status` of `PENDING`.
+        """
+        piece = f'get-output/{job_id}'
+        endpoint = self._format_endpoint(piece)
+
+        headers = {'Accept': 'application/json'}
+
+        try:
+            response = requests.get(endpoint, headers=headers)
+            self._check_response(response)
+            data = response.json()
+            self.data[job_id] = data
+            return data
+        except Exception as e:
+            return RequestError(error=str(e))
         

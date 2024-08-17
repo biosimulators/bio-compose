@@ -3,8 +3,14 @@ from bio_compose.runner import SimulationRunner
 from bio_compose.composer import Composer
 
 
+DEFAULT_DURATION = 5
+
+test_runner = SimulationRunner()
+test_verifier = Verifier()
+
+
 def test_run_smoldyn():
-    pass 
+    assert test_runner._test_root() is not None
 
 
 def test_run_utc():
@@ -12,13 +18,11 @@ def test_run_utc():
 
 
 def test_verify_sbml():
-    verifier = Verifier()
-    assert verifier._test_root() is not None
+    assert test_verifier._test_root() is not None
 
 
 def test_verify_omex():
-    verifier = Verifier()
-    assert verifier._test_root() is not None
+    assert test_verifier._test_root() is not None
 
 
 def test_run_composition():

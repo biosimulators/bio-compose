@@ -28,7 +28,12 @@ class SimulationRunner(Api):
         multidata = MultipartEncoder(fields=encoder_fields)
 
         # query and headers
-        query_params = {'duration': str(duration), 'dt': str(dt)}
+        query_params = {}
+        query_args = [('duration', duration), ('dt', dt)]
+        for arg in query_args:
+            if arg[1] is not None:
+                query_params[arg[0]] = str(arg[1])
+
         headers = {'Content-Type': multidata.content_type}
 
         return self._execute_request(endpoint=endpoint, headers=headers, multidata=multidata, query_params=query_params)

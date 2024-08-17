@@ -196,30 +196,6 @@ class Verifier(Api):
         except Exception as e:
             return RequestError(error=str(e))
 
-    def get_verify_output(self, job_id: str) -> Union[Dict[str, Union[str, Dict]], RequestError]:
-        """Fetch the current state of the job referenced with `comparison_id`. If the job has not yet been processed, it will return a `status` of `PENDING`. If the job is being processed by
-            the service at the time of return, `status` will read `IN_PROGRESS`. If the job is complete, the job state will be returned, optionally with included result data.
-
-            Args:
-                job_id:`str`: The id of the comparison job submission.
-
-            Returns:
-                The job state of the task referenced by `comparison_id`. If the job has not yet been processed, it will return a `status` of `PENDING`.
-        """
-        piece = f'get-verify-output/{job_id}'
-        endpoint = self._format_endpoint(piece)
-
-        headers = {'Accept': 'application/json'}
-
-        try:
-            response = requests.get(endpoint, headers=headers)
-            self._check_response(response)
-            data = response.json()
-            self.data[job_id] = data
-            return data
-        except Exception as e:
-            return RequestError(error=str(e))
-
     def get_compatible(self, file: str, versions: bool = False) -> Union[List[Tuple[Any, ...]], RequestError]:
         """Get all simulators and optionally their versions for a given file. The File is expected to be either an OMEX/COMBINE archive
             or SBML file.
@@ -232,7 +208,7 @@ class Verifier(Api):
                 A dict of compatible simulators and the referenced file.
 
         """
-        endpoint = self._format_endpoint('get-compatible')
+        endpoint = self._format_endpoint('get-compatible-for-verification')
         fp = (file.split('/')[-1], open(file, 'rb'), 'application/octet-stream')
 
         encoder_fields = {'uploaded_file': fp}
