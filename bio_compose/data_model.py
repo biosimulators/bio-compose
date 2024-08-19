@@ -1,4 +1,5 @@
 from dataclasses import asdict, dataclass
+import os
 from typing import Dict, List, Union
 
 import requests
@@ -59,15 +60,17 @@ class Api:
         except requests.RequestException as e:
             return {'bio-check-error': f"A connection to that endpoint could not be established: {e}"}
         
-    def get_output(self, job_id: str) -> Union[Dict[str, Union[str, Dict]], RequestError]:
-        """Fetch the current state of the job referenced with `cjob_id`. If the job has not yet been processed, it will return a `status` of `PENDING`. If the job is being processed by
-            the service at the time of return, `status` will read `IN_PROGRESS`. If the job is complete, the job state will be returned, optionally with included result data.
+    def get_output(self, job_id: str, download_dest: str, filename: str = None) -> Union[Dict[str, Union[str, Dict]], RequestError]:
+        """Fetch the current state of the job referenced with `job_id`. If the job has not yet been processed, it will return a `status` of `PENDING`. If the job is being processed by
+            the service at the time of return, `status` will read `IN_PROGRESS`. If the job is complete, the job state will be returned, optionally with included result data (either JSON or downloadable file data).
 
             Args:
-                job_id:`str`: The id of the ob submission.
+                job_id:`str`: The id of the job submission.
+                download_dest:`str`: Directory where the file will be downloaded if the output is a file. Defaults to the current directory.
+                filename:`str`: Optional filename to save the downloaded file as. If not provided, the filename will be extracted from the Content-Disposition header.
 
             Returns:
-                The job state of the task referenced by `comparison_id`. If the job has not yet been processed, it will return a `status` of `PENDING`.
+                If the output is a JSON response, return the parsed JSON as a dictionary. If the output is a file, download the file and return the filepath. If an error occurs, return a RequestError.
         """
         piece = f'get-output/{job_id}'
         endpoint = self._format_endpoint(piece)
@@ -77,9 +80,37 @@ class Api:
         try:
             response = requests.get(endpoint, headers=headers)
             self._check_response(response)
-            data = response.json()
-            self.data[job_id] = data
-            return data
+            
+            # Check the content type of the response
+            content_type = response.headers.get('Content-Type')
+            
+            # case: response is raw data
+            if 'application/json' in content_type:
+                data = response.json()
+                self.data[job_id] = data
+                return data
+            # otherwise: response is downloadable file
+            else:
+                content_disposition = response.headers.get('Content-Disposition')
+                
+                # extract the filename from the Content-Disposition header
+                if not filename and content_disposition:
+                    filename = content_disposition.split('filename=')[-1].strip('"')
+                # fallback to a default filename if none is provided or extracted
+                elif not filename:
+                    filename = f'{job_id}_output'
+
+                # ensure the download directory exists
+                # os.makedirs(download_dest, exist_ok=True)
+                
+                filepath = os.path.join(download_dest, filename)
+
+                # Save the file
+                with open(filepath, 'wb') as f:
+                    f.write(response.content)
+                
+                return {'results_file': filepath}
+
         except Exception as e:
             return RequestError(error=str(e))
         
