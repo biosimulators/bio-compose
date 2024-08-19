@@ -56,6 +56,24 @@ class SimulationRunner(Api):
         headers = {'Content-Type': multidata.content_type}
 
         return self._execute_request(endpoint=endpoint, headers=headers, multidata=multidata, query_params=query_params)
+    
+    def generate_simularium_file(self, smoldyn_output_filepath: str, box_size: float, filename: str = None):
+        endpoint = self._format_endpoint(f'generate-simularium-file')
+
+        # multipart 
+        input_fp = (smoldyn_output_filepath.split('/')[-1], open(smoldyn_output_filepath, 'rb'), 'application/octet-stream')
+        encoder_fields = {'uploaded_file': input_fp}
+        multidata = MultipartEncoder(fields=encoder_fields)
+
+        # query
+        query_params = {'box_size': str(box_size)}
+        if filename is not None:
+            query_params['filename'] = filename
+
+        # headers 
+        headers = {'Content-Type': multidata.content_type}
+
+        return self._execute_request(endpoint=endpoint, headers=headers, multidata=multidata, query_params=query_params)
         
         
     
