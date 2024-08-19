@@ -1,7 +1,7 @@
 [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/drive/1ip_gEiTvesO4tY2nFrOlZnG90z0Yq-uI#scrollTo=Fzaib0pdVccJ)
-[![Convert Smoldyn outputs to Simularium]](https://colab.research.google.com/drive/17uMMRq3L3KqRIXnezahM6TtOtJYK8Cu6#scrollTo=6n5Wf58hthFm)
 ![GitHub CI](https://github.com/biosimulators/bio-compose/actions/workflows/ci.yaml/badge.svg)
 ![GitHub CD](https://github.com/biosimulators/bio-compose/actions/workflows/cd.yaml/badge.svg)
+[Convert Smoldyn outputs to Simularium](https://colab.research.google.com/drive/17uMMRq3L3KqRIXnezahM6TtOtJYK8Cu6#scrollTo=6n5Wf58hthFm)
 # BioCompose: Create, execute, and introspect reproducible composite simulations of dynamic biological systems.
 #### __This service utilizes separate containers for REST API management, job processing, and datastorage with MongoDB, ensuring scalable and robust performance.__
 
