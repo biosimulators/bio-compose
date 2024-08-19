@@ -1,4 +1,4 @@
-[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/drive/19uxh93pZvhCGXkC7a15SmAx4oH4MV7OJ#scrollTo=j_mN-EE3vanZ)
+[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/drive/1ip_gEiTvesO4tY2nFrOlZnG90z0Yq-uI#scrollTo=Fzaib0pdVccJ)
 ![GitHub CI](https://github.com/biosimulators/bio-compose/actions/workflows/ci.yaml/badge.svg)
 ![GitHub CD](https://github.com/biosimulators/bio-compose/actions/workflows/cd.yaml/badge.svg)
 # BioCompose: Create, execute, and introspect reproducible composite simulations of dynamic biological systems.
