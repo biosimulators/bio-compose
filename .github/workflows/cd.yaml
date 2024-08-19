@@ -21,9 +21,9 @@ jobs:
         python -m pip install --upgrade pip
         pip install -r requirements.txt
 
-    - name: Test BioCompose API
-      run: |
-        pytest
+    # - name: Test BioCompose API
+    #   run: |
+    #     pytest
 
   release_new_version:
     needs: run_redundant_test
