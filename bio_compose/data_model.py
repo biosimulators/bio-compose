@@ -60,14 +60,14 @@ class Api:
         except requests.RequestException as e:
             return {'bio-check-error': f"A connection to that endpoint could not be established: {e}"}
         
-    def get_output(self, job_id: str, download_dest: str, filename: str = None) -> Union[Dict[str, Union[str, Dict]], RequestError]:
+    def get_output(self, job_id: str, download_dest: str = None, filename: str = None) -> Union[Dict[str, Union[str, Dict]], RequestError]:
         """Fetch the current state of the job referenced with `job_id`. If the job has not yet been processed, it will return a `status` of `PENDING`. If the job is being processed by
             the service at the time of return, `status` will read `IN_PROGRESS`. If the job is complete, the job state will be returned, optionally with included result data (either JSON or downloadable file data).
 
             Args:
                 job_id:`str`: The id of the job submission.
-                download_dest:`str`: Directory where the file will be downloaded if the output is a file. Defaults to the current directory.
-                filename:`str`: Optional filename to save the downloaded file as. If not provided, the filename will be extracted from the Content-Disposition header.
+                download_dest:`Optional[str]`: Optional directory where the file will be downloaded if the output is a file. Defaults to the current directory.
+                filename:`Optional[str]`: Optional filename to save the downloaded file as if the output is a file. If not provided, the filename will be extracted from the Content-Disposition header.
 
             Returns:
                 If the output is a JSON response, return the parsed JSON as a dictionary. If the output is a file, download the file and return the filepath. If an error occurs, return a RequestError.
