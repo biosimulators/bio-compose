@@ -90,7 +90,6 @@ class Verifier(Api):
         if aTol:
             query_params['aTol'] = str(aTol)
 
-        print(f'Selection list: {selection_list}')
         multidata = MultipartEncoder(fields=encoder_fields)
         headers = {'Content-Type': multidata.content_type}
 

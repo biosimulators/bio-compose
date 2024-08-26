@@ -24,8 +24,7 @@ class Api:
             domain with which it is associated (e.g., 'execute-simulations', 'verification', etc.) 
         """
         self.endpoint_root = "https://biochecknet.biosimulations.org"
-        root_response = self._test_root()
-        print(root_response)
+        self._test_root()
 
         self.data: Dict = {}
         self.submitted_jobs: List[Dict] = []
