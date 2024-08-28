@@ -19,7 +19,19 @@ class SimulationRunner(Api):
         """
         super().__init__()
 
-    def run_smoldyn_simulation(self, smoldyn_configuration_filepath: str, duration: int = None, dt: float = None):
+    def run_smoldyn_simulation(self, smoldyn_configuration_filepath: str, duration: int = None, dt: float = None) -> Dict[str, Any]:
+        """Run a smoldyn simulation using a standard Smoldyn configuration file. Please see https://www.smoldyn.org/SmoldynManual.pdf for more information on running
+            simulations with Smoldyn.
+
+            Args:
+                smoldyn_configuration_filepath:`str`: The path to the Smoldyn configuration file for the given model simulation.
+                duration:`int`: The duration of the simulation. If `None` is passed, duration inference will be attempted using `time_stop` parameter within the Smoldyn configuration. Defaults to `None`.
+                dt:`float`: The timestep to use within the Smoldyn simulation. If `None` is passed, dt inference will be attempted using the `.dt` parameter of the loaded Smoldyn simulation. Defaults to `None`.
+
+            Returns:
+                The response for the Smoldyn simulation submission request.
+
+        """
         endpoint = self._format_endpoint(f'run-smoldyn')
         
         # multipart
@@ -38,7 +50,19 @@ class SimulationRunner(Api):
 
         return self._execute_request(endpoint=endpoint, headers=headers, multidata=multidata, query_params=query_params)
         
-    def run_utc_simulation(self, sbml_filepath: str, start: int, end: int, steps: int, simulator: str):
+    def run_utc_simulation(self, sbml_filepath: str, start: int, end: int, steps: int, simulator: str) -> Dict[str, Any]:
+        """Run a uniform time course simulation of the model specified in `sbml_filepath` with a supported simulator.
+
+            Args:
+                sbml_filepath:`str`: The path to a valid SBML file.
+                start:`int`: The start time of the simulation.
+                end:`int`: The end time of the simulation.
+                steps:`int`: The number of steps to record within the ODE.
+                simulator:`str`: The simulator to use. Currently, simulator choices include: `'amici'`, `'copasi'`, or `'tellurium'`.
+
+            Returns:
+                The response for the UTC simulation submission request.
+        """
         endpoint = self._format_endpoint(f'run-utc')
 
         # multipart 
@@ -57,7 +81,18 @@ class SimulationRunner(Api):
 
         return self._execute_request(endpoint=endpoint, headers=headers, multidata=multidata, query_params=query_params)
     
-    def generate_simularium_file(self, smoldyn_output_filepath: str, box_size: float, filename: str = None):
+    def generate_simularium_file(self, smoldyn_output_filepath: str, box_size: float, filename: str = None) -> Dict[str, Any]:
+        """Run a Smoldyn simulation and generate a Simularium trajectory from the aforementioned simulation's outputs.
+
+            Args:
+                smoldyn_output_filepath:`str`: The path to the Smoldyn output file for the given model simulation.
+                box_size:`float`: The box size to use for the Simularium trajectory.
+                filename:`str`: The name of the Simularium file that is generated. If `None` is passed, a general `'simulation.simularium'` filename will be used.
+                    Defaults to `None`.
+
+            Returns:
+                The response for the Simularium submission request.
+        """
         endpoint = self._format_endpoint(f'generate-simularium-file')
 
         # multipart 
@@ -74,7 +109,3 @@ class SimulationRunner(Api):
         headers = {'Content-Type': multidata.content_type}
 
         return self._execute_request(endpoint=endpoint, headers=headers, multidata=multidata, query_params=query_params)
-        
-        
-    
-        

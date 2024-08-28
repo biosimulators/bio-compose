@@ -121,7 +121,7 @@ class Verifier(Api):
         """Submit a new uniform time course comparison job to the service and return confirmation of job submission.
 
             Args:
-                entrypoint:`str`: One of either: a path to a sbml OR an antimony model/string that can be converted to SBML.
+                entrypoint:`str`: One of either: a path to a sbml OR an antimony model/string that can be converted to SBML. NOTE: Currently, only SBML is supported as an entrypoint.
                 start:`int`: The start time of the time course to include in comparison.
                 end: `int`: The end of the comparison job in seconds.
                 steps: `int`: The number of steps in the comparison job.
@@ -457,6 +457,6 @@ def test_verifier():
     end = 10
     steps = 100
 
-    sbml_submission = verifier.verify_sbml(sbml_filepath=sbml_fp, number_of_steps=steps, end=end, simulators=simulators, comparison_id="notebook_test1")
+    sbml_submission = verifier.verify_sbml(entrypoint=sbml_fp, steps=steps, start=0, end=end, simulators=simulators, comparison_id="notebook_test1")
     print(sbml_submission)
 
