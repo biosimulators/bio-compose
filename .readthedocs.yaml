@@ -17,5 +17,6 @@ build:
     python: "3.12"
   commands:
     - pip install sphinx sphinx-autodoc-typehints
+    - export PYTHONPATH=$PYTHONPATH:$(pwd)
     - sphinx-apidoc -o documentation/source/ bio_compose
     - sphinx-build -b html documentation/source/ $READTHEDOCS_OUTPUT/html
