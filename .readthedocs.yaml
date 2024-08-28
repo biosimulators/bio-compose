@@ -18,5 +18,5 @@ build:
   commands:
     - pip install sphinx sphinx-autodoc-typehints
     - sphinx-apidoc -o documentation/source/ bio_compose
-    - make html -W documentation/Makefile
+    - make -W documentation/Makefile
     - sphinx-build -b html documentation/source/ $READTHEDOCS_OUTPUT/html
