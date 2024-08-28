@@ -13,15 +13,19 @@ class RequestError:
         return asdict(self)
     
 
-class Api:
-    endpoint_root: str
-    data: Dict
-    submitted_jobs: List[Dict]
+class Api(object):
+    """
+    Base class inherited by the domain-specific polymorphisms native to this package: ``verifier.Verifier``, ``composer.Composer``, and ``runner.SimulationRunner``.
+
+    Params:
+        - **endpoint_root**: `str`: default base endpoint used by this packaging.
+        - **data**: `dict`: default historical collection of data fetched by the given instance of this class.
+        - **submitted_jobs**: `list[dict]`: default list of jobs submitted by the given instance.
+    """
 
     def __init__(self):
-        """Generic base instance which is inherited by any flavor (tag group) of the BioCompose REST API.
-            Each the methods of polymorphism of this base class should pertain entirely to the tag group 
-            domain with which it is associated (e.g., 'execute-simulations', 'verification', etc.) 
+        """
+        Generic base instance which is inherited by any flavor (tag group) of the BioCompose REST API. Polymorphism of this base class should pertain entirely to the tag group domain with which it is associated (e.g., 'execute-simulations', 'verification', etc.)
         """
         self.endpoint_root = "https://biochecknet.biosimulations.org"
         self._test_root()
@@ -60,16 +64,16 @@ class Api:
             return {'bio-check-error': f"A connection to that endpoint could not be established: {e}"}
         
     def get_output(self, job_id: str, download_dest: str = None, filename: str = None) -> Union[Dict[str, Union[str, Dict]], RequestError]:
-        """Fetch the current state of the job referenced with `job_id`. If the job has not yet been processed, it will return a `status` of `PENDING`. If the job is being processed by
-            the service at the time of return, `status` will read `IN_PROGRESS`. If the job is complete, the job state will be returned, optionally with included result data (either JSON or downloadable file data).
+        """
+        Fetch the current state of the job referenced with `job_id`. If the job has not yet been processed, it will return a `status` of `PENDING`. If the job is being processed by the service at the time of return, `status` will read `IN_PROGRESS`. If the job is complete, the job state will be returned, optionally with included result data (either JSON or downloadable file data).
 
-            Args:
-                job_id:`str`: The id of the job submission.
-                download_dest:`Optional[str]`: Optional directory where the file will be downloaded if the output is a file. Defaults to the current directory.
-                filename:`Optional[str]`: Optional filename to save the downloaded file as if the output is a file. If not provided, the filename will be extracted from the Content-Disposition header.
+        Args:
+            - **job_id**: `str`: The id of the job submission.
+            - **download_dest**: `Optional[str]`: Optional directory where the file will be downloaded if the output is a file. Defaults to the current directory.
+            - **filename**: `Optional[str]`: Optional filename to save the downloaded file as if the output is a file. If not provided, the filename will be extracted from the Content-Disposition header.
 
-            Returns:
-                If the output is a JSON response, return the parsed JSON as a dictionary. If the output is a file, download the file and return the filepath. If an error occurs, return a RequestError.
+        Returns:
+            If the output is a JSON response, return the parsed JSON as a dictionary. If the output is a file, download the file and return the filepath. If an error occurs, return a RequestError.
         """
         piece = f'get-output/{job_id}'
         endpoint = self._format_endpoint(piece)

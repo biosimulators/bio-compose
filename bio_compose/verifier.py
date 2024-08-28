@@ -21,13 +21,13 @@ from bio_compose.data_model import Api, RequestError
 
 
 class Verifier(Api):
-    """Quasi-proxy object that is used to represent the content of the BioCompose REST API and its methods therein."""
-    endpoint_root: str
-    data: Dict
-    submitted_jobs: List[Dict]
+    """
+    API for verifying (running and comparing) the results of multiple simulators for a given SBML model.
+    """
 
     def __init__(self):
-        """A new instance of the Verifier class. NOTE: this may clash with your record keeping in a notebook, so it is highly recommended that users treat instances of this class as quasi-singletons, although not necessary for fundamental interaction.
+        """
+        A new instance of the Verifier class. **NOTE**: this may clash with your record keeping in a notebook, so it is highly recommended that users treat instances of this class as quasi-singletons, although not necessary for fundamental interaction.
         """
         super().__init__()
 
@@ -118,7 +118,8 @@ class Verifier(Api):
             selection_list: List[str] = None,
             _steady_state: bool = False
     ) -> Union[Dict[str, str], RequestError]:
-        """Submit a new uniform time course comparison job to the service and return confirmation of job submission.
+        """
+        Submit a new uniform time course comparison job to the service and return confirmation of job submission.
 
         Args:
             - **entrypoint**: `str`: One of either: a path to a sbml OR an antimony model/string that can be converted to SBML. NOTE: Currently, only SBML is supported as an entrypoint.
@@ -195,14 +196,15 @@ class Verifier(Api):
             return RequestError(error=str(e))
 
     def get_compatible(self, file: str, versions: bool = False) -> Union[List[Tuple[Any, ...]], RequestError]:
-        """Get all simulators and optionally their versions for a given file. The File is expected to be either an OMEX/COMBINE archive or SBML file.
+        """
+        Get all simulators and optionally their versions for a given file. The File is expected to be either an OMEX/COMBINE archive or SBML file.
 
         Args:
-        file:`str`: The path to the file to be checked.
-        versions:`bool`: Whether to return the compatible version of the given compatible simulator. Defaults to `False`.
+            - **file**: `str`: The path to the file to be checked.
+            - **versions**: `bool`: Whether to return the compatible version of the given compatible simulator. Defaults to `False`.
 
         Returns:
-        A dict of compatible simulators and the referenced file.
+            A dictionary of compatible simulators and the referenced file.
         """
         endpoint = self._format_endpoint('get-compatible-for-verification')
         fp = (file.split('/')[-1], open(file, 'rb'), 'application/octet-stream')
@@ -245,20 +247,21 @@ class Verifier(Api):
             use_grid: bool = False,
             color_mapping: List[str] = None
     ) -> Figure:
-        """Visualize simulation output data, not comparison data, with subplots for each species.
+        """
+        Visualize simulation output data, not comparison data, with subplots for each species.
 
         Args:
-        data (dict): simulation output data
-        simulators (list[str]): list of simulators
-        output_start (int): start time of simulation output recording.
-        output_end (int): end time of simulation output recording.
-        num_points (int): number of points in simulation output time series.
-        hue (str): hue upon which the line plot colors are based. Options are: `'simulators'` or `'species'`. Defaults to 'simulators'. If `'simulators'` is passed, each column will be of its own color. If `'species'` is passed, each row will be of its own color.
-        use_grid (bool): whether to use a grid for each subplot. Defaults to False.
-        color_mapping (list[str]): list of colors to use for each subplot. Defaults to None.
+            - **data**: `dict`: simulation output data
+            - **simulators**: `list[str]`: list of simulators
+            - **output_start**: `int`: start time of simulation output recording.
+            - **output_end**: `int`: end time of simulation output recording.
+            - **num_points**: `int`: number of points in simulation output time series.
+            - **hue**: `str`: hue upon which the line plot colors are based. Options are: `'simulators'` or `'species'`. Defaults to 'simulators'. If `'simulators'` is passed, each column will be of its own color. If `'species'` is passed, each row will be of its own color.
+            - **use_grid**: `bool`: whether to use a grid for each subplot. Defaults to False.
+            - **color_mapping**: `list[str]`: list of colors to use for each subplot. Defaults to None.
 
         Returns:
-        matplotlib.pyplot.Figure of a plot grid
+            `matplotlib.pyplot.Figure` of a plot grid
 
         """
         # grid plot params
@@ -311,16 +314,17 @@ class Verifier(Api):
         return fig
 
     def visualize_comparison(self, data: Dict, simulators: List[str], comparison_type='proximity', color_mapping: List[str] = None) -> Figure:
-        """Visualize simulation comparison matrix in the form of a heatmap.
+        """
+        Visualize simulation comparison matrix in the form of a heatmap.
 
         Args:
-        data (dict): simulation output data
-        simulators (list[str]): list of simulators
-        comparison_type (str): type of comparison. Defaults to `'proximity'`.
-        color_mapping (list[str]): list of colors to use for True and False responses. Defaults to None.
+            - **data**: `dict`: simulation output data
+            - **simulators**: `list[str]`: list of simulators
+            - **comparison_type**: `str`: type of comparison. Defaults to `'proximity'`.
+            - **color_mapping**: `list[str]`: list of colors to use for True and False responses. Defaults to None.
 
         Returns:
-        matplotlib.pyplot.Figure of a plot grid
+            `matplotlib.pyplot.Figure` of a plot grid
         """
         species_data_content = data['content']['results']['results']
         species_names = list(species_data_content.keys())
@@ -358,12 +362,13 @@ class Verifier(Api):
 
         return fig
 
-    def export_plot(self, fig: Figure, save_dest: str):
-        """Save a `matplotlib.pyplot.Figure` instance generated from one of this class' `visualize_` methods, as a PDF file.
+    def export_plot(self, fig: Figure, save_dest: str) -> None:
+        """
+        Save a `matplotlib.pyplot.Figure` instance generated from one of this class' `visualize_` methods, as a PDF file.
 
         Args:
-        fig (matplotlib.pyplot.Figure): Figure instance generated from either `Verifier.visualize_comparison()` or `Verifier.visualize_outputs()`.
-        save_dest (str): Destination path to save the plot to.
+            - **fig**: `matplotlib.pyplot.Figure`: Figure instance generated from either `Verifier.visualize_comparison()` or `Verifier.visualize_outputs()`.
+            - **save_dest**: `str`: Destination path to save the plot to.
         """
         with PdfPages(save_dest) as pdf:
             pdf.savefig(fig)
@@ -372,14 +377,15 @@ class Verifier(Api):
 
     # -- csv and observables
     def get_observables(self, data: Dict, simulators: List[str]) -> pd.DataFrame:
-        """Get the observables passed within `data` as a flattened dataframe in which each column is: `<SPECIES NAME>_<SIMULATOR>` for each species name and simulator involved within the comparison.
+        """
+        Get the observables passed within `data` as a flattened dataframe in which each column is: `<SPECIES NAME>_<SIMULATOR>` for each species name and simulator involved within the comparison.
 
         Args:
-        data (dict): simulation output data generated from `Verifier.get_verify_output()`. This method assumes a resulting job status from the aforementioned `get` method as being `'COMPLETED'`. Tip: if the `data` does not yet have a completed status, try again.
-        simulators (list[str]): list of simulators to include in the dataframe.
+            - **data**: `Dict`: simulation output data generated from `Verifier.get_verify_output()`. This method assumes a resulting job status from the aforementioned `get` method as being `'COMPLETED'`. Tip: if the `data` does not yet have a completed status, try again.
+            - **simulators**: `List[str]`: list of simulators to include in the dataframe.
 
         Returns:
-        pd.DataFrame of observables.
+            pd.DataFrame of observables.
         """
         dataframe = {}
         species_data_content = data['content']['results']['results']
@@ -398,22 +404,26 @@ class Verifier(Api):
         return pd.DataFrame(dataframe)
 
     def export_csv(self, data: Dict, save_dest: str, simulators: List[str]):
-        """Export the content passed in `data` as a CSV file.
+        """
+        Export the content passed in `data` as a CSV file.
 
         Args:
-        data (dict): simulation output data generated from `Verifier.get_verify_output()`.
-        save_dest (str): Destination path to save the CSV file.
-        simulators (list[str]): list of simulators to include in the dataframe.
+            - **data**: `Dict`: simulation output data generated from `Verifier.get_verify_output()`.
+            - **save_dest**: `str`: Destination path to save the CSV file.
+            - **simulators**: `List[str]`: list of simulators to include in the dataframe.
         """
         return self.get_observables(data, simulators).to_csv(save_dest, index=False)
 
     def read_observables(self, csv_path: str) -> pd.DataFrame:
-        """Read in a dataframe generated from `Verifier.export_csv()`."""
+        """
+        Read in a dataframe generated from `Verifier.export_csv()`.
+        """
         return pd.read_csv(csv_path)
 
     # -- tools
     def select_observables(self, observables: List[str], data: Dict) -> Dict:
-        """Select data from the input data that is passed which should be formatted such that the data has mappings of observable names to dicts in which the keys are the simulator names and the values are arrays. The data must have content accessible at: `data['content']['results']`.
+        """
+        Select data from the input data that is passed which should be formatted such that the data has mappings of observable names to dicts in which the keys are the simulator names and the values are arrays. The data must have content accessible at: `data['content']['results']`.
         """
         outputs = data.copy()
         result = {}
@@ -421,9 +431,21 @@ class Verifier(Api):
             if name in observables:
                 result[name] = obs_data
         outputs['content']['results'] = result
+
         return outputs
 
-    def _write_antimony_to_sbml(self, antimony_string: str, dest: str, model_name: str = None):
+    def _write_antimony_to_sbml(self, antimony_string: str, dest: str, model_name: str = None) -> str:
+        """
+        Convert an antimony model to SBML. To be used as an entrypoint validator for `Verifier().verify_sbml()`.
+
+        Args:
+            - **antimony_string**: `str`: Antimony model to convert.
+            - **dest**: `str`: Destination path to save the SBML file.
+            - **model_name**: `str`: Model name to use for the converted model file. Defaults to `None` (a generic `'model.xml'`).
+
+        Returns:
+            Path to the written SBML file.
+        """
         ant_ret = antimony.loadAntimonyString(antimony_string)
         if ant_ret == -1:
             raise IOError(f"This antimony string cannot be converted to SBML by Antimony: {antimony_string}. Please check the model and try again.")
