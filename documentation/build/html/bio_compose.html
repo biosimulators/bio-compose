@@ -118,15 +118,15 @@
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">Dict</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>, <code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">Dict</span></code>]], <a class="reference internal" href="#bio_compose.data_model.RequestError" title="bio_compose.data_model.RequestError"><code class="xref py py-class docutils literal notranslate"><span class="pre">RequestError</span></code></a>]</span></p>
 </dd>
-</dl>
-<dl class="simple">
-<dt>Args:</dt><dd><ul class="simple">
-<li><p><strong>job_id</strong>: <cite>str</cite>: The id of the job submission.</p></li>
-<li><p><strong>download_dest</strong>: <cite>Optional[str]</cite>: Optional directory where the file will be downloaded if the output is a file. Defaults to the current directory.</p></li>
-<li><p><strong>filename</strong>: <cite>Optional[str]</cite>: Optional filename to save the downloaded file as if the output is a file. If not provided, the filename will be extracted from the Content-Disposition header.</p></li>
+<dt class="field-even">Parameters<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>job_id</strong> (<em>-</em>) – <cite>str</cite>: The id of the job submission.</p></li>
+<li><p><strong>download_dest</strong> (<em>-</em>) – <cite>Optional[str]</cite>: Optional directory where the file will be downloaded if the output is a file. Defaults to the current directory.</p></li>
+<li><p><strong>filename</strong> (<em>-</em>) – <cite>Optional[str]</cite>: Optional filename to save the downloaded file as if the output is a file. If not provided, the filename will be extracted from the Content-Disposition header.</p></li>
 </ul>
 </dd>
-<dt>Returns:</dt><dd><p>If the output is a JSON response, return the parsed JSON as a dictionary. If the output is a file, download the file and return the filepath. If an error occurs, return a RequestError.</p>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>If the output is a JSON response, return the parsed JSON as a dictionary. If the output is a file, download the file and return the filepath. If an error occurs, return a RequestError.</p>
 </dd>
 </dl>
 </dd></dl>
@@ -188,15 +188,15 @@
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">Dict</span></code></span></p>
 </dd>
-</dl>
-<dl class="simple">
-<dt>Args:</dt><dd><ul class="simple">
-<li><p><strong>smoldyn_output_filepath</strong>: <cite>str</cite>: The path to the Smoldyn output file for the given model simulation.</p></li>
-<li><p><strong>box_size</strong>: <cite>float</cite>: The box size to use for the Simularium trajectory.</p></li>
-<li><p><strong>filename</strong>: <cite>str</cite>: The name of the Simularium file that is generated. If <cite>None</cite> is passed, a general <cite>‘simulation.simularium’</cite> filename will be used. Defaults to <cite>None</cite>.</p></li>
+<dt class="field-even">Parameters<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>smoldyn_output_filepath</strong> (<em>-</em>) – <cite>str</cite>: The path to the Smoldyn output file for the given model simulation.</p></li>
+<li><p><strong>box_size</strong> (<em>-</em>) – <cite>float</cite>: The box size to use for the Simularium trajectory.</p></li>
+<li><p><strong>filename</strong> (<em>-</em>) – <cite>str</cite>: The name of the Simularium file that is generated. If <cite>None</cite> is passed, a general <cite>‘simulation.simularium’</cite> filename will be used. Defaults to <cite>None</cite>.</p></li>
 </ul>
 </dd>
-<dt>Returns:</dt><dd><p>The response for the Simularium submission request.</p>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>The response for the Simularium submission request.</p>
 </dd>
 </dl>
 </dd></dl>
@@ -209,15 +209,15 @@
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">Dict</span></code></span></p>
 </dd>
-</dl>
-<dl class="simple">
-<dt>Args:</dt><dd><ul class="simple">
-<li><p><strong>smoldyn_configuration_filepath</strong>: <cite>str</cite>: The path to the Smoldyn configuration file for the given model simulation.</p></li>
-<li><p><strong>duration</strong>: <cite>int</cite>: The duration of the simulation. If <cite>None</cite> is passed, duration inference will be attempted using <cite>time_stop</cite> parameter within the Smoldyn configuration. Defaults to <cite>None</cite>.</p></li>
-<li><p><strong>dt</strong>: <cite>float</cite>: The timestep to use within the Smoldyn simulation. If <cite>None</cite> is passed, dt inference will be attempted using the <cite>.dt</cite> parameter of the loaded Smoldyn simulation. Defaults to <cite>None</cite>.</p></li>
+<dt class="field-even">Parameters<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>smoldyn_configuration_filepath</strong> (<em>-</em>) – <cite>str</cite>: The path to the Smoldyn configuration file for the given model simulation.</p></li>
+<li><p><strong>duration</strong> (<em>-</em>) – <cite>int</cite>: The duration of the simulation. If <cite>None</cite> is passed, duration inference will be attempted using <cite>time_stop</cite> parameter within the Smoldyn configuration. Defaults to <cite>None</cite>.</p></li>
+<li><p><strong>dt</strong> (<em>-</em>) – <cite>float</cite>: The timestep to use within the Smoldyn simulation. If <cite>None</cite> is passed, dt inference will be attempted using the <cite>.dt</cite> parameter of the loaded Smoldyn simulation. Defaults to <cite>None</cite>.</p></li>
 </ul>
 </dd>
-<dt>Returns:</dt><dd><p>The response for the Smoldyn simulation submission request.</p>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>The response for the Smoldyn simulation submission request.</p>
 </dd>
 </dl>
 </dd></dl>
@@ -230,17 +230,17 @@
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">Dict</span></code></span></p>
 </dd>
-</dl>
-<dl class="simple">
-<dt>Args:</dt><dd><ul class="simple">
-<li><p><strong>sbml_filepath</strong>: <cite>str</cite>: The path to a valid SBML file.</p></li>
-<li><p><strong>start</strong>: <cite>int</cite>: The start time of the simulation.</p></li>
-<li><p><strong>end</strong>: <cite>int</cite>: The end time of the simulation.</p></li>
-<li><p><strong>steps</strong>: <cite>int</cite>: The number of steps to record within the ODE.</p></li>
-<li><p><strong>simulator</strong>: <cite>str</cite>: The simulator to use. Currently, simulator choices include: <cite>‘amici’</cite>, <cite>‘copasi’</cite>, or <cite>‘tellurium’</cite>.</p></li>
+<dt class="field-even">Parameters<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>sbml_filepath</strong> (<em>-</em>) – <cite>str</cite>: The path to a valid SBML file.</p></li>
+<li><p><strong>start</strong> (<em>-</em>) – <cite>int</cite>: The start time of the simulation.</p></li>
+<li><p><strong>end</strong> (<em>-</em>) – <cite>int</cite>: The end time of the simulation.</p></li>
+<li><p><strong>steps</strong> (<em>-</em>) – <cite>int</cite>: The number of steps to record within the ODE.</p></li>
+<li><p><strong>simulator</strong> (<em>-</em>) – <cite>str</cite>: The simulator to use. Currently, simulator choices include: <cite>‘amici’</cite>, <cite>‘copasi’</cite>, or <cite>‘tellurium’</cite>.</p></li>
 </ul>
 </dd>
-<dt>Returns:</dt><dd><p>The response for the UTC simulation submission request.</p>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>The response for the UTC simulation submission request.</p>
 </dd>
 </dl>
 </dd></dl>
@@ -264,11 +264,12 @@
 <dt class="sig sig-object py" id="bio_compose.verifier.Verifier.export_csv">
 <span class="sig-name descname"><span class="pre">export_csv</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">save_dest</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">simulators</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#bio_compose.verifier.Verifier.export_csv" title="Link to this definition">¶</a></dt>
 <dd><p>Export the content passed in <cite>data</cite> as a CSV file.</p>
-<dl class="simple">
-<dt>Args:</dt><dd><ul class="simple">
-<li><p><strong>data</strong>: <cite>Dict</cite>: simulation output data generated from <cite>Verifier.get_verify_output()</cite>.</p></li>
-<li><p><strong>save_dest</strong>: <cite>str</cite>: Destination path to save the CSV file.</p></li>
-<li><p><strong>simulators</strong>: <cite>List[str]</cite>: list of simulators to include in the dataframe.</p></li>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>data</strong> (<em>-</em>) – <cite>Dict</cite>: simulation output data generated from <cite>Verifier.get_verify_output()</cite>.</p></li>
+<li><p><strong>save_dest</strong> (<em>-</em>) – <cite>str</cite>: Destination path to save the CSV file.</p></li>
+<li><p><strong>simulators</strong> (<em>-</em>) – <cite>List[str]</cite>: list of simulators to include in the dataframe.</p></li>
 </ul>
 </dd>
 </dl>
@@ -282,11 +283,10 @@
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></span></p>
 </dd>
-</dl>
-<dl class="simple">
-<dt>Args:</dt><dd><ul class="simple">
-<li><p><strong>fig</strong>: <cite>matplotlib.pyplot.Figure</cite>: Figure instance generated from either <cite>Verifier.visualize_comparison()</cite> or <cite>Verifier.visualize_outputs()</cite>.</p></li>
-<li><p><strong>save_dest</strong>: <cite>str</cite>: Destination path to save the plot to.</p></li>
+<dt class="field-even">Parameters<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>fig</strong> (<em>-</em>) – <cite>matplotlib.pyplot.Figure</cite>: Figure instance generated from either <cite>Verifier.visualize_comparison()</cite> or <cite>Verifier.visualize_outputs()</cite>.</p></li>
+<li><p><strong>save_dest</strong> (<em>-</em>) – <cite>str</cite>: Destination path to save the plot to.</p></li>
 </ul>
 </dd>
 </dl>
@@ -300,14 +300,14 @@
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code>[<code class="xref py py-data docutils literal notranslate"><span class="pre">Tuple</span></code>[<code class="xref py py-data docutils literal notranslate"><span class="pre">Any</span></code>, <code class="xref py py-data docutils literal notranslate"><span class="pre">...</span></code>]], <a class="reference internal" href="#bio_compose.data_model.RequestError" title="bio_compose.data_model.RequestError"><code class="xref py py-class docutils literal notranslate"><span class="pre">RequestError</span></code></a>]</span></p>
 </dd>
-</dl>
-<dl class="simple">
-<dt>Args:</dt><dd><ul class="simple">
-<li><p><strong>file</strong>: <cite>str</cite>: The path to the file to be checked.</p></li>
-<li><p><strong>versions</strong>: <cite>bool</cite>: Whether to return the compatible version of the given compatible simulator. Defaults to <cite>False</cite>.</p></li>
+<dt class="field-even">Parameters<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>file</strong> (<em>-</em>) – <cite>str</cite>: The path to the file to be checked.</p></li>
+<li><p><strong>versions</strong> (<em>-</em>) – <cite>bool</cite>: Whether to return the compatible version of the given compatible simulator. Defaults to <cite>False</cite>.</p></li>
 </ul>
 </dd>
-<dt>Returns:</dt><dd><p>A dictionary of compatible simulators and the referenced file.</p>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>A dictionary of compatible simulators and the referenced file.</p>
 </dd>
 </dl>
 </dd></dl>
@@ -320,14 +320,14 @@
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">DataFrame</span></code></span></p>
 </dd>
-</dl>
-<dl class="simple">
-<dt>Args:</dt><dd><ul class="simple">
-<li><p><strong>data</strong>: <cite>Dict</cite>: simulation output data generated from <cite>Verifier.get_verify_output()</cite>. This method assumes a resulting job status from the aforementioned <cite>get</cite> method as being <cite>‘COMPLETED’</cite>. Tip: if the <cite>data</cite> does not yet have a completed status, try again.</p></li>
-<li><p><strong>simulators</strong>: <cite>List[str]</cite>: list of simulators to include in the dataframe.</p></li>
+<dt class="field-even">Parameters<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>data</strong> (<em>-</em>) – <cite>Dict</cite>: simulation output data generated from <cite>Verifier.get_verify_output()</cite>. This method assumes a resulting job status from the aforementioned <cite>get</cite> method as being <cite>‘COMPLETED’</cite>. Tip: if the <cite>data</cite> does not yet have a completed status, try again.</p></li>
+<li><p><strong>simulators</strong> (<em>-</em>) – <cite>List[str]</cite>: list of simulators to include in the dataframe.</p></li>
 </ul>
 </dd>
-<dt>Returns:</dt><dd><p>pd.DataFrame of observables.</p>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>pd.DataFrame of observables.</p>
 </dd>
 </dl>
 </dd></dl>
@@ -362,21 +362,24 @@
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">Dict</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>], <a class="reference internal" href="#bio_compose.data_model.RequestError" title="bio_compose.data_model.RequestError"><code class="xref py py-class docutils literal notranslate"><span class="pre">RequestError</span></code></a>]</span></p>
 </dd>
-</dl>
-<dl class="simple">
-<dt>Args:</dt><dd><ul class="simple">
-<li><p><strong>omex_filepath</strong>: <cite>str</cite>: The path to the omex file to submit.</p></li>
-<li><p><strong>simulators</strong>: <cite>List[str]</cite>: The list of simulators to include in comparison. Defaults to all utc simulators (amici, copasi, tellurium)</p></li>
-<li><p><strong>include_outputs</strong>: <cite>bool, optional</cite>: Whether to include the output data used to calculate comparison in the job results on result fetch. Defaults to True.</p></li>
-<li><p><strong>comparison_id</strong>: <cite>str, optional</cite>: The unique identifier for the comparison job. Defaults to None. If <cite>None</cite> is passed, a comparison id of <cite>bio_check-request-&lt;UUID&gt;</cite> is generated.</p></li>
-<li><p><strong>expected_results</strong>: <cite>str, optional</cite>: The path to the ground expected_results report file to include in comparison. Defaults to None.</p></li>
-<li><p><strong>selection_list</strong>: <cite>List[str], optional</cite>: The list of observables to include in comparison output. Defaults to None (all observables).</p></li>
-<li><p><strong>rTol</strong>: <cite>float, optional</cite>: The relative tolerance used to determine the relative distance in a pairwise comparison.</p></li>
-<li><p><strong>aTol</strong>: <cite>float, optional</cite>: The absolute tolerance used to determine the absolute distance in a pairwise comparison.</p></li>
-<li><p><strong>_steady_state</strong>: <cite>bool, optional</cite>: Whether to include the steady state analysis job. NOTE: This feature will currently throw an error as it is not yet implemented.</p></li>
+<dt class="field-even">Parameters<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>omex_filepath</strong> (<em>-</em>) – <cite>str</cite>: The path to the omex file to submit.</p></li>
+<li><p><strong>simulators</strong> (<em>-</em>) – <cite>List[str]</cite>: The list of simulators to include in comparison. Defaults to all utc simulators (amici, copasi, tellurium)</p></li>
+<li><p><strong>include_outputs</strong> (<em>-</em>) – <cite>bool, optional</cite>: Whether to include the output data used to calculate comparison in the job results on result fetch. Defaults to True.</p></li>
+<li><p><strong>comparison_id</strong> (<em>-</em>) – <cite>str, optional</cite>: The unique identifier for the comparison job. Defaults to None. If <cite>None</cite> is passed, a comparison id of <cite>bio_check-request-&lt;UUID&gt;</cite> is generated.</p></li>
+<li><p><strong>expected_results</strong> (<em>-</em>) – <cite>str, optional</cite>: The path to the ground expected_results report file to include in comparison. Defaults to None.</p></li>
+<li><p><strong>selection_list</strong> (<em>-</em>) – <cite>List[str], optional</cite>: The list of observables to include in comparison output. Defaults to None (all observables).</p></li>
+<li><p><strong>rTol</strong> (<em>-</em>) – <cite>float, optional</cite>: The relative tolerance used to determine the relative distance in a pairwise comparison.</p></li>
+<li><p><strong>aTol</strong> (<em>-</em>) – <cite>float, optional</cite>: The absolute tolerance used to determine the absolute distance in a pairwise comparison.</p></li>
+<li><p><strong>_steady_state</strong> (<em>-</em>) – <cite>bool, optional</cite>: Whether to include the steady state analysis job. NOTE: This feature will currently throw an error as it is not yet implemented.</p></li>
 </ul>
 </dd>
-<dt>Returns:</dt><dd><p>A dictionary containing the job submission results. <strong>Note</strong>: the return status should read <cite>PENDING</cite>.</p>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>the return status should read <cite>PENDING</cite>.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>A dictionary containing the job submission results. <strong>Note</strong></p>
 </dd>
 </dl>
 </dd></dl>
@@ -389,24 +392,27 @@
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">Dict</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>], <a class="reference internal" href="#bio_compose.data_model.RequestError" title="bio_compose.data_model.RequestError"><code class="xref py py-class docutils literal notranslate"><span class="pre">RequestError</span></code></a>]</span></p>
 </dd>
-</dl>
-<dl class="simple">
-<dt>Args:</dt><dd><ul class="simple">
-<li><p><strong>entrypoint</strong>: <cite>str</cite>: One of either: a path to a sbml OR an antimony model/string that can be converted to SBML. NOTE: Currently, only SBML is supported as an entrypoint.</p></li>
-<li><p><strong>start</strong>: <cite>int</cite>: The start time of the time course to include in comparison.</p></li>
-<li><p><strong>end</strong>: <cite>int</cite>: The end of the comparison job in seconds.</p></li>
-<li><p><strong>steps</strong>: <cite>int</cite>: The number of steps in the comparison job.</p></li>
-<li><p><strong>simulators</strong>: <cite>List[str]</cite>: The list of simulators to include in comparison. Defaults to all utc simulators (amici, copasi, tellurium)</p></li>
-<li><p><strong>include_outputs</strong>: <cite>bool, optional</cite>: Whether to include the output data used to calculate comparison in the job results on result fetch. Defaults to True.</p></li>
-<li><p><strong>comparison_id</strong>: <cite>str, optional</cite>: The unique identifier for the comparison job. Defaults to None. If <cite>None</cite> is passed, a comparison id of <cite>bio_check-request-&lt;UUID&gt;</cite> is generated.</p></li>
-<li><p><strong>expected_results</strong>: <cite>str, optional</cite>: The path to the ground expected_results report file to include in comparison. Defaults to None.</p></li>
-<li><p><strong>rTol</strong>: <cite>float</cite>, optional: The relative tolerance used to determine the relative distance in a pairwise comparison.</p></li>
-<li><p><strong>aTol</strong>: <a href="#id1"><span class="problematic" id="id2">`</span></a>float`L optional: The absolute tolerance used to determine the absolute distance in a pairwise comparison.</p></li>
-<li><p><strong>selection_list</strong>: <cite>List[str]</cite>: Observables to include in the output. If passed, all observable names NOT in this list will be excluded. Defaults to <cite>None</cite> (all observables).</p></li>
-<li><p><strong>_steady_state</strong>: <cite>bool, optional</cite>: Whether to include the steady state analysis job. NOTE: This feature will currently throw an error as it is not yet implemented.</p></li>
+<dt class="field-even">Parameters<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>entrypoint</strong> (<em>-</em>) – <cite>str</cite>: One of either: a path to a sbml OR an antimony model/string that can be converted to SBML. NOTE: Currently, only SBML is supported as an entrypoint.</p></li>
+<li><p><strong>start</strong> (<em>-</em>) – <cite>int</cite>: The start time of the time course to include in comparison.</p></li>
+<li><p><strong>end</strong> (<em>-</em>) – <cite>int</cite>: The end of the comparison job in seconds.</p></li>
+<li><p><strong>steps</strong> (<em>-</em>) – <cite>int</cite>: The number of steps in the comparison job.</p></li>
+<li><p><strong>simulators</strong> (<em>-</em>) – <cite>List[str]</cite>: The list of simulators to include in comparison. Defaults to all utc simulators (amici, copasi, tellurium)</p></li>
+<li><p><strong>include_outputs</strong> (<em>-</em>) – <cite>bool, optional</cite>: Whether to include the output data used to calculate comparison in the job results on result fetch. Defaults to True.</p></li>
+<li><p><strong>comparison_id</strong> (<em>-</em>) – <cite>str, optional</cite>: The unique identifier for the comparison job. Defaults to None. If <cite>None</cite> is passed, a comparison id of <cite>bio_check-request-&lt;UUID&gt;</cite> is generated.</p></li>
+<li><p><strong>expected_results</strong> (<em>-</em>) – <cite>str, optional</cite>: The path to the ground expected_results report file to include in comparison. Defaults to None.</p></li>
+<li><p><strong>rTol</strong> (<em>-</em>) – <cite>float</cite>, optional: The relative tolerance used to determine the relative distance in a pairwise comparison.</p></li>
+<li><p><strong>aTol</strong> (<em>-</em>) – <a href="#id1"><span class="problematic" id="id2">`</span></a>float`L optional: The absolute tolerance used to determine the absolute distance in a pairwise comparison.</p></li>
+<li><p><strong>selection_list</strong> (<em>-</em>) – <cite>List[str]</cite>: Observables to include in the output. If passed, all observable names NOT in this list will be excluded. Defaults to <cite>None</cite> (all observables).</p></li>
+<li><p><strong>_steady_state</strong> (<em>-</em>) – <cite>bool, optional</cite>: Whether to include the steady state analysis job. NOTE: This feature will currently throw an error as it is not yet implemented.</p></li>
 </ul>
 </dd>
-<dt>Returns:</dt><dd><p>A dictionary containing the job submission results. <strong>Note</strong>: the return status should read <cite>PENDING</cite>.</p>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>the return status should read <cite>PENDING</cite>.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>A dictionary containing the job submission results. <strong>Note</strong></p>
 </dd>
 </dl>
 </dd></dl>
@@ -419,16 +425,16 @@
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">Figure</span></code></span></p>
 </dd>
-</dl>
-<dl class="simple">
-<dt>Args:</dt><dd><ul class="simple">
-<li><p><strong>data</strong>: <cite>dict</cite>: simulation output data</p></li>
-<li><p><strong>simulators</strong>: <cite>list[str]</cite>: list of simulators</p></li>
-<li><p><strong>comparison_type</strong>: <cite>str</cite>: type of comparison. Defaults to <cite>‘proximity’</cite>.</p></li>
-<li><p><strong>color_mapping</strong>: <cite>list[str]</cite>: list of colors to use for True and False responses. Defaults to None.</p></li>
+<dt class="field-even">Parameters<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>data</strong> (<em>-</em>) – <cite>dict</cite>: simulation output data</p></li>
+<li><p><strong>simulators</strong> (<em>-</em>) – <cite>list[str]</cite>: list of simulators</p></li>
+<li><p><strong>comparison_type</strong> (<em>-</em>) – <cite>str</cite>: type of comparison. Defaults to <cite>‘proximity’</cite>.</p></li>
+<li><p><strong>color_mapping</strong> (<em>-</em>) – <cite>list[str]</cite>: list of colors to use for True and False responses. Defaults to None.</p></li>
 </ul>
 </dd>
-<dt>Returns:</dt><dd><p><cite>matplotlib.pyplot.Figure</cite> of a plot grid</p>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p><cite>matplotlib.pyplot.Figure</cite> of a plot grid</p>
 </dd>
 </dl>
 </dd></dl>
@@ -441,20 +447,20 @@
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">Figure</span></code></span></p>
 </dd>
-</dl>
-<dl class="simple">
-<dt>Args:</dt><dd><ul class="simple">
-<li><p><strong>data</strong>: <cite>dict</cite>: simulation output data</p></li>
-<li><p><strong>simulators</strong>: <cite>list[str]</cite>: list of simulators</p></li>
-<li><p><strong>output_start</strong>: <cite>int</cite>: start time of simulation output recording.</p></li>
-<li><p><strong>output_end</strong>: <cite>int</cite>: end time of simulation output recording.</p></li>
-<li><p><strong>num_points</strong>: <cite>int</cite>: number of points in simulation output time series.</p></li>
-<li><p><strong>hue</strong>: <cite>str</cite>: hue upon which the line plot colors are based. Options are: <cite>‘simulators’</cite> or <cite>‘species’</cite>. Defaults to ‘simulators’. If <cite>‘simulators’</cite> is passed, each column will be of its own color. If <cite>‘species’</cite> is passed, each row will be of its own color.</p></li>
-<li><p><strong>use_grid</strong>: <cite>bool</cite>: whether to use a grid for each subplot. Defaults to False.</p></li>
-<li><p><strong>color_mapping</strong>: <cite>list[str]</cite>: list of colors to use for each subplot. Defaults to None.</p></li>
+<dt class="field-even">Parameters<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>data</strong> (<em>-</em>) – <cite>dict</cite>: simulation output data</p></li>
+<li><p><strong>simulators</strong> (<em>-</em>) – <cite>list[str]</cite>: list of simulators</p></li>
+<li><p><strong>output_start</strong> (<em>-</em>) – <cite>int</cite>: start time of simulation output recording.</p></li>
+<li><p><strong>output_end</strong> (<em>-</em>) – <cite>int</cite>: end time of simulation output recording.</p></li>
+<li><p><strong>num_points</strong> (<em>-</em>) – <cite>int</cite>: number of points in simulation output time series.</p></li>
+<li><p><strong>hue</strong> (<em>-</em>) – <cite>str</cite>: hue upon which the line plot colors are based. Options are: <cite>‘simulators’</cite> or <cite>‘species’</cite>. Defaults to ‘simulators’. If <cite>‘simulators’</cite> is passed, each column will be of its own color. If <cite>‘species’</cite> is passed, each row will be of its own color.</p></li>
+<li><p><strong>use_grid</strong> (<em>-</em>) – <cite>bool</cite>: whether to use a grid for each subplot. Defaults to False.</p></li>
+<li><p><strong>color_mapping</strong> (<em>-</em>) – <cite>list[str]</cite>: list of colors to use for each subplot. Defaults to None.</p></li>
 </ul>
 </dd>
-<dt>Returns:</dt><dd><p><cite>matplotlib.pyplot.Figure</cite> of a plot grid</p>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p><cite>matplotlib.pyplot.Figure</cite> of a plot grid</p>
 </dd>
 </dl>
 </dd></dl>

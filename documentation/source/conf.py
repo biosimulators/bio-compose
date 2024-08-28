@@ -17,6 +17,7 @@ release = '0.3.2'
 extensions = [
     'sphinx.ext.autodoc',
     'sphinx_autodoc_typehints',
+    'sphinx.ext.napoleon'
 ]
 
 templates_path = ['_templates']
