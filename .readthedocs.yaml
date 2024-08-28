@@ -22,7 +22,7 @@ build:
     - sphinx-quickstart -p BioCompose -a "Alexander A. Patrie" -v "0.3.2" -r "0.3.2" -l en --sep
     - cd source
     - sphinx-apidoc -o . bio_compose
-    - cd .. && make html && cd ..
+    - make html
     - sphinx-build -b html documentation/source/ $READTHEDOCS_OUTPUT/html
 
 
