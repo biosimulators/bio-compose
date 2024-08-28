@@ -18,7 +18,7 @@ build:
   commands:
     - pip install sphinx sphinx-autodoc-typehints
     - export PYTHONPATH=$PYTHONPATH:$(pwd)
-    - sphinx-quickstart -p BioCompose -a Alexander A. Patrie -v 0.3.2 -r 0.3.2 -l en
+    - sphinx-quickstart -p BioCompose -a "Alexander A. Patrie" -v "0.3.2" -r "0.3.2" -l en
     - sphinx-apidoc -o documentation/source/ bio_compose
     - sphinx-build -b html documentation/source/ $READTHEDOCS_OUTPUT/html
 
