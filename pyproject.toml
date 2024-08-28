@@ -16,6 +16,8 @@ process-bigraph = "^0.0.19"
 
 [tool.poetry.group.dev.dependencies]
 pytest = "^8.3.2"
+sphinx = "^8.0.2"
+sphinx-autodoc-typehints = "^2.2.3"
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
