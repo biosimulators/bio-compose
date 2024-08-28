@@ -27,8 +27,7 @@ class Verifier(Api):
     submitted_jobs: List[Dict]
 
     def __init__(self):
-        """A new instance of the Verifier class. NOTE: this may clash with your record keeping in a notebook, so it is highly recommended that users
-            treat instances of this class as quasi-singletons, although not necessary for fundamental interaction.
+        """A new instance of the Verifier class. NOTE: this may clash with your record keeping in a notebook, so it is highly recommended that users treat instances of this class as quasi-singletons, although not necessary for fundamental interaction.
         """
         super().__init__()
 
@@ -45,21 +44,22 @@ class Verifier(Api):
             aTol: float = None,
             _steady_state: bool = False
     ) -> Union[Dict[str, str], RequestError]:
-        """Submit a new uniform time course comparison job to the service and return confirmation of job submission.
+        """
+        Submit a new uniform time course comparison job to the service and return confirmation of job submission.
 
-            Args:
-                omex_filepath:`str`: The path to the omex file to submit.
-                simulators:`List[str]`: The list of simulators to include in comparison. Defaults to all utc simulators (amici, copasi, tellurium)
-                include_outputs:`bool, optional`: Whether to include the output data used to calculate comparison in the job results on result fetch. Defaults to True.
-                comparison_id:`str, optional`: The unique identifier for the comparison job. Defaults to None. If `None` is passed, a comparison id of `bio_check-request-<UUID>` is generated.
-                expected_results:`str, optional`: The path to the ground expected_results report file to include in comparison. Defaults to None.
-                selection_list:`List[str], optional`: The list of observables to include in comparison output. Defaults to None (all observables).
-                rTol:`float`, optional: The relative tolerance used to determine the relative distance in a pairwise comparison.
-                aTol:`float`L optional: The absolute tolerance used to determine the absolute distance in a pairwise comparison.
-                _steady_state:`bool, optional`: Whether to include the steady state analysis job. NOTE: This feature will currently throw an error as it is not
-                    yet implemented.
-            Returns:
-                A dictionary containing the job submission results. **Note**: the return status should read `PENDING`.
+        Args:
+            - **omex_filepath**: `str`: The path to the omex file to submit.
+            - **simulators**: `List[str]`: The list of simulators to include in comparison. Defaults to all utc simulators (amici, copasi, tellurium)
+            - **include_outputs**: `bool, optional`: Whether to include the output data used to calculate comparison in the job results on result fetch. Defaults to True.
+            - **comparison_id**: `str, optional`: The unique identifier for the comparison job. Defaults to None. If `None` is passed, a comparison id of `bio_check-request-<UUID>` is generated.
+            - **expected_results**: `str, optional`: The path to the ground expected_results report file to include in comparison. Defaults to None.
+            - **selection_list**: `List[str], optional`: The list of observables to include in comparison output. Defaults to None (all observables).
+            - **rTol**: `float, optional`: The relative tolerance used to determine the relative distance in a pairwise comparison.
+            - **aTol**: `float, optional`: The absolute tolerance used to determine the absolute distance in a pairwise comparison.
+            - **_steady_state**: `bool, optional`: Whether to include the steady state analysis job. NOTE: This feature will currently throw an error as it is not yet implemented.
+
+        Returns:
+            A dictionary containing the job submission results. **Note**: the return status should read `PENDING`.
         """
         if _steady_state is not False:
             raise NotImplementedError("The steady state analysis of model files is not yet implemented and currently under development.")
@@ -120,24 +120,23 @@ class Verifier(Api):
     ) -> Union[Dict[str, str], RequestError]:
         """Submit a new uniform time course comparison job to the service and return confirmation of job submission.
 
-            Args:
-                entrypoint:`str`: One of either: a path to a sbml OR an antimony model/string that can be converted to SBML. NOTE: Currently, only SBML is supported as an entrypoint.
-                start:`int`: The start time of the time course to include in comparison.
-                end: `int`: The end of the comparison job in seconds.
-                steps: `int`: The number of steps in the comparison job.
-                simulators:`List[str]`: The list of simulators to include in comparison. Defaults to all utc simulators (amici, copasi, tellurium)
-                include_outputs:`bool, optional`: Whether to include the output data used to calculate comparison in the job results on result fetch. Defaults to True.
-                comparison_id:`str, optional`: The unique identifier for the comparison job. Defaults to None. If `None` is passed, a comparison id of `bio_check-request-<UUID>` is generated.
-                expected_results:`str, optional`: The path to the ground expected_results report file to include in comparison. Defaults to None.
-                rTol:`float`, optional: The relative tolerance used to determine the relative distance in a pairwise comparison.
-                aTol:`float`L optional: The absolute tolerance used to determine the absolute distance in a pairwise comparison.
-                selection_list:`List[str]`: Observables to include in the output. If passed, all observable names NOT in this list will
-                    be excluded. Defaults to `None` (all observables).
-                _steady_state:`bool, optional`: Whether to include the steady state analysis job. NOTE: This feature will currently throw an error as it is not
-                    yet implemented.
+        Args:
+            - **entrypoint**: `str`: One of either: a path to a sbml OR an antimony model/string that can be converted to SBML. NOTE: Currently, only SBML is supported as an entrypoint.
+            - **start**: `int`: The start time of the time course to include in comparison.
+            - **end**: `int`: The end of the comparison job in seconds.
+            - **steps**: `int`: The number of steps in the comparison job.
+            - **simulators**: `List[str]`: The list of simulators to include in comparison. Defaults to all utc simulators (amici, copasi, tellurium)
+            - **include_outputs**: `bool, optional`: Whether to include the output data used to calculate comparison in the job results on result fetch. Defaults to True.
+            - **comparison_id**: `str, optional`: The unique identifier for the comparison job. Defaults to None. If `None` is passed, a comparison id of `bio_check-request-<UUID>` is generated.
+            - **expected_results**: `str, optional`: The path to the ground expected_results report file to include in comparison. Defaults to None.
+            - **rTol**: `float`, optional: The relative tolerance used to determine the relative distance in a pairwise comparison.
+            - **aTol**: `float`L optional: The absolute tolerance used to determine the absolute distance in a pairwise comparison.
+            - **selection_list**: `List[str]`: Observables to include in the output. If passed, all observable names NOT in this list will be excluded. Defaults to `None` (all observables).
+            - **_steady_state**: `bool, optional`: Whether to include the steady state analysis job. NOTE: This feature will currently throw an error as it is not yet implemented.
 
-            Returns:
-                A dictionary containing the job submission results. **Note**: the return status should read `PENDING`.
+        Returns:
+            A dictionary containing the job submission results. **Note**: the return status should read `PENDING`.
+
         """
         if _steady_state is not False:
             raise NotImplementedError("The steady state analysis of model files is not yet implemented and currently under development.")
@@ -196,16 +195,14 @@ class Verifier(Api):
             return RequestError(error=str(e))
 
     def get_compatible(self, file: str, versions: bool = False) -> Union[List[Tuple[Any, ...]], RequestError]:
-        """Get all simulators and optionally their versions for a given file. The File is expected to be either an OMEX/COMBINE archive
-            or SBML file.
+        """Get all simulators and optionally their versions for a given file. The File is expected to be either an OMEX/COMBINE archive or SBML file.
 
-            Args:
-                file:`str`: The path to the file to be checked.
-                versions:`bool`: Whether to return the compatible version of the given compatible simulator. Defaults to `False`.
+        Args:
+        file:`str`: The path to the file to be checked.
+        versions:`bool`: Whether to return the compatible version of the given compatible simulator. Defaults to `False`.
 
-            Returns:
-                A dict of compatible simulators and the referenced file.
-
+        Returns:
+        A dict of compatible simulators and the referenced file.
         """
         endpoint = self._format_endpoint('get-compatible-for-verification')
         fp = (file.split('/')[-1], open(file, 'rb'), 'application/octet-stream')
@@ -250,20 +247,18 @@ class Verifier(Api):
     ) -> Figure:
         """Visualize simulation output data, not comparison data, with subplots for each species.
 
-            Args:
-                data (dict): simulation output data
-                simulators (list[str]): list of simulators
-                output_start (int): start time of simulation output recording.
-                output_end (int): end time of simulation output recording.
-                num_points (int): number of points in simulation output time series.
-                hue (str): hue upon which the line plot colors are based. Options are: `'simulators'` or `'species'`. Defaults to 'simulators'.
-                    If `'simulators'` is passed, each column will be of its own color. If `'species'` is passed, each row will be of its
-                    own color.
-                use_grid (bool): whether to use a grid for each subplot. Defaults to False.
-                color_mapping (list[str]): list of colors to use for each subplot. Defaults to None.
+        Args:
+        data (dict): simulation output data
+        simulators (list[str]): list of simulators
+        output_start (int): start time of simulation output recording.
+        output_end (int): end time of simulation output recording.
+        num_points (int): number of points in simulation output time series.
+        hue (str): hue upon which the line plot colors are based. Options are: `'simulators'` or `'species'`. Defaults to 'simulators'. If `'simulators'` is passed, each column will be of its own color. If `'species'` is passed, each row will be of its own color.
+        use_grid (bool): whether to use a grid for each subplot. Defaults to False.
+        color_mapping (list[str]): list of colors to use for each subplot. Defaults to None.
 
-            Returns:
-                matplotlib.pyplot.Figure of a plot grid
+        Returns:
+        matplotlib.pyplot.Figure of a plot grid
 
         """
         # grid plot params
@@ -318,16 +313,14 @@ class Verifier(Api):
     def visualize_comparison(self, data: Dict, simulators: List[str], comparison_type='proximity', color_mapping: List[str] = None) -> Figure:
         """Visualize simulation comparison matrix in the form of a heatmap.
 
-            Args:
-                data (dict): simulation output data
-                simulators (list[str]): list of simulators
-                comparison_type (str): type of comparison. Defaults to `'proximity'`.
-                color_mapping (list[str]): list of colors to use for True and False responses. Defaults to None.
+        Args:
+        data (dict): simulation output data
+        simulators (list[str]): list of simulators
+        comparison_type (str): type of comparison. Defaults to `'proximity'`.
+        color_mapping (list[str]): list of colors to use for True and False responses. Defaults to None.
 
-            Returns:
-                matplotlib.pyplot.Figure of a plot grid
-
-
+        Returns:
+        matplotlib.pyplot.Figure of a plot grid
         """
         species_data_content = data['content']['results']['results']
         species_names = list(species_data_content.keys())
@@ -368,9 +361,9 @@ class Verifier(Api):
     def export_plot(self, fig: Figure, save_dest: str):
         """Save a `matplotlib.pyplot.Figure` instance generated from one of this class' `visualize_` methods, as a PDF file.
 
-            Args:
-                fig (matplotlib.pyplot.Figure): Figure instance generated from either `Verifier.visualize_comparison()` or `Verifier.visualize_outputs()`.
-                save_dest (str): Destination path to save the plot to.
+        Args:
+        fig (matplotlib.pyplot.Figure): Figure instance generated from either `Verifier.visualize_comparison()` or `Verifier.visualize_outputs()`.
+        save_dest (str): Destination path to save the plot to.
         """
         with PdfPages(save_dest) as pdf:
             pdf.savefig(fig)
@@ -379,16 +372,14 @@ class Verifier(Api):
 
     # -- csv and observables
     def get_observables(self, data: Dict, simulators: List[str]) -> pd.DataFrame:
-        """Get the observables passed within `data` as a flattened dataframe in which each column is: `<SPECIES NAME>_<SIMULATOR>` for each
-            species name and simulator involved within the comparison.
+        """Get the observables passed within `data` as a flattened dataframe in which each column is: `<SPECIES NAME>_<SIMULATOR>` for each species name and simulator involved within the comparison.
 
-            Args:
-                data (dict): simulation output data generated from `Verifier.get_verify_output()`. This method assumes a resulting job status from the aforementioned
-                    `get` method as being `'COMPLETED'`. Tip: if the `data` does not yet have a completed status, try again.
-                simulators (list[str]): list of simulators to include in the dataframe.
+        Args:
+        data (dict): simulation output data generated from `Verifier.get_verify_output()`. This method assumes a resulting job status from the aforementioned `get` method as being `'COMPLETED'`. Tip: if the `data` does not yet have a completed status, try again.
+        simulators (list[str]): list of simulators to include in the dataframe.
 
-            Returns:
-                pd.DataFrame of observables.
+        Returns:
+        pd.DataFrame of observables.
         """
         dataframe = {}
         species_data_content = data['content']['results']['results']
@@ -409,10 +400,10 @@ class Verifier(Api):
     def export_csv(self, data: Dict, save_dest: str, simulators: List[str]):
         """Export the content passed in `data` as a CSV file.
 
-            Args:
-                data (dict): simulation output data generated from `Verifier.get_verify_output()`.
-                save_dest (str): Destination path to save the CSV file.
-                simulators (list[str]): list of simulators to include in the dataframe.
+        Args:
+        data (dict): simulation output data generated from `Verifier.get_verify_output()`.
+        save_dest (str): Destination path to save the CSV file.
+        simulators (list[str]): list of simulators to include in the dataframe.
         """
         return self.get_observables(data, simulators).to_csv(save_dest, index=False)
 
@@ -422,8 +413,7 @@ class Verifier(Api):
 
     # -- tools
     def select_observables(self, observables: List[str], data: Dict) -> Dict:
-        """Select data from the input data that is passed which should be formatted such that the data has mappings of observable names
-            to dicts in which the keys are the simulator names and the values are arrays. The data must have content accessible at: `data['content']['results']`.
+        """Select data from the input data that is passed which should be formatted such that the data has mappings of observable names to dicts in which the keys are the simulator names and the values are arrays. The data must have content accessible at: `data['content']['results']`.
         """
         outputs = data.copy()
         result = {}
