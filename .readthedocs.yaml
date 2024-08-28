@@ -10,17 +10,11 @@ formats:
    - pdf
    - epub
 
-# Optional but recommended, declare the Python requirements required
-# to build your documentation
-# See https://docs.readthedocs.io/en/stable/guides/reproducible-builds.html
-python:
-   install:
-   - requirements: documentation/requirements.docs.txt
-
 build:
   os: ubuntu-22.04
   tools:
     python: "3.12"
   commands:
-  - sphinx-apidoc -o documentation/source/ ../bio_compose
-  - sphinx-build -b html documentation/source/ documentation/_build/html
+    - pip install sphinx sphinx-autodoc-typehints
+    - sphinx-apidoc -o documentation/source/ bio_compose
+    - sphinx-build -b html documentation/source/ documentation/build/html
