@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="../../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>bio_compose.runner &#8212; BioCompose 0.3.2 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=d1102ebc" />
+    <link rel="stylesheet" type="text/css" href="../../_static/basic.css?v=c058f7c8" />
+    <link rel="stylesheet" type="text/css" href="../../_static/alabaster.css?v=27fed22d" />
+    <script src="../../_static/documentation_options.js?v=71d9d8e6"></script>
+    <script src="../../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+   
+  <link rel="stylesheet" href="../../_static/custom.css" type="text/css" />
+  
+
+  
+  
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <h1>Source code for bio_compose.runner</h1><div class="highlight"><pre>
+<span></span><span class="c1"># Runner for interacting with the &quot;execute-simulations&quot; group of endpoints</span>
+<span class="kn">import</span> <span class="nn">os</span> 
+<span class="kn">import</span> <span class="nn">abc</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="o">*</span> 
+
+<span class="kn">from</span> <span class="nn">requests_toolbelt.multipart.encoder</span> <span class="kn">import</span> <span class="n">MultipartEncoder</span>
+
+<span class="kn">from</span> <span class="nn">bio_compose.data_model</span> <span class="kn">import</span> <span class="n">Api</span>
+
+
+<div class="viewcode-block" id="SimulationRunner">
+<a class="viewcode-back" href="../../bio_compose.html#bio_compose.runner.SimulationRunner">[docs]</a>
+<span class="k">class</span> <span class="nc">SimulationRunner</span><span class="p">(</span><span class="n">Api</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    API which handles all aspects of running either UTC or Smoldyn (Brownian Motion) simulations using the REST API.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        A new instance of the SimulationRunner class. NOTE: this may clash with your record keeping in a notebook, so it is highly recommended that users treat instances of this class as quasi-singletons, although not necessary for fundamental interaction.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+
+<div class="viewcode-block" id="SimulationRunner.run_smoldyn_simulation">
+<a class="viewcode-back" href="../../bio_compose.html#bio_compose.runner.SimulationRunner.run_smoldyn_simulation">[docs]</a>
+    <span class="k">def</span> <span class="nf">run_smoldyn_simulation</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">smoldyn_configuration_filepath</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">duration</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">dt</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Run a smoldyn simulation using a standard Smoldyn configuration file. Please see https://www.smoldyn.org/SmoldynManual.pdf for more information on running simulations with Smoldyn.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            - **smoldyn_configuration_filepath**: `str`: The path to the Smoldyn configuration file for the given model simulation.</span>
+<span class="sd">            - **duration**: `int`: The duration of the simulation. If `None` is passed, duration inference will be attempted using `time_stop` parameter within the Smoldyn configuration. Defaults to `None`.</span>
+<span class="sd">            - **dt**: `float`: The timestep to use within the Smoldyn simulation. If `None` is passed, dt inference will be attempted using the `.dt` parameter of the loaded Smoldyn simulation. Defaults to `None`.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            The response for the Smoldyn simulation submission request.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">endpoint</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_format_endpoint</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;run-smoldyn&#39;</span><span class="p">)</span>
+        
+        <span class="c1"># multipart</span>
+        <span class="n">input_fp</span> <span class="o">=</span> <span class="p">(</span><span class="n">smoldyn_configuration_filepath</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;/&#39;</span><span class="p">)[</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="nb">open</span><span class="p">(</span><span class="n">smoldyn_configuration_filepath</span><span class="p">,</span> <span class="s1">&#39;rb&#39;</span><span class="p">),</span> <span class="s1">&#39;application/octet-stream&#39;</span><span class="p">)</span>
+        <span class="n">encoder_fields</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;uploaded_file&#39;</span><span class="p">:</span> <span class="n">input_fp</span><span class="p">}</span>
+        <span class="n">multidata</span> <span class="o">=</span> <span class="n">MultipartEncoder</span><span class="p">(</span><span class="n">fields</span><span class="o">=</span><span class="n">encoder_fields</span><span class="p">)</span>
+
+        <span class="c1"># query and headers</span>
+        <span class="n">query_params</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="n">query_args</span> <span class="o">=</span> <span class="p">[(</span><span class="s1">&#39;duration&#39;</span><span class="p">,</span> <span class="n">duration</span><span class="p">),</span> <span class="p">(</span><span class="s1">&#39;dt&#39;</span><span class="p">,</span> <span class="n">dt</span><span class="p">)]</span>
+        <span class="k">for</span> <span class="n">arg</span> <span class="ow">in</span> <span class="n">query_args</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">arg</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">query_params</span><span class="p">[</span><span class="n">arg</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">arg</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+
+        <span class="n">headers</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;Content-Type&#39;</span><span class="p">:</span> <span class="n">multidata</span><span class="o">.</span><span class="n">content_type</span><span class="p">}</span>
+
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_execute_request</span><span class="p">(</span><span class="n">endpoint</span><span class="o">=</span><span class="n">endpoint</span><span class="p">,</span> <span class="n">headers</span><span class="o">=</span><span class="n">headers</span><span class="p">,</span> <span class="n">multidata</span><span class="o">=</span><span class="n">multidata</span><span class="p">,</span> <span class="n">query_params</span><span class="o">=</span><span class="n">query_params</span><span class="p">)</span></div>
+
+        
+<div class="viewcode-block" id="SimulationRunner.run_utc_simulation">
+<a class="viewcode-back" href="../../bio_compose.html#bio_compose.runner.SimulationRunner.run_utc_simulation">[docs]</a>
+    <span class="k">def</span> <span class="nf">run_utc_simulation</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sbml_filepath</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">start</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">end</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">steps</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">simulator</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Run a uniform time course simulation of the model specified in `sbml_filepath` with a supported simulator.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            - **sbml_filepath**: `str`: The path to a valid SBML file.</span>
+<span class="sd">            - **start**: `int`: The start time of the simulation.</span>
+<span class="sd">            - **end**: `int`: The end time of the simulation.</span>
+<span class="sd">            - **steps**: `int`: The number of steps to record within the ODE.</span>
+<span class="sd">            - **simulator**: `str`: The simulator to use. Currently, simulator choices include: `&#39;amici&#39;`, `&#39;copasi&#39;`, or `&#39;tellurium&#39;`.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            The response for the UTC simulation submission request.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">endpoint</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_format_endpoint</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;run-utc&#39;</span><span class="p">)</span>
+
+        <span class="c1"># multipart </span>
+        <span class="n">input_fp</span> <span class="o">=</span> <span class="p">(</span><span class="n">sbml_filepath</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;/&#39;</span><span class="p">)[</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="nb">open</span><span class="p">(</span><span class="n">sbml_filepath</span><span class="p">,</span> <span class="s1">&#39;rb&#39;</span><span class="p">),</span> <span class="s1">&#39;application/octet-stream&#39;</span><span class="p">)</span>
+        <span class="n">encoder_fields</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;uploaded_file&#39;</span><span class="p">:</span> <span class="n">input_fp</span><span class="p">}</span>
+        <span class="n">multidata</span> <span class="o">=</span> <span class="n">MultipartEncoder</span><span class="p">(</span><span class="n">fields</span><span class="o">=</span><span class="n">encoder_fields</span><span class="p">)</span>
+
+        <span class="c1"># query and headers</span>
+        <span class="n">query_params</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s1">&#39;start&#39;</span><span class="p">:</span> <span class="nb">str</span><span class="p">(</span><span class="n">start</span><span class="p">),</span> 
+            <span class="s1">&#39;end&#39;</span><span class="p">:</span> <span class="nb">str</span><span class="p">(</span><span class="n">end</span><span class="p">),</span>
+            <span class="s1">&#39;steps&#39;</span><span class="p">:</span> <span class="nb">str</span><span class="p">(</span><span class="n">steps</span><span class="p">),</span>
+            <span class="s1">&#39;simulator&#39;</span><span class="p">:</span> <span class="n">simulator</span>
+        <span class="p">}</span>
+        <span class="n">headers</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;Content-Type&#39;</span><span class="p">:</span> <span class="n">multidata</span><span class="o">.</span><span class="n">content_type</span><span class="p">}</span>
+
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_execute_request</span><span class="p">(</span><span class="n">endpoint</span><span class="o">=</span><span class="n">endpoint</span><span class="p">,</span> <span class="n">headers</span><span class="o">=</span><span class="n">headers</span><span class="p">,</span> <span class="n">multidata</span><span class="o">=</span><span class="n">multidata</span><span class="p">,</span> <span class="n">query_params</span><span class="o">=</span><span class="n">query_params</span><span class="p">)</span></div>
+
+    
+<div class="viewcode-block" id="SimulationRunner.generate_simularium_file">
+<a class="viewcode-back" href="../../bio_compose.html#bio_compose.runner.SimulationRunner.generate_simularium_file">[docs]</a>
+    <span class="k">def</span> <span class="nf">generate_simularium_file</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">smoldyn_output_filepath</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">box_size</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">filename</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Run a Smoldyn simulation and generate a Simularium trajectory from the aforementioned simulation&#39;s outputs.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            - **smoldyn_output_filepath**: `str`: The path to the Smoldyn output file for the given model simulation.</span>
+<span class="sd">            - **box_size**: `float`: The box size to use for the Simularium trajectory.</span>
+<span class="sd">            - **filename**: `str`: The name of the Simularium file that is generated. If `None` is passed, a general `&#39;simulation.simularium&#39;` filename will be used. Defaults to `None`.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            The response for the Simularium submission request.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">endpoint</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_format_endpoint</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;generate-simularium-file&#39;</span><span class="p">)</span>
+
+        <span class="c1"># multipart </span>
+        <span class="n">input_fp</span> <span class="o">=</span> <span class="p">(</span><span class="n">smoldyn_output_filepath</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;/&#39;</span><span class="p">)[</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="nb">open</span><span class="p">(</span><span class="n">smoldyn_output_filepath</span><span class="p">,</span> <span class="s1">&#39;rb&#39;</span><span class="p">),</span> <span class="s1">&#39;application/octet-stream&#39;</span><span class="p">)</span>
+        <span class="n">encoder_fields</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;uploaded_file&#39;</span><span class="p">:</span> <span class="n">input_fp</span><span class="p">}</span>
+        <span class="n">multidata</span> <span class="o">=</span> <span class="n">MultipartEncoder</span><span class="p">(</span><span class="n">fields</span><span class="o">=</span><span class="n">encoder_fields</span><span class="p">)</span>
+
+        <span class="c1"># query</span>
+        <span class="n">query_params</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;box_size&#39;</span><span class="p">:</span> <span class="nb">str</span><span class="p">(</span><span class="n">box_size</span><span class="p">)}</span>
+        <span class="k">if</span> <span class="n">filename</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">query_params</span><span class="p">[</span><span class="s1">&#39;filename&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">filename</span>
+
+        <span class="c1"># headers </span>
+        <span class="n">headers</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;Content-Type&#39;</span><span class="p">:</span> <span class="n">multidata</span><span class="o">.</span><span class="n">content_type</span><span class="p">}</span>
+
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_execute_request</span><span class="p">(</span><span class="n">endpoint</span><span class="o">=</span><span class="n">endpoint</span><span class="p">,</span> <span class="n">headers</span><span class="o">=</span><span class="n">headers</span><span class="p">,</span> <span class="n">multidata</span><span class="o">=</span><span class="n">multidata</span><span class="p">,</span> <span class="n">query_params</span><span class="o">=</span><span class="n">query_params</span><span class="p">)</span></div>
+</div>
+
+</pre></div>
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../../index.html">BioCompose</a></h1>
+
+
+
+
+
+
+
+
+
+<search id="searchbox" style="display: none" role="search">
+    <div class="searchformwrapper">
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" placeholder="Search"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</search>
+<script>document.getElementById('searchbox').style.display = "block"</script><h3>Navigation</h3>
+<p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../modules.html">bio_compose</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../../index.html">Documentation overview</a><ul>
+  <li><a href="../index.html">Module code</a><ul>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &#169;2024, Alexander A. Patrie.
+      
+      |
+      Powered by <a href="https://www.sphinx-doc.org/">Sphinx 8.0.2</a>
+      &amp; <a href="https://alabaster.readthedocs.io">Alabaster 1.0.0</a>
+      
+    </div>
+
+    
+
+    
+  </body>
+</html>

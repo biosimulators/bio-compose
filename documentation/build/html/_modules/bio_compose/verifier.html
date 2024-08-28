@@ -1,0 +1,610 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="../../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>bio_compose.verifier &#8212; BioCompose 0.3.2 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=d1102ebc" />
+    <link rel="stylesheet" type="text/css" href="../../_static/basic.css?v=c058f7c8" />
+    <link rel="stylesheet" type="text/css" href="../../_static/alabaster.css?v=27fed22d" />
+    <script src="../../_static/documentation_options.js?v=71d9d8e6"></script>
+    <script src="../../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+   
+  <link rel="stylesheet" href="../../_static/custom.css" type="text/css" />
+  
+
+  
+  
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <h1>Source code for bio_compose.verifier</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">tempfile</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="kn">from</span> <span class="nn">uuid</span> <span class="kn">import</span> <span class="n">uuid4</span>
+<span class="kn">from</span> <span class="nn">dataclasses</span> <span class="kn">import</span> <span class="n">dataclass</span><span class="p">,</span> <span class="n">asdict</span>
+
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span> 
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">import</span> <span class="nn">requests</span>
+<span class="kn">import</span> <span class="nn">seaborn</span> <span class="k">as</span> <span class="nn">sns</span>
+<span class="kn">import</span> <span class="nn">antimony</span>
+<span class="kn">from</span> <span class="nn">matplotlib</span> <span class="kn">import</span> <span class="n">pyplot</span> <span class="k">as</span> <span class="n">plt</span>
+<span class="kn">from</span> <span class="nn">matplotlib.backends.backend_pdf</span> <span class="kn">import</span> <span class="n">PdfPages</span>
+<span class="kn">from</span> <span class="nn">matplotlib.figure</span> <span class="kn">import</span> <span class="n">Figure</span>
+<span class="kn">from</span> <span class="nn">requests</span> <span class="kn">import</span> <span class="n">Response</span>
+<span class="kn">from</span> <span class="nn">requests.exceptions</span> <span class="kn">import</span> <span class="n">RequestException</span>
+<span class="kn">from</span> <span class="nn">requests_toolbelt.multipart.encoder</span> <span class="kn">import</span> <span class="n">MultipartEncoder</span>
+
+<span class="kn">from</span> <span class="nn">bio_compose.processing_tools</span> <span class="kn">import</span> <span class="n">generate_color_gradient</span>
+<span class="kn">from</span> <span class="nn">bio_compose.data_model</span> <span class="kn">import</span> <span class="n">Api</span><span class="p">,</span> <span class="n">RequestError</span>
+
+
+<div class="viewcode-block" id="Verifier">
+<a class="viewcode-back" href="../../bio_compose.html#bio_compose.verifier.Verifier">[docs]</a>
+<span class="k">class</span> <span class="nc">Verifier</span><span class="p">(</span><span class="n">Api</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    API for verifying (running and comparing) the results of multiple simulators for a given SBML model.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        A new instance of the Verifier class. **NOTE**: this may clash with your record keeping in a notebook, so it is highly recommended that users treat instances of this class as quasi-singletons, although not necessary for fundamental interaction.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+
+    <span class="c1"># -- api calls</span>
+<div class="viewcode-block" id="Verifier.verify_omex">
+<a class="viewcode-back" href="../../bio_compose.html#bio_compose.verifier.Verifier.verify_omex">[docs]</a>
+    <span class="k">def</span> <span class="nf">verify_omex</span><span class="p">(</span>
+            <span class="bp">self</span><span class="p">,</span>
+            <span class="n">omex_filepath</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+            <span class="n">simulators</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+            <span class="n">include_outputs</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+            <span class="n">comparison_id</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+            <span class="n">expected_results</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+            <span class="n">selection_list</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+            <span class="n">rTol</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+            <span class="n">aTol</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+            <span class="n">_steady_state</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Union</span><span class="p">[</span><span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">],</span> <span class="n">RequestError</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Submit a new uniform time course comparison job to the service and return confirmation of job submission.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            - **omex_filepath**: `str`: The path to the omex file to submit.</span>
+<span class="sd">            - **simulators**: `List[str]`: The list of simulators to include in comparison. Defaults to all utc simulators (amici, copasi, tellurium)</span>
+<span class="sd">            - **include_outputs**: `bool, optional`: Whether to include the output data used to calculate comparison in the job results on result fetch. Defaults to True.</span>
+<span class="sd">            - **comparison_id**: `str, optional`: The unique identifier for the comparison job. Defaults to None. If `None` is passed, a comparison id of `bio_check-request-&lt;UUID&gt;` is generated.</span>
+<span class="sd">            - **expected_results**: `str, optional`: The path to the ground expected_results report file to include in comparison. Defaults to None.</span>
+<span class="sd">            - **selection_list**: `List[str], optional`: The list of observables to include in comparison output. Defaults to None (all observables).</span>
+<span class="sd">            - **rTol**: `float, optional`: The relative tolerance used to determine the relative distance in a pairwise comparison.</span>
+<span class="sd">            - **aTol**: `float, optional`: The absolute tolerance used to determine the absolute distance in a pairwise comparison.</span>
+<span class="sd">            - **_steady_state**: `bool, optional`: Whether to include the steady state analysis job. NOTE: This feature will currently throw an error as it is not yet implemented.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            A dictionary containing the job submission results. **Note**: the return status should read `PENDING`.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">_steady_state</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">False</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span><span class="s2">&quot;The steady state analysis of model files is not yet implemented and currently under development.&quot;</span><span class="p">)</span>
+
+        <span class="n">endpoint</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_format_endpoint</span><span class="p">(</span><span class="s1">&#39;verify-omex&#39;</span><span class="p">)</span>
+
+        <span class="c1"># configure params</span>
+        <span class="n">_id</span> <span class="o">=</span> <span class="n">comparison_id</span> <span class="ow">or</span> <span class="s2">&quot;bio_check-request-&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">uuid4</span><span class="p">())</span>
+        <span class="n">_omex</span> <span class="o">=</span> <span class="p">(</span><span class="n">omex_filepath</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;/&#39;</span><span class="p">)[</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="nb">open</span><span class="p">(</span><span class="n">omex_filepath</span><span class="p">,</span> <span class="s1">&#39;rb&#39;</span><span class="p">),</span> <span class="s1">&#39;application/octet-stream&#39;</span><span class="p">)</span>
+        <span class="n">_report</span> <span class="o">=</span> <span class="p">(</span><span class="n">expected_results</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;/&#39;</span><span class="p">)[</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="nb">open</span><span class="p">(</span><span class="n">expected_results</span><span class="p">,</span> <span class="s1">&#39;rb&#39;</span><span class="p">),</span> <span class="s1">&#39;application/octet-stream&#39;</span><span class="p">)</span> <span class="k">if</span> <span class="n">expected_results</span> <span class="k">else</span> <span class="kc">None</span>
+        <span class="n">sims</span> <span class="o">=</span> <span class="n">simulators</span> <span class="ow">or</span> <span class="p">[</span><span class="s1">&#39;amici&#39;</span><span class="p">,</span> <span class="s1">&#39;copasi&#39;</span><span class="p">,</span> <span class="s1">&#39;tellurium&#39;</span><span class="p">]</span>
+
+        <span class="n">encoder_fields</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s1">&#39;uploaded_file&#39;</span><span class="p">:</span> <span class="n">_omex</span><span class="p">,</span>
+            <span class="s1">&#39;expected_results&#39;</span><span class="p">:</span> <span class="n">_report</span>
+        <span class="p">}</span>
+
+        <span class="n">query_params</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s1">&#39;simulators&#39;</span><span class="p">:</span> <span class="s1">&#39;,&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">sims</span><span class="p">),</span>
+            <span class="s1">&#39;include_outputs&#39;</span><span class="p">:</span> <span class="nb">str</span><span class="p">(</span><span class="n">include_outputs</span><span class="p">)</span><span class="o">.</span><span class="n">lower</span><span class="p">(),</span>
+            <span class="s1">&#39;comparison_id&#39;</span><span class="p">:</span> <span class="n">_id</span><span class="p">,</span>
+        <span class="p">}</span>
+
+        <span class="k">if</span> <span class="n">selection_list</span><span class="p">:</span>
+            <span class="n">query_params</span><span class="p">[</span><span class="s1">&#39;selection_list&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;,&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">selection_list</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">rTol</span><span class="p">:</span>
+            <span class="n">query_params</span><span class="p">[</span><span class="s1">&#39;rTol&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">rTol</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">aTol</span><span class="p">:</span>
+            <span class="n">query_params</span><span class="p">[</span><span class="s1">&#39;aTol&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">aTol</span><span class="p">)</span>
+
+        <span class="n">multidata</span> <span class="o">=</span> <span class="n">MultipartEncoder</span><span class="p">(</span><span class="n">fields</span><span class="o">=</span><span class="n">encoder_fields</span><span class="p">)</span>
+        <span class="n">headers</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;Content-Type&#39;</span><span class="p">:</span> <span class="n">multidata</span><span class="o">.</span><span class="n">content_type</span><span class="p">}</span>
+
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">response</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="n">endpoint</span><span class="p">,</span> <span class="n">headers</span><span class="o">=</span><span class="n">headers</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">multidata</span><span class="p">,</span> <span class="n">params</span><span class="o">=</span><span class="n">query_params</span><span class="p">)</span>
+            <span class="n">response</span><span class="o">.</span><span class="n">raise_for_status</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_check_response</span><span class="p">(</span><span class="n">response</span><span class="p">)</span>
+            <span class="n">output</span> <span class="o">=</span> <span class="n">response</span><span class="o">.</span><span class="n">json</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">submitted_jobs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">output</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">output</span>
+        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">RequestError</span><span class="p">(</span><span class="n">error</span><span class="o">=</span><span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">))</span></div>
+
+
+<div class="viewcode-block" id="Verifier.verify_sbml">
+<a class="viewcode-back" href="../../bio_compose.html#bio_compose.verifier.Verifier.verify_sbml">[docs]</a>
+    <span class="k">def</span> <span class="nf">verify_sbml</span><span class="p">(</span>
+            <span class="bp">self</span><span class="p">,</span>
+            <span class="n">entrypoint</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+            <span class="n">start</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+            <span class="n">end</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+            <span class="n">steps</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+            <span class="n">simulators</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+            <span class="n">include_outputs</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+            <span class="n">comparison_id</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+            <span class="n">expected_results</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+            <span class="n">rTol</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+            <span class="n">aTol</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+            <span class="n">selection_list</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+            <span class="n">_steady_state</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Union</span><span class="p">[</span><span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">],</span> <span class="n">RequestError</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Submit a new uniform time course comparison job to the service and return confirmation of job submission.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            - **entrypoint**: `str`: One of either: a path to a sbml OR an antimony model/string that can be converted to SBML. NOTE: Currently, only SBML is supported as an entrypoint.</span>
+<span class="sd">            - **start**: `int`: The start time of the time course to include in comparison.</span>
+<span class="sd">            - **end**: `int`: The end of the comparison job in seconds.</span>
+<span class="sd">            - **steps**: `int`: The number of steps in the comparison job.</span>
+<span class="sd">            - **simulators**: `List[str]`: The list of simulators to include in comparison. Defaults to all utc simulators (amici, copasi, tellurium)</span>
+<span class="sd">            - **include_outputs**: `bool, optional`: Whether to include the output data used to calculate comparison in the job results on result fetch. Defaults to True.</span>
+<span class="sd">            - **comparison_id**: `str, optional`: The unique identifier for the comparison job. Defaults to None. If `None` is passed, a comparison id of `bio_check-request-&lt;UUID&gt;` is generated.</span>
+<span class="sd">            - **expected_results**: `str, optional`: The path to the ground expected_results report file to include in comparison. Defaults to None.</span>
+<span class="sd">            - **rTol**: `float`, optional: The relative tolerance used to determine the relative distance in a pairwise comparison.</span>
+<span class="sd">            - **aTol**: `float`L optional: The absolute tolerance used to determine the absolute distance in a pairwise comparison.</span>
+<span class="sd">            - **selection_list**: `List[str]`: Observables to include in the output. If passed, all observable names NOT in this list will be excluded. Defaults to `None` (all observables).</span>
+<span class="sd">            - **_steady_state**: `bool, optional`: Whether to include the steady state analysis job. NOTE: This feature will currently throw an error as it is not yet implemented.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            A dictionary containing the job submission results. **Note**: the return status should read `PENDING`.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">_steady_state</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">False</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span><span class="s2">&quot;The steady state analysis of model files is not yet implemented and currently under development.&quot;</span><span class="p">)</span>
+
+        <span class="n">endpoint</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_format_endpoint</span><span class="p">(</span><span class="s1">&#39;verify-sbml&#39;</span><span class="p">)</span>
+
+        <span class="c1"># TODO: fix and remove this</span>
+        <span class="c1"># raise NotImplementedError(&quot;Submission of jobs with a SBML file is currently under development.&quot;)</span>
+
+        <span class="c1"># handle entrypoint as antimony</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">entrypoint</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s1">&#39;.xml&#39;</span><span class="p">):</span>
+            <span class="n">dest</span> <span class="o">=</span> <span class="n">tempfile</span><span class="o">.</span><span class="n">mkdtemp</span><span class="p">()</span>
+            <span class="n">entrypoint</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_write_antimony_to_sbml</span><span class="p">(</span><span class="n">entrypoint</span><span class="p">,</span> <span class="n">dest</span><span class="p">)</span>
+
+        <span class="n">sbml_fp</span> <span class="o">=</span> <span class="p">(</span><span class="n">entrypoint</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;/&#39;</span><span class="p">)[</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="nb">open</span><span class="p">(</span><span class="n">entrypoint</span><span class="p">,</span> <span class="s1">&#39;rb&#39;</span><span class="p">),</span> <span class="s1">&#39;application/octet-stream&#39;</span><span class="p">)</span>
+        <span class="n">_report</span> <span class="o">=</span> <span class="p">(</span><span class="n">expected_results</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;/&#39;</span><span class="p">)[</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="nb">open</span><span class="p">(</span><span class="n">expected_results</span><span class="p">,</span> <span class="s1">&#39;rb&#39;</span><span class="p">),</span> <span class="s1">&#39;application/octet-stream&#39;</span><span class="p">)</span> <span class="k">if</span> <span class="n">expected_results</span> <span class="k">else</span> <span class="kc">None</span>
+
+        <span class="n">_id</span> <span class="o">=</span> <span class="n">comparison_id</span> <span class="ow">or</span> <span class="s2">&quot;bio_check-request-&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">uuid4</span><span class="p">())</span>
+        <span class="k">if</span> <span class="n">simulators</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">simulators</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;copasi&quot;</span><span class="p">,</span> <span class="s2">&quot;tellurium&quot;</span><span class="p">]</span>
+
+        <span class="c1"># create encoder fields</span>
+        <span class="n">encoder_fields</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s1">&#39;uploaded_file&#39;</span><span class="p">:</span> <span class="n">sbml_fp</span><span class="p">,</span>
+            <span class="s1">&#39;expected_results&#39;</span><span class="p">:</span> <span class="n">_report</span>
+        <span class="p">}</span>
+
+        <span class="n">query_params</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s1">&#39;simulators&#39;</span><span class="p">:</span> <span class="s1">&#39;,&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">simulators</span><span class="p">),</span>
+            <span class="s1">&#39;include_outputs&#39;</span><span class="p">:</span> <span class="nb">str</span><span class="p">(</span><span class="n">include_outputs</span><span class="p">)</span><span class="o">.</span><span class="n">lower</span><span class="p">(),</span>
+            <span class="s1">&#39;comparison_id&#39;</span><span class="p">:</span> <span class="n">_id</span><span class="p">,</span>
+            <span class="s1">&#39;start&#39;</span><span class="p">:</span> <span class="nb">str</span><span class="p">(</span><span class="n">start</span><span class="p">),</span>
+            <span class="s1">&#39;end&#39;</span><span class="p">:</span> <span class="nb">str</span><span class="p">(</span><span class="n">end</span><span class="p">),</span>
+            <span class="s1">&#39;steps&#39;</span><span class="p">:</span> <span class="nb">str</span><span class="p">(</span><span class="n">steps</span><span class="p">)</span>
+        <span class="p">}</span>
+
+        <span class="k">if</span> <span class="n">selection_list</span><span class="p">:</span>
+            <span class="n">query_params</span><span class="p">[</span><span class="s1">&#39;selection_list&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;,&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">selection_list</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">rTol</span><span class="p">:</span>
+            <span class="n">query_params</span><span class="p">[</span><span class="s1">&#39;rTol&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">rTol</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">aTol</span><span class="p">:</span>
+            <span class="n">query_params</span><span class="p">[</span><span class="s1">&#39;aTol&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">aTol</span><span class="p">)</span>
+
+        <span class="n">multidata</span> <span class="o">=</span> <span class="n">MultipartEncoder</span><span class="p">(</span><span class="n">fields</span><span class="o">=</span><span class="n">encoder_fields</span><span class="p">)</span>
+        <span class="c1"># TODO: do we need to change the headers?</span>
+        <span class="n">headers</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;Content-Type&#39;</span><span class="p">:</span> <span class="n">multidata</span><span class="o">.</span><span class="n">content_type</span><span class="p">}</span>
+
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">response</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="n">url</span><span class="o">=</span><span class="n">endpoint</span><span class="p">,</span> <span class="n">headers</span><span class="o">=</span><span class="n">headers</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">multidata</span><span class="p">,</span> <span class="n">params</span><span class="o">=</span><span class="n">query_params</span><span class="p">)</span>
+            <span class="n">response</span><span class="o">.</span><span class="n">raise_for_status</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_check_response</span><span class="p">(</span><span class="n">response</span><span class="p">)</span>
+            <span class="n">output</span> <span class="o">=</span> <span class="n">response</span><span class="o">.</span><span class="n">json</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">submitted_jobs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">output</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">output</span>
+        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">RequestError</span><span class="p">(</span><span class="n">error</span><span class="o">=</span><span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">))</span></div>
+
+
+<div class="viewcode-block" id="Verifier.get_compatible">
+<a class="viewcode-back" href="../../bio_compose.html#bio_compose.verifier.Verifier.get_compatible">[docs]</a>
+    <span class="k">def</span> <span class="nf">get_compatible</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">file</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">versions</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Union</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="n">Tuple</span><span class="p">[</span><span class="n">Any</span><span class="p">,</span> <span class="o">...</span><span class="p">]],</span> <span class="n">RequestError</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get all simulators and optionally their versions for a given file. The File is expected to be either an OMEX/COMBINE archive or SBML file.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            - **file**: `str`: The path to the file to be checked.</span>
+<span class="sd">            - **versions**: `bool`: Whether to return the compatible version of the given compatible simulator. Defaults to `False`.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            A dictionary of compatible simulators and the referenced file.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">endpoint</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_format_endpoint</span><span class="p">(</span><span class="s1">&#39;get-compatible-for-verification&#39;</span><span class="p">)</span>
+        <span class="n">fp</span> <span class="o">=</span> <span class="p">(</span><span class="n">file</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;/&#39;</span><span class="p">)[</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="nb">open</span><span class="p">(</span><span class="n">file</span><span class="p">,</span> <span class="s1">&#39;rb&#39;</span><span class="p">),</span> <span class="s1">&#39;application/octet-stream&#39;</span><span class="p">)</span>
+
+        <span class="n">encoder_fields</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;uploaded_file&#39;</span><span class="p">:</span> <span class="n">fp</span><span class="p">}</span>
+        <span class="n">query_params</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;versions&#39;</span><span class="p">:</span> <span class="nb">str</span><span class="p">(</span><span class="n">versions</span><span class="p">)</span><span class="o">.</span><span class="n">lower</span><span class="p">()}</span>
+
+        <span class="n">multidata</span> <span class="o">=</span> <span class="n">MultipartEncoder</span><span class="p">(</span><span class="n">fields</span><span class="o">=</span><span class="n">encoder_fields</span><span class="p">)</span>
+        <span class="c1"># TODO: do we need to change the headers?</span>
+        <span class="n">headers</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;Content-Type&#39;</span><span class="p">:</span> <span class="n">multidata</span><span class="o">.</span><span class="n">content_type</span><span class="p">}</span>
+
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">response</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="n">url</span><span class="o">=</span><span class="n">endpoint</span><span class="p">,</span> <span class="n">headers</span><span class="o">=</span><span class="n">headers</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">multidata</span><span class="p">,</span> <span class="n">params</span><span class="o">=</span><span class="n">query_params</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_check_response</span><span class="p">(</span><span class="n">response</span><span class="p">)</span>
+            <span class="n">response</span> <span class="o">=</span> <span class="n">response</span><span class="o">.</span><span class="n">json</span><span class="p">()</span>
+
+            <span class="n">output</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="k">for</span> <span class="n">sim_data</span> <span class="ow">in</span> <span class="n">response</span><span class="p">[</span><span class="s1">&#39;simulators&#39;</span><span class="p">]:</span>
+                <span class="n">name</span> <span class="o">=</span> <span class="n">sim_data</span><span class="p">[</span><span class="s1">&#39;name&#39;</span><span class="p">]</span>
+                <span class="n">version</span> <span class="o">=</span> <span class="n">sim_data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;version&#39;</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">version</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                    <span class="n">data</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">([</span><span class="n">name</span><span class="p">,</span> <span class="n">version</span><span class="p">])</span>
+                    <span class="n">output</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">output</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
+
+            <span class="k">return</span> <span class="n">output</span>
+        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">RequestError</span><span class="p">(</span><span class="n">error</span><span class="o">=</span><span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">))</span></div>
+
+
+    <span class="c1"># -- visualizations</span>
+<div class="viewcode-block" id="Verifier.visualize_outputs">
+<a class="viewcode-back" href="../../bio_compose.html#bio_compose.verifier.Verifier.visualize_outputs">[docs]</a>
+    <span class="k">def</span> <span class="nf">visualize_outputs</span><span class="p">(</span>
+            <span class="bp">self</span><span class="p">,</span>
+            <span class="n">data</span><span class="p">:</span> <span class="n">Dict</span><span class="p">,</span>
+            <span class="n">simulators</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span>
+            <span class="n">output_start</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+            <span class="n">output_end</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+            <span class="n">num_points</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+            <span class="n">hue</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">&#39;simulators&#39;</span><span class="p">,</span>
+            <span class="n">use_grid</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+            <span class="n">color_mapping</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Figure</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Visualize simulation output data, not comparison data, with subplots for each species.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            - **data**: `dict`: simulation output data</span>
+<span class="sd">            - **simulators**: `list[str]`: list of simulators</span>
+<span class="sd">            - **output_start**: `int`: start time of simulation output recording.</span>
+<span class="sd">            - **output_end**: `int`: end time of simulation output recording.</span>
+<span class="sd">            - **num_points**: `int`: number of points in simulation output time series.</span>
+<span class="sd">            - **hue**: `str`: hue upon which the line plot colors are based. Options are: `&#39;simulators&#39;` or `&#39;species&#39;`. Defaults to &#39;simulators&#39;. If `&#39;simulators&#39;` is passed, each column will be of its own color. If `&#39;species&#39;` is passed, each row will be of its own color.</span>
+<span class="sd">            - **use_grid**: `bool`: whether to use a grid for each subplot. Defaults to False.</span>
+<span class="sd">            - **color_mapping**: `list[str]`: list of colors to use for each subplot. Defaults to None.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            `matplotlib.pyplot.Figure` of a plot grid</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># grid plot params</span>
+        <span class="n">species_data_content</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s1">&#39;content&#39;</span><span class="p">][</span><span class="s1">&#39;results&#39;</span><span class="p">][</span><span class="s1">&#39;results&#39;</span><span class="p">]</span>
+        <span class="n">species_names</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">species_data_content</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
+        <span class="n">num_species</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">species_names</span><span class="p">)</span>
+        <span class="n">num_simulators</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">simulators</span><span class="p">)</span>
+
+        <span class="c1"># plot data params</span>
+        <span class="n">t</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="n">output_start</span><span class="p">,</span> <span class="n">output_end</span><span class="p">,</span> <span class="n">num_points</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>  <span class="c1"># TODO: extract this dynamically.</span>
+
+        <span class="n">simulator_hue</span> <span class="o">=</span> <span class="n">hue</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="o">==</span> <span class="s1">&#39;simulators&#39;</span>
+        <span class="n">hue_group</span> <span class="o">=</span> <span class="n">simulators</span> <span class="k">if</span> <span class="n">simulator_hue</span> <span class="k">else</span> <span class="n">species_names</span>
+
+        <span class="k">if</span> <span class="n">color_mapping</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">line_colors</span> <span class="o">=</span> <span class="n">color_mapping</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">line_colors</span> <span class="o">=</span> <span class="n">generate_color_gradient</span><span class="p">(</span><span class="n">hue_group</span><span class="p">)</span>
+
+        <span class="c1"># TODO: extract simulator names dynamically as well.</span>
+
+        <span class="n">fig</span><span class="p">,</span> <span class="n">axes</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="n">nrows</span><span class="o">=</span><span class="n">num_species</span><span class="p">,</span> <span class="n">ncols</span><span class="o">=</span><span class="n">num_simulators</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">15</span><span class="p">,</span> <span class="mi">5</span> <span class="o">*</span> <span class="n">num_species</span><span class="p">))</span>
+
+        <span class="k">if</span> <span class="n">num_species</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="n">axes</span> <span class="o">=</span> <span class="p">[</span><span class="n">axes</span><span class="p">]</span>
+
+        <span class="c1"># iterate over grid rows</span>
+        <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">species_name</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">species_names</span><span class="p">):</span>
+            <span class="c1"># iterate over grid cols</span>
+            <span class="k">for</span> <span class="n">j</span><span class="p">,</span> <span class="n">simulator_name</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">simulators</span><span class="p">):</span>
+                <span class="n">ax</span> <span class="o">=</span> <span class="n">axes</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">]</span>
+                <span class="n">species_data</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s1">&#39;content&#39;</span><span class="p">][</span><span class="s1">&#39;results&#39;</span><span class="p">][</span><span class="s1">&#39;results&#39;</span><span class="p">][</span><span class="n">species_name</span><span class="p">]</span>
+                <span class="n">output_data</span> <span class="o">=</span> <span class="n">species_data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;output_data&#39;</span><span class="p">)</span>
+
+                <span class="k">if</span> <span class="n">output_data</span><span class="p">:</span>
+                    <span class="c1"># create one plot in each column mapped to each individual simulator output (for clarity :) )</span>
+                    <span class="n">simulator_output</span> <span class="o">=</span> <span class="n">output_data</span><span class="p">[</span><span class="n">simulator_name</span><span class="p">]</span>
+                    <span class="n">color_index</span> <span class="o">=</span> <span class="n">j</span> <span class="k">if</span> <span class="n">simulator_hue</span> <span class="k">else</span> <span class="n">i</span>
+                    <span class="n">sns</span><span class="o">.</span><span class="n">lineplot</span><span class="p">(</span><span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">line_colors</span><span class="p">[</span><span class="n">color_index</span><span class="p">],</span> <span class="n">x</span><span class="o">=</span><span class="n">t</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="n">simulator_output</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">simulator_name</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+                    <span class="c1"># set row title</span>
+                    <span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">species_name</span><span class="si">}</span><span class="s2"> simulation outputs for </span><span class="si">{</span><span class="n">simulator_name</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+                    <span class="n">ax</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
+                    <span class="n">ax</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="n">use_grid</span><span class="p">)</span>
+
+        <span class="c1"># TODO: adjust this</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+
+        <span class="k">return</span> <span class="n">fig</span></div>
+
+
+<div class="viewcode-block" id="Verifier.visualize_comparison">
+<a class="viewcode-back" href="../../bio_compose.html#bio_compose.verifier.Verifier.visualize_comparison">[docs]</a>
+    <span class="k">def</span> <span class="nf">visualize_comparison</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">:</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">simulators</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span> <span class="n">comparison_type</span><span class="o">=</span><span class="s1">&#39;proximity&#39;</span><span class="p">,</span> <span class="n">color_mapping</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Figure</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Visualize simulation comparison matrix in the form of a heatmap.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            - **data**: `dict`: simulation output data</span>
+<span class="sd">            - **simulators**: `list[str]`: list of simulators</span>
+<span class="sd">            - **comparison_type**: `str`: type of comparison. Defaults to `&#39;proximity&#39;`.</span>
+<span class="sd">            - **color_mapping**: `list[str]`: list of colors to use for True and False responses. Defaults to None.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            `matplotlib.pyplot.Figure` of a plot grid</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">species_data_content</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s1">&#39;content&#39;</span><span class="p">][</span><span class="s1">&#39;results&#39;</span><span class="p">][</span><span class="s1">&#39;results&#39;</span><span class="p">]</span>
+        <span class="n">species_names</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">species_data_content</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
+        <span class="n">num_species</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">species_names</span><span class="p">)</span>
+
+        <span class="n">fig</span><span class="p">,</span> <span class="n">axes</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="n">nrows</span><span class="o">=</span><span class="n">num_species</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">15</span><span class="p">,</span> <span class="mi">5</span> <span class="o">*</span> <span class="n">num_species</span><span class="p">))</span>
+
+        <span class="k">if</span> <span class="n">color_mapping</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">true_color</span> <span class="o">=</span> <span class="n">color_mapping</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+            <span class="n">false_color</span> <span class="o">=</span> <span class="n">color_mapping</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">true_color</span> <span class="o">=</span> <span class="s1">&#39;#1E3A8A&#39;</span>  <span class="c1"># dark blue</span>
+            <span class="n">false_color</span> <span class="o">=</span> <span class="s1">&#39;#D97706&#39;</span>  <span class="c1"># dark orange</span>
+
+        <span class="k">if</span> <span class="n">num_species</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="n">axes</span> <span class="o">=</span> <span class="p">[</span><span class="n">axes</span><span class="p">]</span>
+
+        <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">species_name</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">species_names</span><span class="p">):</span>
+            <span class="n">ax</span> <span class="o">=</span> <span class="n">axes</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+            <span class="n">species_data</span> <span class="o">=</span> <span class="n">species_data_content</span><span class="p">[</span><span class="n">species_name</span><span class="p">]</span>
+            <span class="n">comparison_data</span> <span class="o">=</span> <span class="p">[</span><span class="nb">list</span><span class="p">(</span><span class="n">col</span><span class="o">.</span><span class="n">values</span><span class="p">())</span> <span class="k">for</span> <span class="n">col</span> <span class="ow">in</span> <span class="nb">list</span><span class="p">(</span><span class="n">species_data</span><span class="p">[</span><span class="n">comparison_type</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">())]</span>
+            <span class="n">sns</span><span class="o">.</span><span class="n">heatmap</span><span class="p">(</span>
+                <span class="n">data</span><span class="o">=</span><span class="n">comparison_data</span><span class="p">,</span>
+                <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">,</span>
+                <span class="n">annot</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                <span class="n">xticklabels</span><span class="o">=</span><span class="n">simulators</span><span class="p">,</span>
+                <span class="n">yticklabels</span><span class="o">=</span><span class="n">simulators</span><span class="p">,</span>
+                <span class="n">cmap</span><span class="o">=</span><span class="p">[</span><span class="n">false_color</span><span class="p">,</span> <span class="n">true_color</span><span class="p">],</span>
+                <span class="n">linewidths</span><span class="o">=</span><span class="mi">1</span>
+            <span class="p">)</span>
+            <span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">species_name</span><span class="si">}</span><span class="s2"> comparison matrix&quot;</span><span class="p">)</span>
+
+        <span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+
+        <span class="k">return</span> <span class="n">fig</span></div>
+
+
+<div class="viewcode-block" id="Verifier.export_plot">
+<a class="viewcode-back" href="../../bio_compose.html#bio_compose.verifier.Verifier.export_plot">[docs]</a>
+    <span class="k">def</span> <span class="nf">export_plot</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fig</span><span class="p">:</span> <span class="n">Figure</span><span class="p">,</span> <span class="n">save_dest</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Save a `matplotlib.pyplot.Figure` instance generated from one of this class&#39; `visualize_` methods, as a PDF file.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            - **fig**: `matplotlib.pyplot.Figure`: Figure instance generated from either `Verifier.visualize_comparison()` or `Verifier.visualize_outputs()`.</span>
+<span class="sd">            - **save_dest**: `str`: Destination path to save the plot to.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">with</span> <span class="n">PdfPages</span><span class="p">(</span><span class="n">save_dest</span><span class="p">)</span> <span class="k">as</span> <span class="n">pdf</span><span class="p">:</span>
+            <span class="n">pdf</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="n">fig</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">plt</span><span class="o">.</span><span class="n">close</span><span class="p">(</span><span class="n">fig</span><span class="p">)</span></div>
+
+
+    <span class="c1"># -- csv and observables</span>
+<div class="viewcode-block" id="Verifier.get_observables">
+<a class="viewcode-back" href="../../bio_compose.html#bio_compose.verifier.Verifier.get_observables">[docs]</a>
+    <span class="k">def</span> <span class="nf">get_observables</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">:</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">simulators</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get the observables passed within `data` as a flattened dataframe in which each column is: `&lt;SPECIES NAME&gt;_&lt;SIMULATOR&gt;` for each species name and simulator involved within the comparison.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            - **data**: `Dict`: simulation output data generated from `Verifier.get_verify_output()`. This method assumes a resulting job status from the aforementioned `get` method as being `&#39;COMPLETED&#39;`. Tip: if the `data` does not yet have a completed status, try again.</span>
+<span class="sd">            - **simulators**: `List[str]`: list of simulators to include in the dataframe.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            pd.DataFrame of observables.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">dataframe</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="n">species_data_content</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s1">&#39;content&#39;</span><span class="p">][</span><span class="s1">&#39;results&#39;</span><span class="p">][</span><span class="s1">&#39;results&#39;</span><span class="p">]</span>
+        <span class="n">species_names</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">species_data_content</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
+        <span class="n">num_species</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">species_names</span><span class="p">)</span>
+
+        <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">species_name</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">species_names</span><span class="p">):</span>
+            <span class="k">for</span> <span class="n">j</span><span class="p">,</span> <span class="n">simulator_name</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">simulators</span><span class="p">):</span>
+                <span class="n">species_data</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s1">&#39;content&#39;</span><span class="p">][</span><span class="s1">&#39;results&#39;</span><span class="p">][</span><span class="s1">&#39;results&#39;</span><span class="p">][</span><span class="n">species_name</span><span class="p">]</span>
+                <span class="n">output_data</span> <span class="o">=</span> <span class="n">species_data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;output_data&#39;</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">output_data</span><span class="p">:</span>
+                    <span class="n">simulator_output</span> <span class="o">=</span> <span class="n">output_data</span><span class="p">[</span><span class="n">simulator_name</span><span class="p">]</span>
+                    <span class="n">colname</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">species_name</span><span class="si">}</span><span class="s2">_</span><span class="si">{</span><span class="n">simulator_name</span><span class="si">}</span><span class="s2">&quot;</span>
+                    <span class="n">dataframe</span><span class="p">[</span><span class="n">colname</span><span class="p">]</span> <span class="o">=</span> <span class="n">simulator_output</span>
+
+        <span class="k">return</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">dataframe</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="Verifier.export_csv">
+<a class="viewcode-back" href="../../bio_compose.html#bio_compose.verifier.Verifier.export_csv">[docs]</a>
+    <span class="k">def</span> <span class="nf">export_csv</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">:</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">save_dest</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">simulators</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Export the content passed in `data` as a CSV file.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            - **data**: `Dict`: simulation output data generated from `Verifier.get_verify_output()`.</span>
+<span class="sd">            - **save_dest**: `str`: Destination path to save the CSV file.</span>
+<span class="sd">            - **simulators**: `List[str]`: list of simulators to include in the dataframe.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_observables</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">simulators</span><span class="p">)</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="n">save_dest</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="Verifier.read_observables">
+<a class="viewcode-back" href="../../bio_compose.html#bio_compose.verifier.Verifier.read_observables">[docs]</a>
+    <span class="k">def</span> <span class="nf">read_observables</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">csv_path</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Read in a dataframe generated from `Verifier.export_csv()`.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">csv_path</span><span class="p">)</span></div>
+
+
+    <span class="c1"># -- tools</span>
+<div class="viewcode-block" id="Verifier.select_observables">
+<a class="viewcode-back" href="../../bio_compose.html#bio_compose.verifier.Verifier.select_observables">[docs]</a>
+    <span class="k">def</span> <span class="nf">select_observables</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">observables</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span> <span class="n">data</span><span class="p">:</span> <span class="n">Dict</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Select data from the input data that is passed which should be formatted such that the data has mappings of observable names to dicts in which the keys are the simulator names and the values are arrays. The data must have content accessible at: `data[&#39;content&#39;][&#39;results&#39;]`.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">outputs</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">obs_data</span> <span class="ow">in</span> <span class="n">data</span><span class="p">[</span><span class="s1">&#39;content&#39;</span><span class="p">][</span><span class="s1">&#39;results&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="k">if</span> <span class="n">name</span> <span class="ow">in</span> <span class="n">observables</span><span class="p">:</span>
+                <span class="n">result</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="n">obs_data</span>
+        <span class="n">outputs</span><span class="p">[</span><span class="s1">&#39;content&#39;</span><span class="p">][</span><span class="s1">&#39;results&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">result</span>
+
+        <span class="k">return</span> <span class="n">outputs</span></div>
+
+
+    <span class="k">def</span> <span class="nf">_write_antimony_to_sbml</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">antimony_string</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">dest</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">model_name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Convert an antimony model to SBML. To be used as an entrypoint validator for `Verifier().verify_sbml()`.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            - **antimony_string**: `str`: Antimony model to convert.</span>
+<span class="sd">            - **dest**: `str`: Destination path to save the SBML file.</span>
+<span class="sd">            - **model_name**: `str`: Model name to use for the converted model file. Defaults to `None` (a generic `&#39;model.xml&#39;`).</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            Path to the written SBML file.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">ant_ret</span> <span class="o">=</span> <span class="n">antimony</span><span class="o">.</span><span class="n">loadAntimonyString</span><span class="p">(</span><span class="n">antimony_string</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">ant_ret</span> <span class="o">==</span> <span class="o">-</span><span class="mi">1</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">IOError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;This antimony string cannot be converted to SBML by Antimony: </span><span class="si">{</span><span class="n">antimony_string</span><span class="si">}</span><span class="s2">. Please check the model and try again.&quot;</span><span class="p">)</span>
+
+        <span class="n">filename</span> <span class="o">=</span> <span class="n">model_name</span> <span class="ow">or</span> <span class="s1">&#39;model.xml&#39;</span>
+        <span class="n">file_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">dest</span><span class="p">,</span> <span class="n">filename</span><span class="p">)</span>
+        <span class="n">sbml_ret</span> <span class="o">=</span> <span class="n">antimony</span><span class="o">.</span><span class="n">writeSBMLFile</span><span class="p">(</span><span class="n">filename</span><span class="o">=</span><span class="n">file_path</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">sbml_ret</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">file_path</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">IOError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;This SBML model: </span><span class="si">{</span><span class="n">filename</span><span class="si">}</span><span class="s2"> cannot be written to </span><span class="si">{</span><span class="n">file_path</span><span class="si">}</span><span class="s2">. Please check your paths and try again.&quot;</span><span class="p">)</span></div>
+
+
+
+<span class="c1"># tests</span>
+
+<div class="viewcode-block" id="test_verifier">
+<a class="viewcode-back" href="../../bio_compose.html#bio_compose.verifier.test_verifier">[docs]</a>
+<span class="k">def</span> <span class="nf">test_verifier</span><span class="p">():</span>
+    <span class="c1"># TODO: replace this</span>
+    <span class="n">verifier</span> <span class="o">=</span> <span class="n">Verifier</span><span class="p">()</span>
+    <span class="n">simulators</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;copasi&#39;</span><span class="p">,</span> <span class="s1">&#39;tellurium&#39;</span><span class="p">]</span>
+    <span class="n">sbml_fp</span> <span class="o">=</span> <span class="s2">&quot;../model-examples/sbml-core/Elowitz-Nature-2000-Repressilator/BIOMD0000000012_url.xml&quot;</span>
+    <span class="n">end</span> <span class="o">=</span> <span class="mi">10</span>
+    <span class="n">steps</span> <span class="o">=</span> <span class="mi">100</span>
+
+    <span class="n">sbml_submission</span> <span class="o">=</span> <span class="n">verifier</span><span class="o">.</span><span class="n">verify_sbml</span><span class="p">(</span><span class="n">entrypoint</span><span class="o">=</span><span class="n">sbml_fp</span><span class="p">,</span> <span class="n">steps</span><span class="o">=</span><span class="n">steps</span><span class="p">,</span> <span class="n">start</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">end</span><span class="o">=</span><span class="n">end</span><span class="p">,</span> <span class="n">simulators</span><span class="o">=</span><span class="n">simulators</span><span class="p">,</span> <span class="n">comparison_id</span><span class="o">=</span><span class="s2">&quot;notebook_test1&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">sbml_submission</span><span class="p">)</span></div>
+
+
+</pre></div>
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../../index.html">BioCompose</a></h1>
+
+
+
+
+
+
+
+
+
+<search id="searchbox" style="display: none" role="search">
+    <div class="searchformwrapper">
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" placeholder="Search"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</search>
+<script>document.getElementById('searchbox').style.display = "block"</script><h3>Navigation</h3>
+<p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../modules.html">bio_compose</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../../index.html">Documentation overview</a><ul>
+  <li><a href="../index.html">Module code</a><ul>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &#169;2024, Alexander A. Patrie.
+      
+      |
+      Powered by <a href="https://www.sphinx-doc.org/">Sphinx 8.0.2</a>
+      &amp; <a href="https://alabaster.readthedocs.io">Alabaster 1.0.0</a>
+      
+    </div>
+
+    
+
+    
+  </body>
+</html>

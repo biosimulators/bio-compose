@@ -9,13 +9,13 @@ from bio_compose.data_model import Api
 
 
 class SimulationRunner(Api):
-    endpoint_root: str
-    data: Dict
-    submitted_jobs: List[Dict]
+    """
+    API which handles all aspects of running either UTC or Smoldyn (Brownian Motion) simulations using the REST API.
+    """
 
     def __init__(self):
         """
-        A new instance of the Verifier class. NOTE: this may clash with your record keeping in a notebook, so it is highly recommended that users treat instances of this class as quasi-singletons, although not necessary for fundamental interaction.
+        A new instance of the SimulationRunner class. NOTE: this may clash with your record keeping in a notebook, so it is highly recommended that users treat instances of this class as quasi-singletons, although not necessary for fundamental interaction.
         """
         super().__init__()
 
