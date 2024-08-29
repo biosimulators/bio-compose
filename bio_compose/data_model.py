@@ -59,7 +59,6 @@ class Api(object):
         try:
             resp = requests.get(self.endpoint_root)
             resp.raise_for_status()
-            return resp.json()
         except requests.RequestException as e:
             return {'bio-check-error': f"A connection to that endpoint could not be established: {e}"}
         

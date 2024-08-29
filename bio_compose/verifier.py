@@ -166,7 +166,7 @@ class Verifier(Api):
         }
 
         query_params = {
-            'simulators': ','.join(simulators),
+            'simulators': simulators,  # ','.join(simulators),
             'include_outputs': str(include_outputs).lower(),
             'comparison_id': _id,
             'start': str(start),
