@@ -10,6 +10,7 @@ import requests
 import seaborn as sns
 import antimony
 from matplotlib import pyplot as plt
+from matplotlib.axes import Axes
 from matplotlib.backends.backend_pdf import PdfPages
 from matplotlib.figure import Figure
 from requests import Response
@@ -312,6 +313,29 @@ class Verifier(Api):
         plt.show()
 
         return fig
+
+    def visualize_rmse(self, data: Dict) -> Union[Axes, str]:
+        """
+        Visualize root-mean-square error from the provided verification result data as a bar plot.
+
+        Args:
+            - **data**: `Dict`: verification result data derived directly from ``get_output()``.
+
+        Returns:
+            ``matplotlib.pyplot.Axes`` instance of rmse plot if successful, otherwise an error message.
+        """
+        rmse_matrix = data['content'].get('results').get('rmse')
+        if rmse_matrix is None:
+            return "Root Mean Square Error data could not be parsed from your provided input."
+
+        df = pd.DataFrame(list(rmse_matrix.items()), columns=['Simulator', 'RMSE'])
+        ax = sns.barplot(x='Simulator', y='RMSE', data=df)
+        plt.xlabel('Simulator')
+        plt.ylabel('RMSE')
+        plt.title('Simulator Comparison')
+        plt.show()
+
+        return ax
 
     def visualize_comparison(self, data: Dict, simulators: List[str], comparison_type='proximity', color_mapping: List[str] = None) -> Figure:
         """
