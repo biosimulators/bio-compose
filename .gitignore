@@ -16,3 +16,5 @@ bucket.sh
 .env_dev
 NOTES
 scratch.ipynb
+demos/.ipynb_checkpoints/
+.ipynb_checkpoints/
