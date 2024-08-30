@@ -32,6 +32,7 @@ class Api(object):
 
         self.data: Dict = {}
         self.submitted_jobs: List[Dict] = []
+        self._output = {}
     
     def _format_endpoint(self, path_piece: str) -> str:
         return f'{self.endpoint_root}/{path_piece}'
@@ -89,6 +90,7 @@ class Api(object):
             # case: response is raw data
             if 'application/json' in content_type:
                 data = response.json()
+                self._output = data
                 self.data[job_id] = data
                 return data
             # otherwise: response is downloadable file
@@ -111,8 +113,10 @@ class Api(object):
                 with open(filepath, 'wb') as f:
                     f.write(response.content)
                 
-                return {'results_file': filepath}
+                data = {'results_file': filepath}
+                self._output = data
 
+                return data
         except Exception as e:
             return RequestError(error=str(e))
         

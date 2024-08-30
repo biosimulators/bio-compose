@@ -196,6 +196,19 @@ class Verifier(Api):
         except Exception as e:
             return RequestError(error=str(e))
 
+    def get_rmse(self, job_id: str) -> dict:
+        """
+        Get root-mean-square error scoring for all simulators involved in the last completed verification job.
+
+        Args:
+            - **job_id**: `str`: The unique identifier for the verification job.
+
+        Returns:
+            A dictionary mapping of simulator names to their respective root-mean-square error scores.
+        """
+        output = self.get_output(job_id=job_id)
+        return output['content'].get('results').get('rmse') or {}
+
     def get_compatible(self, file: str, versions: bool = False) -> Union[List[Tuple[Any, ...]], RequestError]:
         """
         Get all simulators and optionally their versions for a given file. The File is expected to be either an OMEX/COMBINE archive or SBML file.
