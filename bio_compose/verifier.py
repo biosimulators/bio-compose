@@ -79,7 +79,7 @@ class Verifier(Api):
         }
 
         query_params = {
-            'simulators': ','.join(sims),
+            'simulators': sims,
             'include_outputs': str(include_outputs).lower(),
             'comparison_id': _id,
         }
