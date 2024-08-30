@@ -279,7 +279,7 @@ class Verifier(Api):
 
         """
         # grid plot params
-        species_data_content = data['content']['results']['results']
+        species_data_content = data['content']['results']
         species_names = list(species_data_content.keys())
         num_species = len(species_names)
         num_simulators = len(simulators)
@@ -307,7 +307,7 @@ class Verifier(Api):
             # iterate over grid cols
             for j, simulator_name in enumerate(simulators):
                 ax = axes[i][j]
-                species_data = data['content']['results']['results'][species_name]
+                species_data = data['content']['results'][species_name]
                 output_data = species_data.get('output_data')
 
                 if output_data:
@@ -327,28 +327,37 @@ class Verifier(Api):
 
         return fig
 
-    def visualize_rmse(self, data: Dict) -> Union[Axes, str]:
+    def visualize_rmse(self, job_id: str, size_dimensions: tuple[int, int] = None, color_mapping: list[str] = None):
         """
-        Visualize root-mean-square error from the provided verification result data as a bar plot.
+        Visualize the root-mean-squared error between simulator verification outputs as a heatmap.
 
         Args:
-            - **data**: `Dict`: verification result data derived directly from ``get_output()``.
-
-        Returns:
-            ``matplotlib.pyplot.Axes`` instance of rmse plot if successful, otherwise an error message.
+            - **job_id**: `str`: verification job id. This value can be easily derived from either of ``Verifier`'s `.verify_...` methods.
+            - **size_dimensions**: `tuple[int, int]`: The value to use as the `figsize` parameter for a call to `matplotlib.pyplot.figure()`. If `None` is pa
         """
-        rmse_matrix = data['content'].get('results').get('rmse')
-        if rmse_matrix is None:
-            return "Root Mean Square Error data could not be parsed from your provided input."
+        # extract data
+        rmse_data = self.get_rmse(job_id)
+        simulators = list(rmse_data.keys())
+        n_simulators = len(simulators)
+        if color_mapping is None:
+            color_mapping = ['#1E3A8A', '#D97706']
 
-        df = pd.DataFrame(list(rmse_matrix.items()), columns=['Simulator', 'RMSE'])
-        ax = sns.barplot(x='Simulator', y='RMSE', data=df)
-        plt.xlabel('Simulator')
-        plt.ylabel('RMSE')
-        plt.title('Simulator Comparison')
+        # set up figure
+        size_dimensions = size_dimensions or (8, 6)
+        plt.figure(figsize=size_dimensions)
+        sns.heatmap(
+            data=[list(v.values()) for s, v in rmse_data.items()],
+            annot=True,
+            xticklabels=simulators,
+            yticklabels=simulators,
+            cmap=color_mapping,
+            linewidths=1
+        )
+
+        # set up plot annotations
+        plt.title('Pairwise Root Mean Square Error Between Simulators')
+        plt.tight_layout()
         plt.show()
-
-        return ax
 
     def visualize_comparison(self, data: Dict, simulators: List[str], comparison_type='proximity', color_mapping: List[str] = None) -> Figure:
         """
@@ -363,7 +372,7 @@ class Verifier(Api):
         Returns:
             `matplotlib.pyplot.Figure` of a plot grid
         """
-        species_data_content = data['content']['results']['results']
+        species_data_content = data['content']['results']
         species_names = list(species_data_content.keys())
         num_species = len(species_names)
 
@@ -413,7 +422,7 @@ class Verifier(Api):
         return plt.close(fig)
 
     # -- csv and observables
-    def get_observables(self, data: Dict, simulators: List[str]) -> pd.DataFrame:
+    def get_observables(self, data: Dict) -> pd.DataFrame:
         """
         Get the observables passed within `data` as a flattened dataframe in which each column is: `<SPECIES NAME>_<SIMULATOR>` for each species name and simulator involved within the comparison.
 
@@ -425,31 +434,32 @@ class Verifier(Api):
             pd.DataFrame of observables.
         """
         dataframe = {}
-        species_data_content = data['content']['results']['results']
+        species_data_content = data['content']['results']
         species_names = list(species_data_content.keys())
         num_species = len(species_names)
 
         for i, species_name in enumerate(species_names):
-            for j, simulator_name in enumerate(simulators):
-                species_data = data['content']['results']['results'][species_name]
+            # for j, simulator_name in enumerate(simulators):
+            species_data = data['content']['results'][species_name]
+            if not isinstance(species_data, str):
                 output_data = species_data.get('output_data')
-                if output_data:
-                    simulator_output = output_data[simulator_name]
-                    colname = f"{species_name}_{simulator_name}"
-                    dataframe[colname] = simulator_output
+                if output_data is not None:
+                    for simulator_name in output_data.keys():
+                        simulator_output = output_data[simulator_name]
+                        colname = f"{species_name}_{simulator_name}"
+                        dataframe[colname] = simulator_output
 
         return pd.DataFrame(dataframe)
 
-    def export_csv(self, data: Dict, save_dest: str, simulators: List[str]):
+    def export_csv(self, data: Dict, save_dest: str):
         """
         Export the content passed in `data` as a CSV file.
 
         Args:
             - **data**: `Dict`: simulation output data generated from `Verifier.get_verify_output()`.
             - **save_dest**: `str`: Destination path to save the CSV file.
-            - **simulators**: `List[str]`: list of simulators to include in the dataframe.
         """
-        return self.get_observables(data, simulators).to_csv(save_dest, index=False)
+        return self.get_observables(data).to_csv(save_dest, index=False)
 
     def read_observables(self, csv_path: str) -> pd.DataFrame:
         """

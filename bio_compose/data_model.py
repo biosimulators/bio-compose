@@ -119,4 +119,8 @@ class Api(object):
                 return data
         except Exception as e:
             return RequestError(error=str(e))
+
+    def get_job_status(self, job_id: str):
+        output = self.get_output(job_id=job_id)
+        return output.get('content').get('status')
         
