@@ -31,7 +31,7 @@ fi
 if [ ! -z "$(git status --untracked-files=no --porcelain)" ]; then
     echo "You have changes that have yet to be committed."
     echo "Aborting PyPI upload and attempting to commit your changes."
-    ../../commit.sh
+    exit 1
 fi
 
 # Check that we are on main
@@ -56,7 +56,7 @@ function get_pypi_token {
 
 pypi_token=$(get_pypi_token)
 
-yes | poetry cache clear PyPI --all && yes | poetry cache clear _default_cache --all
+# yes | poetry cache clear PyPI --all && yes | poetry cache clear _default_cache --all
 poetry build
 poetry publish --username __token__ --password "$pypi_token"
 rm -r dist
