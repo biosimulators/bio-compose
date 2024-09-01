@@ -55,6 +55,8 @@ function get_pypi_token {
 }
 
 pypi_token=$(get_pypi_token)
+
+yes | poetry cache clear PyPI --all && yes | poetry cache clear _default_cache --all
 poetry build
 poetry publish --username __token__ --password "$pypi_token"
 rm -r dist
