@@ -206,8 +206,20 @@ class Verifier(Api):
         Returns:
             A dictionary mapping of simulator names to their respective root-mean-square error scores.
         """
-        output = self.get_output(job_id=job_id)
-        return output['content'].get('results').get('rmse') or {}
+        try:
+            output = self.get_output(job_id=job_id)
+            return output['content'].get('results').get('rmse') or {}
+        except Exception as e:
+            import traceback
+            tb_str = traceback.format_exc()
+            error_message = (
+                f"An unexpected error occurred while processing your request:\n"
+                f"Error Type: {type(e).__name__}\n"
+                f"Error Details: {str(e)}\n"
+                f"Traceback:\n{tb_str}"
+            )
+
+            return {'error': error_message}
 
     def get_compatible(self, file: str, versions: bool = False) -> Union[List[Tuple[Any, ...]], RequestError]:
         """
