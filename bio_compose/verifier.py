@@ -348,28 +348,47 @@ class Verifier(Api):
             - **size_dimensions**: `tuple[int, int]`: The value to use as the `figsize` parameter for a call to `matplotlib.pyplot.figure()`. If `None` is pa
         """
         # extract data
-        rmse_data = self.get_rmse(job_id)
-        simulators = list(rmse_data.keys())
+        rmse_matrix = self.get_rmse(job_id)
+        simulators = list(rmse_matrix.keys())
         n_simulators = len(simulators)
+        rmse_data = []
+        for sim_name, score in rmse_matrix.items():
+            if isinstance(score, dict):
+                rmse_data.append(list(score.values()))
+
         if color_mapping is None:
             color_mapping = ['#1E3A8A', '#D97706']
 
-        # set up figure
-        size_dimensions = size_dimensions or (8, 6)
-        plt.figure(figsize=size_dimensions)
-        sns.heatmap(
-            data=[list(v.values()) for s, v in rmse_data.items()],
-            annot=True,
-            xticklabels=simulators,
-            yticklabels=simulators,
-            cmap=color_mapping,
-            linewidths=1
-        )
+        try:
+            # set up figure
+            size_dimensions = size_dimensions or (8, 6)
+            fig = plt.figure(figsize=size_dimensions)
+            sns.heatmap(
+                data=rmse_data,
+                annot=True,
+                xticklabels=simulators,
+                yticklabels=simulators,
+                cmap=color_mapping,
+                linewidths=1
+            )
 
-        # set up plot annotations
-        plt.title('Pairwise Root Mean Square Error Between Simulators')
-        plt.tight_layout()
-        plt.show()
+            # set up plot annotations
+            plt.title('Pairwise Root Mean Square Error Between Simulators')
+            plt.tight_layout()
+            plt.show()
+
+            return fig
+        except Exception as e:
+            import traceback
+            from bio_compose.data_model import RequestError
+            tb_str = traceback.format_exc()
+            error_message = (
+                f"An unexpected error occurred while processing your request:\n"
+                f"Error Type: {type(e).__name__}\n"
+                f"Error Details: {str(e)}\n"
+                f"Traceback:\n{tb_str}"
+            )
+            return RequestError(error=error_message)
 
     def visualize_comparison(self, data: Dict, simulators: List[str], comparison_type='proximity', color_mapping: List[str] = None) -> Figure:
         """
