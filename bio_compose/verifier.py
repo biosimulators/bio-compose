@@ -352,17 +352,17 @@ class Verifier(Api):
         simulators = list(rmse_matrix.keys())
         n_simulators = len(simulators)
         rmse_data = []
-        for sim_name, score in rmse_matrix.items():
-            if isinstance(score, dict):
-                rmse_data.append(list(score.values()))
+        for sim_name, scores in rmse_matrix.items():
+            if isinstance(scores, dict):
+                rmse_data.append(list(scores.values()))
 
         if color_mapping is None:
             color_mapping = ['#1E3A8A', '#D97706']
 
         try:
             # set up figure
-            size_dimensions = size_dimensions or (8, 6)
-            fig = plt.figure(figsize=size_dimensions)
+            # size_dimensions = size_dimensions or (8, 6)
+            # fig = plt.figure(figsize=size_dimensions)
             sns.heatmap(
                 data=rmse_data,
                 annot=True,
@@ -375,9 +375,8 @@ class Verifier(Api):
             # set up plot annotations
             plt.title('Pairwise Root Mean Square Error Between Simulators')
             plt.tight_layout()
-            plt.show()
 
-            return fig
+            return plt.show()
         except Exception as e:
             import traceback
             from bio_compose.data_model import RequestError
