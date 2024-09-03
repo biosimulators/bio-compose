@@ -1,41 +1,15 @@
-# Required
 version: 2
 
-# Build documentation in the "docs/" directory with Sphinx
-sphinx:
-  builder: html
-  configuration: documentation/source/conf.py
-
-# Optionally build your docs in additional formats such as PDF and ePub
-# formats:
-#    - pdf
-#    - epub
-
 build:
-  os: ubuntu-22.04
+  os: "ubuntu-22.04"
   tools:
-    python: "3.12"
-  commands:
-    - pip install sphinx sphinx-autodoc-typehints
-    - export PYTHONPATH=$PYTHONPATH:$(pwd)
-    - cd documentation
-    - sphinx-quickstart -p BioCompose -a "Alexander A. Patrie" -v "0.3.2" -r "0.3.2" -l en --sep
-    - cd source
-    - sphinx-apidoc -o . bio_compose
-    - make html
-    - sphinx-build -b html documentation/source/ $READTHEDOCS_OUTPUT/html
+    python: "3.11"
 
+python:
+  install:
+    - requirements: documentation/requirements.docs.txt
+    - method: pip
+      path: ./documentation
 
-# Project basic options:
-#   -p PROJECT, --project PROJECT
-#                         project name
-#   -a AUTHOR, --author AUTHOR
-#                         author names
-#   -v VERSION            version of project
-#   -r RELEASE, --release RELEASE
-#                         release of project
-#   -l LANGUAGE, --language LANGUAGE
-#                         document language
-#   --suffix SUFFIX       source file suffix
-#   --master MASTER       master document name
-#   --epub                use epub
+sphinx:
+  configuration: documentation/source/conf.py
