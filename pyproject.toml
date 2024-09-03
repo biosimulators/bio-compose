@@ -19,6 +19,9 @@ pytest = "^8.3.2"
 sphinx = "^8.0.2"
 sphinx-autodoc-typehints = "^2.2.3"
 
+[project.optional-dependencies]
+documentation = ["sphinx_rtd_theme", "mock"]
+
 [tool.pytest.ini_options]
 testpaths = ["tests"]
 addopts = "--ignore=setup.py"
