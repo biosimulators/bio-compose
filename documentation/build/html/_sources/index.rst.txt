@@ -12,6 +12,7 @@ Create, execute, and introspect reproducible composite simulations of dynamic bi
    :maxdepth: 2
    :caption: Contents:
 
+   installation
    modules
 
 .. automodule:: bio_compose

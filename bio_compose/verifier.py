@@ -127,13 +127,13 @@ class Verifier(Api):
             - **start**: `int`: The start time of the time course to include in comparison.
             - **end**: `int`: The end of the comparison job in seconds.
             - **steps**: `int`: The number of steps in the comparison job.
-            - **simulators**: `List[str]`: The list of simulators to include in comparison. Defaults to all utc simulators (amici, copasi, tellurium)
+            - **simulators**: `List[str], optional`: The list of simulators to include in comparison. Defaults to all utc simulators (amici, copasi, tellurium)
             - **include_outputs**: `bool, optional`: Whether to include the output data used to calculate comparison in the job results on result fetch. Defaults to True.
             - **comparison_id**: `str, optional`: The unique identifier for the comparison job. Defaults to None. If `None` is passed, a comparison id of `bio_check-request-<UUID>` is generated.
             - **expected_results**: `str, optional`: The path to the ground expected_results report file to include in comparison. Defaults to None.
-            - **rTol**: `float`, optional: The relative tolerance used to determine the relative distance in a pairwise comparison.
-            - **aTol**: `float`L optional: The absolute tolerance used to determine the absolute distance in a pairwise comparison.
-            - **selection_list**: `List[str]`: Observables to include in the output. If passed, all observable names NOT in this list will be excluded. Defaults to `None` (all observables).
+            - **rTol**: `float, optional`: The relative tolerance used to determine the relative distance in a pairwise comparison.
+            - **aTol**: `float, optional`: The absolute tolerance used to determine the absolute distance in a pairwise comparison.
+            - **selection_list**: `List[str], optional`: Observables to include in the output. If passed, all observable names NOT in this list will be excluded. Defaults to `None` (all observables).
             - **_steady_state**: `bool, optional`: Whether to include the steady state analysis job. NOTE: This feature will currently throw an error as it is not yet implemented.
 
         Returns:
@@ -339,13 +339,14 @@ class Verifier(Api):
 
         return fig
 
-    def visualize_rmse(self, job_id: str, size_dimensions: tuple[int, int] = None, color_mapping: list[str] = None):
+    def visualize_rmse(self, job_id: str, size_dimensions: tuple[int, int] = None, color_mapping: list[str] = None) -> None:
         """
         Visualize the root-mean-squared error between simulator verification outputs as a heatmap.
 
         Args:
             - **job_id**: `str`: verification job id. This value can be easily derived from either of ``Verifier`'s `.verify_...` methods.
-            - **size_dimensions**: `tuple[int, int]`: The value to use as the `figsize` parameter for a call to `matplotlib.pyplot.figure()`. If `None` is pa
+            - **size_dimensions**: `Tuple[int, int], optional`: The value to use as the `figsize` parameter for a call to `matplotlib.pyplot.figure()`. If `None` is passed, default to (8, 6).
+            - **color_mapping**: `List[str], optional`: list of colors to use for each simulator in the grid. Defaults to None.
         """
         # extract data
         rmse_matrix = self.get_rmse(job_id)

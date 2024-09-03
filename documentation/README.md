@@ -31,3 +31,10 @@
     ```bash
     make html 
     ```
+   
+
+## Applying changes:
+
+```bash
+cd documentation && make clean && make html
+```
