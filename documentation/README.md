@@ -36,5 +36,5 @@
 ## Applying changes:
 
 ```bash
-cd documentation && make clean && make html
+cd documentation && make clean && make html && cd ..
 ```

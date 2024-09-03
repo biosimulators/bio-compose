@@ -112,6 +112,20 @@
 </dd>
 </dl>
 <dl class="py method">
+<dt class="sig sig-object py" id="bio_compose.data_model.Api.export_csv">
+<span class="sig-name descname"><span class="pre">export_csv</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Dict</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">save_dest</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/bio_compose/data_model.html#Api.export_csv"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#bio_compose.data_model.Api.export_csv" title="Link to this definition">¶</a></dt>
+<dd><p>Export the content passed in <cite>data</cite> as a CSV file.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>data</strong> (<em>-</em>) – <cite>Dict</cite>: simulation output data generated from <cite>Verifier.get_verify_output()</cite>.</p></li>
+<li><p><strong>save_dest</strong> (<em>-</em>) – <cite>str</cite>: Destination path to save the CSV file.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
 <dt class="sig sig-object py" id="bio_compose.data_model.Api.export_plot">
 <span class="sig-name descname"><span class="pre">export_plot</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fig</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Figure</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">save_dest</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/bio_compose/data_model.html#Api.export_plot"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#bio_compose.data_model.Api.export_plot" title="Link to this definition">¶</a></dt>
 <dd><p>Save a <cite>matplotlib.pyplot.Figure</cite> instance generated from one of this class’ <cite>visualize_</cite> methods, as a PDF file.</p>
@@ -131,6 +145,23 @@
 <dd></dd></dl>
 
 <dl class="py method">
+<dt class="sig sig-object py" id="bio_compose.data_model.Api.get_observables">
+<span class="sig-name descname"><span class="pre">get_observables</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Dict</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">DataFrame</span></span></span><a class="reference internal" href="_modules/bio_compose/data_model.html#Api.get_observables"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#bio_compose.data_model.Api.get_observables" title="Link to this definition">¶</a></dt>
+<dd><p>Get the observables passed within <cite>data</cite> as a flattened dataframe in which each column is: <cite>&lt;SPECIES NAME&gt;_&lt;SIMULATOR&gt;</cite> for each species name and simulator involved within the comparison.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>data</strong> (<em>-</em>) – <cite>Dict</cite>: simulation output data generated from <cite>Verifier.get_verify_output()</cite>. This method assumes a resulting job status from the aforementioned <cite>get</cite> method as being <cite>‘COMPLETED’</cite>. Tip: if the <cite>data</cite> does not yet have a completed status, try again.</p></li>
+<li><p><strong>simulators</strong> (<em>-</em>) – <cite>List[str]</cite>: list of simulators to include in the dataframe.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>pd.DataFrame of observables.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
 <dt class="sig sig-object py" id="bio_compose.data_model.Api.get_output">
 <span class="sig-name descname"><span class="pre">get_output</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">job_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">download_dest</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">filename</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">Dict</span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference internal" href="#bio_compose.data_model.RequestError" title="bio_compose.data_model.RequestError"><span class="pre">RequestError</span></a></span></span><a class="reference internal" href="_modules/bio_compose/data_model.html#Api.get_output"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#bio_compose.data_model.Api.get_output" title="Link to this definition">¶</a></dt>
 <dd><p>Fetch the current state of the job referenced with <cite>job_id</cite>. If the job has not yet been processed, it will return a <cite>status</cite> of <cite>PENDING</cite>. If the job is being processed by the service at the time of return, <cite>status</cite> will read <cite>IN_PROGRESS</cite>. If the job is complete, the job state will be returned, optionally with included result data (either JSON or downloadable file data).</p>
@@ -146,6 +177,18 @@
 <dd class="field-even"><p>If the output is a JSON response, return the parsed JSON as a dictionary. If the output is a file, download the file and return the filepath. If an error occurs, return a RequestError.</p>
 </dd>
 </dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="bio_compose.data_model.Api.read_observables">
+<span class="sig-name descname"><span class="pre">read_observables</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">csv_path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">DataFrame</span></span></span><a class="reference internal" href="_modules/bio_compose/data_model.html#Api.read_observables"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#bio_compose.data_model.Api.read_observables" title="Link to this definition">¶</a></dt>
+<dd><p>Read in a dataframe generated from <cite>Verifier.export_csv()</cite>.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="bio_compose.data_model.Api.select_observables">
+<span class="sig-name descname"><span class="pre">select_observables</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">observables</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Dict</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Dict</span></span></span><a class="reference internal" href="_modules/bio_compose/data_model.html#Api.select_observables"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#bio_compose.data_model.Api.select_observables" title="Link to this definition">¶</a></dt>
+<dd><p>Select data from the input data that is passed which should be formatted such that the data has mappings of observable names to dicts in which the keys are the simulator names and the values are arrays. The data must have content accessible at: <cite>data[‘content’][‘results’]</cite>.</p>
 </dd></dl>
 
 </dd></dl>
@@ -269,20 +312,6 @@
 <dd><p>Bases: <a class="reference internal" href="#bio_compose.data_model.Api" title="bio_compose.data_model.Api"><code class="xref py py-class docutils literal notranslate"><span class="pre">Api</span></code></a></p>
 <p>API for verifying (running and comparing) the results of multiple simulators for a given SBML model.</p>
 <dl class="py method">
-<dt class="sig sig-object py" id="bio_compose.verifier.Verifier.export_csv">
-<span class="sig-name descname"><span class="pre">export_csv</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Dict</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">save_dest</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/bio_compose/verifier.html#Verifier.export_csv"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#bio_compose.verifier.Verifier.export_csv" title="Link to this definition">¶</a></dt>
-<dd><p>Export the content passed in <cite>data</cite> as a CSV file.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>data</strong> (<em>-</em>) – <cite>Dict</cite>: simulation output data generated from <cite>Verifier.get_verify_output()</cite>.</p></li>
-<li><p><strong>save_dest</strong> (<em>-</em>) – <cite>str</cite>: Destination path to save the CSV file.</p></li>
-</ul>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
 <dt class="sig sig-object py" id="bio_compose.verifier.Verifier.get_compatible">
 <span class="sig-name descname"><span class="pre">get_compatible</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">file</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">versions</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">Any</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="p"><span class="pre">...</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference internal" href="#bio_compose.data_model.RequestError" title="bio_compose.data_model.RequestError"><span class="pre">RequestError</span></a></span></span><a class="reference internal" href="_modules/bio_compose/verifier.html#Verifier.get_compatible"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#bio_compose.verifier.Verifier.get_compatible" title="Link to this definition">¶</a></dt>
 <dd><p>Get all simulators and optionally their versions for a given file. The File is expected to be either an OMEX/COMBINE archive or SBML file.</p>
@@ -300,23 +329,6 @@
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="bio_compose.verifier.Verifier.get_observables">
-<span class="sig-name descname"><span class="pre">get_observables</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Dict</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">DataFrame</span></span></span><a class="reference internal" href="_modules/bio_compose/verifier.html#Verifier.get_observables"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#bio_compose.verifier.Verifier.get_observables" title="Link to this definition">¶</a></dt>
-<dd><p>Get the observables passed within <cite>data</cite> as a flattened dataframe in which each column is: <cite>&lt;SPECIES NAME&gt;_&lt;SIMULATOR&gt;</cite> for each species name and simulator involved within the comparison.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>data</strong> (<em>-</em>) – <cite>Dict</cite>: simulation output data generated from <cite>Verifier.get_verify_output()</cite>. This method assumes a resulting job status from the aforementioned <cite>get</cite> method as being <cite>‘COMPLETED’</cite>. Tip: if the <cite>data</cite> does not yet have a completed status, try again.</p></li>
-<li><p><strong>simulators</strong> (<em>-</em>) – <cite>List[str]</cite>: list of simulators to include in the dataframe.</p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>pd.DataFrame of observables.</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
 <dt class="sig sig-object py" id="bio_compose.verifier.Verifier.get_rmse">
 <span class="sig-name descname"><span class="pre">get_rmse</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">job_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">dict</span></span></span><a class="reference internal" href="_modules/bio_compose/verifier.html#Verifier.get_rmse"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#bio_compose.verifier.Verifier.get_rmse" title="Link to this definition">¶</a></dt>
 <dd><p>Get root-mean-square error scoring for all simulators involved in the last completed verification job.</p>
@@ -328,18 +340,6 @@
 <dd class="field-even"><p>A dictionary mapping of simulator names to their respective root-mean-square error scores.</p>
 </dd>
 </dl>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="bio_compose.verifier.Verifier.read_observables">
-<span class="sig-name descname"><span class="pre">read_observables</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">csv_path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">DataFrame</span></span></span><a class="reference internal" href="_modules/bio_compose/verifier.html#Verifier.read_observables"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#bio_compose.verifier.Verifier.read_observables" title="Link to this definition">¶</a></dt>
-<dd><p>Read in a dataframe generated from <cite>Verifier.export_csv()</cite>.</p>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="bio_compose.verifier.Verifier.select_observables">
-<span class="sig-name descname"><span class="pre">select_observables</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">observables</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Dict</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Dict</span></span></span><a class="reference internal" href="_modules/bio_compose/verifier.html#Verifier.select_observables"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#bio_compose.verifier.Verifier.select_observables" title="Link to this definition">¶</a></dt>
-<dd><p>Select data from the input data that is passed which should be formatted such that the data has mappings of observable names to dicts in which the keys are the simulator names and the values are arrays. The data must have content accessible at: <cite>data[‘content’][‘results’]</cite>.</p>
 </dd></dl>
 
 <dl class="py method">
