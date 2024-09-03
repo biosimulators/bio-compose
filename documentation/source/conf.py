@@ -21,7 +21,7 @@ release = '0.3.2'
 
 extensions = [
     'sphinx.ext.autodoc',
-    'sphinx_rtd_theme',
+    # 'sphinx_rtd_theme',
     # 'sphinx_autodoc_typehints',
     'sphinx.ext.napoleon',
     'sphinx.ext.viewcode'
