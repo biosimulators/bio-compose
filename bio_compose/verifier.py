@@ -18,7 +18,7 @@ from requests.exceptions import RequestException
 from requests_toolbelt.multipart.encoder import MultipartEncoder
 
 from bio_compose.processing_tools import generate_color_gradient
-from bio_compose.data_model import Api, RequestError
+from bio_compose.data_model import Api, RequestError, save_plot
 
 
 class Verifier(Api):
@@ -339,7 +339,8 @@ class Verifier(Api):
 
         return fig
 
-    def visualize_observables(self, job_id: str, hspace: float = 0.25, use_grid: bool = True, save_dest: str = None) -> None:
+    @save_plot
+    def visualize_observables(self, job_id: str, hspace: float = 0.25, use_grid: bool = False, save_dest: str = None) -> Figure:
         """
         Visualize simulation output (observables) data, not comparison data, with subplots for each species.
 
@@ -348,13 +349,22 @@ class Verifier(Api):
             - **hspace**: `float`: horizontal spacing between subplots. Defaults to 0.25.
             - **use_grid**: `bool`: whether to use a grid for each subplot. Defaults to False.
             - **save_dest**: `str`: path to save the figure. If this value is passed, the figure will be saved in pdf format to this location.
+
+         Returns:
+            `matplotlib.pyplot.Figure` of a plot grid
+
+        Raises:
+            `IOError`: If `job_id` does not contain a 'results' field.
         """
         # grab output from job id
         output = self.get_output(job_id)
 
         # extract the list of simulators from the `output_data` for one observable
-        species_data_content = output['content']['results']
-        observables = [key for key in species_data_content.keys() if key not in ['comparison_id', 'rmse', 'time', 'Time']]
+        species_data_content = output['content'].get('results')
+        if species_data_content is None:
+            raise IOError(f"The job for {job_id} is either not ready or has an error. Please check the output.")
+        excluded_observables = ['comparison_id', 'rmse', 'time', 'Time', 'data_generator_time', 'Time (dimensionless)']
+        observables = [key for key in species_data_content.keys() if key not in excluded_observables]
         first_observable = species_data_content[observables[0]]
         simulators = list(first_observable['output_data'].keys())
         n_simulators = len(simulators)
@@ -387,59 +397,60 @@ class Verifier(Api):
         plt.subplots_adjust(hspace=hspace)
         plt.show()
 
-        if save_dest is not None:
-            self.export_plot(fig=fig, save_dest=save_dest)
+        return fig
 
-    def visualize_rmse(self, job_id: str, size_dimensions: tuple[int, int] = None, color_mapping: list[str] = None) -> Union[None, RequestError]:
+    @save_plot
+    def visualize_rmse(self, job_id: str, fig_dimensions: tuple[int, int] = None, color_mapping: list[str] = None, save_dest: str = None) -> Figure:
         """
         Visualize the root-mean-squared error between simulator verification outputs as a heatmap.
 
         Args:
             - **job_id**: `str`: verification job id. This value can be easily derived from either of `Verifier`'s `.verify_...` methods.
-            - **size_dimensions**: `Tuple[int, int], optional`: The value to use as the `figsize` parameter for a call to `matplotlib.pyplot.figure()`. If `None` is passed, default to (8, 6).
+            - **fig_dimensions**: `Tuple[int, int], optional`: The value to use as the `figsize` parameter for a call to `matplotlib.pyplot.figure()`. If `None` is passed, default to (8, 6).
             - **color_mapping**: `List[str], optional`: list of colors to use for each simulator in the grid. Defaults to None.
+            - **save_dest**: `str`: destination at which to save figure. Defaults to `None`.
+
+         Returns:
+            `matplotlib.pyplot.Figure` of a plot grid
         """
         # extract data
         rmse_matrix = self.get_rmse(job_id)
+        if 'error' in rmse_matrix.keys():
+            raise IOError(f"The job for {job_id} is either not ready or has an error. Please check the output.")
         simulators = list(rmse_matrix.keys())
         n_simulators = len(simulators)
+
+        # extract rmse data and replace None with np.nan if needed
         rmse_data = []
         for sim_name, scores in rmse_matrix.items():
             if isinstance(scores, dict):
-                rmse_data.append(list(scores.values()))
+                score_vals = list(scores.values())
+                for i, v in enumerate(score_vals):
+                    if v is None:
+                        score_vals.remove(v)
+                        score_vals.insert(i, np.nan)
+                rmse_data.append(score_vals)
 
         if color_mapping is None:
             color_mapping = ['#1E3A8A', '#D97706']
 
-        try:
-            # set up figure
-            # size_dimensions = size_dimensions or (8, 6)
-            # fig = plt.figure(figsize=size_dimensions)
-            sns.heatmap(
-                data=rmse_data,
-                annot=True,
-                xticklabels=simulators,
-                yticklabels=simulators,
-                cmap=color_mapping,
-                linewidths=1
-            )
+        # set up figure
+        dimensions = fig_dimensions or (8, 6)
+        fig = plt.figure(figsize=dimensions)
+        sns.heatmap(
+            data=rmse_data,
+            annot=True,
+            xticklabels=simulators,
+            yticklabels=simulators,
+            cmap=color_mapping,
+            linewidths=1
+        )
+        # set up plot annotations
+        plt.title('Pairwise Root Mean Square Error Between Simulators')
+        plt.tight_layout()
+        plt.show()
 
-            # set up plot annotations
-            plt.title('Pairwise Root Mean Square Error Between Simulators')
-            plt.tight_layout()
-
-            return plt.show()
-        except Exception as e:
-            import traceback
-            from bio_compose.data_model import RequestError
-            tb_str = traceback.format_exc()
-            error_message = (
-                f"An unexpected error occurred while processing your request:\n"
-                f"Error Type: {type(e).__name__}\n"
-                f"Error Details: {str(e)}\n"
-                f"Traceback:\n{tb_str}"
-            )
-            return RequestError(error=error_message)
+        return fig
 
     def visualize_comparison(self, data: Dict, simulators: List[str], comparison_type='proximity', color_mapping: List[str] = None) -> Figure:
         """
@@ -489,19 +500,6 @@ class Verifier(Api):
         plt.show()
 
         return fig
-
-    def export_plot(self, fig: Figure, save_dest: str) -> None:
-        """
-        Save a `matplotlib.pyplot.Figure` instance generated from one of this class' `visualize_` methods, as a PDF file.
-
-        Args:
-            - **fig**: `matplotlib.pyplot.Figure`: Figure instance generated from either `Verifier.visualize_comparison()` or `Verifier.visualize_outputs()`.
-            - **save_dest**: `str`: Destination path to save the plot to.
-        """
-        with PdfPages(save_dest) as pdf:
-            pdf.savefig(fig)
-
-        return plt.close(fig)
 
     # -- csv and observables
     def get_observables(self, data: Dict) -> pd.DataFrame:

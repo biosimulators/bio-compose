@@ -112,6 +112,20 @@
 </dd>
 </dl>
 <dl class="py method">
+<dt class="sig sig-object py" id="bio_compose.data_model.Api.export_plot">
+<span class="sig-name descname"><span class="pre">export_plot</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fig</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Figure</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">save_dest</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/bio_compose/data_model.html#Api.export_plot"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#bio_compose.data_model.Api.export_plot" title="Link to this definition">¶</a></dt>
+<dd><p>Save a <cite>matplotlib.pyplot.Figure</cite> instance generated from one of this class’ <cite>visualize_</cite> methods, as a PDF file.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>fig</strong> (<em>-</em>) – <cite>matplotlib.pyplot.Figure</cite>: Figure instance generated from either <cite>Verifier.visualize_comparison()</cite> or <cite>Verifier.visualize_outputs()</cite>.</p></li>
+<li><p><strong>save_dest</strong> (<em>-</em>) – <cite>str</cite>: Destination path to save the plot to.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
 <dt class="sig sig-object py" id="bio_compose.data_model.Api.get_job_status">
 <span class="sig-name descname"><span class="pre">get_job_status</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">job_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/bio_compose/data_model.html#Api.get_job_status"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#bio_compose.data_model.Api.get_job_status" title="Link to this definition">¶</a></dt>
 <dd></dd></dl>
@@ -150,6 +164,17 @@
 <span class="sig-name descname"><span class="pre">to_dict</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/bio_compose/data_model.html#RequestError.to_dict"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#bio_compose.data_model.RequestError.to_dict" title="Link to this definition">¶</a></dt>
 <dd></dd></dl>
 
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="bio_compose.data_model.save_plot">
+<span class="sig-prename descclassname"><span class="pre">bio_compose.data_model.</span></span><span class="sig-name descname"><span class="pre">save_plot</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">func</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/bio_compose/data_model.html#save_plot"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#bio_compose.data_model.save_plot" title="Link to this definition">¶</a></dt>
+<dd><p>Decorator for <cite>Api().visualize_</cite> methods.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>func</strong> (<em>-</em>) – <cite>Callable</cite>: Decorated <cite>Api().visualize_</cite> method. Currently only implemented in <cite>Verifier()</cite>.</p>
+</dd>
+</dl>
 </dd></dl>
 
 </section>
@@ -252,20 +277,6 @@
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>data</strong> (<em>-</em>) – <cite>Dict</cite>: simulation output data generated from <cite>Verifier.get_verify_output()</cite>.</p></li>
 <li><p><strong>save_dest</strong> (<em>-</em>) – <cite>str</cite>: Destination path to save the CSV file.</p></li>
-</ul>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="bio_compose.verifier.Verifier.export_plot">
-<span class="sig-name descname"><span class="pre">export_plot</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fig</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Figure</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">save_dest</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/bio_compose/verifier.html#Verifier.export_plot"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#bio_compose.verifier.Verifier.export_plot" title="Link to this definition">¶</a></dt>
-<dd><p>Save a <cite>matplotlib.pyplot.Figure</cite> instance generated from one of this class’ <cite>visualize_</cite> methods, as a PDF file.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>fig</strong> (<em>-</em>) – <cite>matplotlib.pyplot.Figure</cite>: Figure instance generated from either <cite>Verifier.visualize_comparison()</cite> or <cite>Verifier.visualize_outputs()</cite>.</p></li>
-<li><p><strong>save_dest</strong> (<em>-</em>) – <cite>str</cite>: Destination path to save the plot to.</p></li>
 </ul>
 </dd>
 </dl>
@@ -409,7 +420,7 @@
 
 <dl class="py method">
 <dt class="sig sig-object py" id="bio_compose.verifier.Verifier.visualize_observables">
-<span class="sig-name descname"><span class="pre">visualize_observables</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">job_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">hspace</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0.25</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">use_grid</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">save_dest</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/bio_compose/verifier.html#Verifier.visualize_observables"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#bio_compose.verifier.Verifier.visualize_observables" title="Link to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">visualize_observables</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">job_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">hspace</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0.25</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">use_grid</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">save_dest</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Figure</span></span></span><a class="reference internal" href="_modules/bio_compose/verifier.html#Verifier.visualize_observables"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#bio_compose.verifier.Verifier.visualize_observables" title="Link to this definition">¶</a></dt>
 <dd><p>Visualize simulation output (observables) data, not comparison data, with subplots for each species.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -417,8 +428,16 @@
 <li><p><strong>job_id</strong> (<em>-</em>) – <cite>str</cite>: job id for the simulation observable output you wish to visualize.</p></li>
 <li><p><strong>hspace</strong> (<em>-</em>) – <cite>float</cite>: horizontal spacing between subplots. Defaults to 0.25.</p></li>
 <li><p><strong>use_grid</strong> (<em>-</em>) – <cite>bool</cite>: whether to use a grid for each subplot. Defaults to False.</p></li>
-<li><p><strong>save_dest</strong> (<em>-</em>) – <cite>str</cite>: path to save the figure. If this value is passed, the figure will be saved in pdf format to this location.</p></li>
+<li><p><strong>save_dest</strong> (<em>-</em>) – <p><cite>str</cite>: path to save the figure. If this value is passed, the figure will be saved in pdf format to this location.</p>
+<dl class="simple">
+<dt>Returns:</dt><dd><p><cite>matplotlib.pyplot.Figure</cite> of a plot grid</p>
+</dd>
+</dl>
+</p></li>
 </ul>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>IOError</strong> – If <cite>job_id</cite> does not contain a ‘results’ field.</p>
 </dd>
 </dl>
 </dd></dl>
@@ -448,14 +467,20 @@
 
 <dl class="py method">
 <dt class="sig sig-object py" id="bio_compose.verifier.Verifier.visualize_rmse">
-<span class="sig-name descname"><span class="pre">visualize_rmse</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">job_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">size_dimensions</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">int</span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">color_mapping</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference internal" href="#bio_compose.data_model.RequestError" title="bio_compose.data_model.RequestError"><span class="pre">RequestError</span></a></span></span><a class="reference internal" href="_modules/bio_compose/verifier.html#Verifier.visualize_rmse"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#bio_compose.verifier.Verifier.visualize_rmse" title="Link to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">visualize_rmse</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">job_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fig_dimensions</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">int</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">color_mapping</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">save_dest</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Figure</span></span></span><a class="reference internal" href="_modules/bio_compose/verifier.html#Verifier.visualize_rmse"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#bio_compose.verifier.Verifier.visualize_rmse" title="Link to this definition">¶</a></dt>
 <dd><p>Visualize the root-mean-squared error between simulator verification outputs as a heatmap.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>job_id</strong> (<em>-</em>) – <cite>str</cite>: verification job id. This value can be easily derived from either of <cite>Verifier</cite>’s <cite>.verify_…</cite> methods.</p></li>
-<li><p><strong>size_dimensions</strong> (<em>-</em>) – <cite>Tuple[int, int], optional</cite>: The value to use as the <cite>figsize</cite> parameter for a call to <cite>matplotlib.pyplot.figure()</cite>. If <cite>None</cite> is passed, default to (8, 6).</p></li>
+<li><p><strong>fig_dimensions</strong> (<em>-</em>) – <cite>Tuple[int, int], optional</cite>: The value to use as the <cite>figsize</cite> parameter for a call to <cite>matplotlib.pyplot.figure()</cite>. If <cite>None</cite> is passed, default to (8, 6).</p></li>
 <li><p><strong>color_mapping</strong> (<em>-</em>) – <cite>List[str], optional</cite>: list of colors to use for each simulator in the grid. Defaults to None.</p></li>
+<li><p><strong>save_dest</strong> (<em>-</em>) – <p><cite>str</cite>: destination at which to save figure. Defaults to <cite>None</cite>.</p>
+<dl class="simple">
+<dt>Returns:</dt><dd><p><cite>matplotlib.pyplot.Figure</cite> of a plot grid</p>
+</dd>
+</dl>
+</p></li>
 </ul>
 </dd>
 </dl>

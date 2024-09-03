@@ -1,8 +1,12 @@
 from dataclasses import asdict, dataclass
 import os
+from functools import wraps
 from typing import Dict, List, Union
 
 import requests
+from matplotlib import pyplot as plt
+from matplotlib.backends.backend_pdf import PdfPages
+from matplotlib.figure import Figure
 
 
 @dataclass
@@ -132,4 +136,31 @@ class Api(object):
     def get_job_status(self, job_id: str):
         output = self.get_output(job_id=job_id)
         return output.get('content').get('status')
-        
+
+    def export_plot(self, fig: Figure, save_dest: str) -> None:
+        """
+        Save a `matplotlib.pyplot.Figure` instance generated from one of this class' `visualize_` methods, as a PDF file.
+
+        Args:
+            - **fig**: `matplotlib.pyplot.Figure`: Figure instance generated from either `Verifier.visualize_comparison()` or `Verifier.visualize_outputs()`.
+            - **save_dest**: `str`: Destination path to save the plot to.
+        """
+        with PdfPages(save_dest) as pdf:
+            pdf.savefig(fig)
+
+
+def save_plot(func):
+    """
+    Decorator for `Api().visualize_` methods.
+
+    Args:
+        - **func**: `Callable`: Decorated `Api().visualize_` method. Currently only implemented in `Verifier()`.
+    """
+    @wraps(func)
+    def wrapper(self, *args, **kwargs):
+        fig = func(self, *args, **kwargs)
+        save_dest = kwargs.get('save_dest', None)
+        if save_dest is not None:
+            dest = save_dest + '.pdf'
+            self.export_plot(fig=fig, save_dest=dest)
+    return wrapper
