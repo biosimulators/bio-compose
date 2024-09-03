@@ -20,7 +20,8 @@ sphinx = "^8.0.2"
 sphinx-autodoc-typehints = "^2.2.3"
 
 [project.optional-dependencies]
-documentation = ["sphinx-autodoc-typehints>=2.3.0", "sphinx_rtd_theme", "mock"]
+# documentation = ["sphinx-autodoc-typehints>=2.3.0", "sphinx_rtd_theme", "mock"]
+documentation = ["sphinx-autodoc-typehints"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
