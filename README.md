@@ -26,4 +26,4 @@ Installation of this tooling can be performed using PyPI as such:
 pip install bio-compose
 ```
 
-#### Alternatively, **the REST API can be accessed via Swagger UI here: [https://biochecknet.biosimulations.org/docs](https://biochecknet.biosimulations.org/docs)
+#### Alternatively, **the REST API can be accessed via Swagger UI here: [https://biochecknet.biosimulations.org/docs](https://biochecknet.biosimulations.org/docs)**
