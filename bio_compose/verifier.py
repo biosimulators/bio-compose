@@ -339,6 +339,57 @@ class Verifier(Api):
 
         return fig
 
+    def visualize_observables(self, job_id: str, hspace: float = 0.25, use_grid: bool = True, save_dest: str = None) -> None:
+        """
+        Visualize simulation output (observables) data, not comparison data, with subplots for each species.
+
+        Args:
+            - **job_id**: `str`: job id for the simulation observable output you wish to visualize.
+            - **hspace**: `float`: horizontal spacing between subplots. Defaults to 0.25.
+            - **use_grid**: `bool`: whether to use a grid for each subplot. Defaults to False.
+            - **save_dest**: `str`: path to save the figure. If this value is passed, the figure will be saved in pdf format to this location.
+        """
+        # grab output from job id
+        output = self.get_output(job_id)
+
+        # extract the list of simulators from the `output_data` for one observable
+        species_data_content = output['content']['results']
+        observables = [key for key in species_data_content.keys() if key not in ['comparison_id', 'rmse', 'time', 'Time']]
+        first_observable = species_data_content[observables[0]]
+        simulators = list(first_observable['output_data'].keys())
+        n_simulators = len(simulators)
+
+        # create subplots
+        fig, axes = plt.subplots(nrows=n_simulators, ncols=1, figsize=(15, 5 * n_simulators))
+
+        # if only one simulator, `axes` won't be an array, so make it an array
+        if n_simulators == 1:
+            axes = [axes]
+
+        # iterate over simulators and plot each observable (by iterating over observables)
+        for idx, simulator in enumerate(simulators):
+            ax = axes[idx]
+            for observable in observables:
+                value_data = species_data_content[observable]['output_data'][simulator]
+                sns.lineplot(data=value_data, ax=ax, label=observable)
+
+            sim = simulator.replace(simulator[0], simulator[0].upper())
+            ax.set_title(f"{sim} Observable Results")
+            ax.set_xlabel("Time")
+            ax.set_ylabel("Value")
+            ax.grid(use_grid)
+
+            # hide the x-axis tick labels
+            ax.set_xticks([])
+
+        # adjust layout for better spacing
+        plt.tight_layout()
+        plt.subplots_adjust(hspace=hspace)
+        plt.show()
+
+        if save_dest is not None:
+            self.export_plot(fig=fig, save_dest=save_dest)
+
     def visualize_rmse(self, job_id: str, size_dimensions: tuple[int, int] = None, color_mapping: list[str] = None) -> Union[None, RequestError]:
         """
         Visualize the root-mean-squared error between simulator verification outputs as a heatmap.
