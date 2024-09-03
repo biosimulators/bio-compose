@@ -339,12 +339,12 @@ class Verifier(Api):
 
         return fig
 
-    def visualize_rmse(self, job_id: str, size_dimensions: tuple[int, int] = None, color_mapping: list[str] = None) -> None:
+    def visualize_rmse(self, job_id: str, size_dimensions: tuple[int, int] = None, color_mapping: list[str] = None) -> Union[None, RequestError]:
         """
         Visualize the root-mean-squared error between simulator verification outputs as a heatmap.
 
         Args:
-            - **job_id**: `str`: verification job id. This value can be easily derived from either of ``Verifier`'s `.verify_...` methods.
+            - **job_id**: `str`: verification job id. This value can be easily derived from either of `Verifier`'s `.verify_...` methods.
             - **size_dimensions**: `Tuple[int, int], optional`: The value to use as the `figsize` parameter for a call to `matplotlib.pyplot.figure()`. If `None` is passed, default to (8, 6).
             - **color_mapping**: `List[str], optional`: list of colors to use for each simulator in the grid. Defaults to None.
         """
