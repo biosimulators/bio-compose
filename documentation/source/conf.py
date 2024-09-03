@@ -9,6 +9,7 @@
 import os
 import sys
 sys.path.insert(0, os.path.abspath('../../bio_compose'))
+import sphinx_rtd_theme
 
 
 project = 'BioCompose'
@@ -33,6 +34,8 @@ exclude_patterns = []
 # -- Options for HTML output -------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#options-for-html-output
 
-html_theme = 'agogo'
+html_theme = "sphinx_rtd_theme"
+html_favicon = './images/favicon.ico'
+pygments_style = 'sphinx'
 html_static_path = ['_static']
 
