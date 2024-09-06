@@ -5,7 +5,7 @@ from typing import *
 
 from requests_toolbelt.multipart.encoder import MultipartEncoder
 
-from bio_compose.data_model import Api
+from bio_compose.data_model import Api, save_plot
 
 
 class SimulationRunner(Api):
@@ -110,6 +110,33 @@ class SimulationRunner(Api):
         headers = {'Content-Type': multidata.content_type}
 
         return self._execute_request(endpoint=endpoint, headers=headers, multidata=multidata, query_params=query_params)
+
+    @save_plot
+    def visualize_observables(self, job_id: str, hspace: float = 0.25, use_grid: bool = False, save_dest: str = None):
+        """
+        Visualize simulation output (observables) data.
+        Args:
+            - **job_id**: `str`: job id for the simulation observables output you wish to visualize.
+            - **hspace**: `float`: horizontal spacing between subplots. Defaults to 0.25.
+            - **use_grid**: `bool`: whether to use a grid for each subplot. Defaults to False.
+            - **save_dest**: `str`: path to save the figure. If this value is passed, the figure will be saved in pdf format to this location.
+         Returns:
+            `matplotlib.pyplot.Figure` of a plot grid
+        Raises:
+            `IOError`: If `job_id` does not contain a 'results' field.
+        """
+        # grab output from job id
+        output = self.get_output(job_id)
+        fig = plt.figure()
+        species_data_content = output['content'].get('results')
+        sns.lineplot(data=species_data_content)
+
+        # adjust layout for better spacing
+        plt.tight_layout()
+        plt.subplots_adjust(hspace=hspace)
+        plt.show()
+
+        return fig
 
 
 class SimulationResult(dict):
