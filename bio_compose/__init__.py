@@ -9,7 +9,7 @@ with open(version_file_path, 'r') as f:
     __version__ = f.read().strip()
 
 
-def run_simulation(*args):
+def run_simulation(*args, **kwargs):
     """
     Run a simulation with BioCompose
 
@@ -43,16 +43,25 @@ def run_simulation(*args):
 
     # fetch results
     job_id = submission.get('job_id')
-    output = None
+    output = {}
+    timeout = kwargs.get('timeout', 100)
+    i = 0
     if job_id is not None:
         while True:
-            simulation_result = runner.get_output(job_id=job_id)
-            status = simulation_result['content']['status']
-            if not 'COMPLETED' in status:
-                time.sleep(1)
-            else:
-                output = simulation_result
+            if i == timeout:
                 break
+            simulation_result = runner.get_output(job_id=job_id)
+            if isinstance(simulation_result, dict):
+                status = simulation_result['content']['status']
+                if not 'COMPLETED' in status:
+                    print('Not complete: ', i, status)
+                    i += 1
+                    time.sleep(1)
+                else:
+                    output = simulation_result
+                    break
+            else:
+                i += 1
 
     return SimulationResult(data=output)
 

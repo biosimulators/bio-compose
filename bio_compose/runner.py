@@ -113,9 +113,10 @@ class SimulationRunner(Api):
 
 
 class SimulationResult(dict):
-    def __init__(self, data):
+    def __init__(self, data: dict):
         self.data = data
-        self.job_id = self.data.get('job_id')
+        self.update({'content': self.data.get('content')})
+        self.job_id = self.data.get('content').get('job_id')
 
     def visualize(self):
         pass
