@@ -13,7 +13,21 @@ def run_simulation(*args, **kwargs):
     pass
 
 
-def verify(*args, **kwargs):
+def verify(*args, **kwargs) -> dict:
+    """
+    Verify and compare the outputs of simulators for a given entrypoint file of either sbml or omex.
+
+    Args:
+        - **args**: positional arguments passed to the verification.
+            - 1 argument(`str`): submit an sbml or omex verification with no time params.
+            - 2 arguments(`str`, `list[str]`): omex filepath, simulators to include in the verification.
+            - 4 arguments(`str`, `int`, `int`, `int`): sbml filepath, start, stop, steps.
+            - 5 arguments(`str`, `int`, `int`, `int`, `list[str]`): sbml filepath, start, stop, steps, simulators.
+        - **kwargs**: keyword arguments passed to the verification.
+
+    Returns:
+        Verification result in the form of a dictionary.
+    """
     import time
     from bio_compose.verifier import Verifier
 

@@ -107,9 +107,9 @@ class Verifier(Api):
     def verify_sbml(
             self,
             entrypoint: str,
-            start: int,
-            end: int,
-            steps: int,
+            start: int = 0,
+            end: int = 10,
+            steps: int = 10,
             simulators: List[str] = None,
             include_outputs: bool = True,
             comparison_id: str = None,

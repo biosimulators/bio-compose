@@ -1,10 +1,12 @@
-from dataclasses import asdict, dataclass
+import asyncio
+import time 
 import os
+from dataclasses import asdict, dataclass
 from functools import wraps
-from typing import Dict, List, Union
+from typing import Dict, List, Union, Any, Callable
 
-import pandas as pd
 import requests
+import pandas as pd
 from matplotlib import pyplot as plt
 from matplotlib.backends.backend_pdf import PdfPages
 from matplotlib.figure import Figure
@@ -67,6 +69,26 @@ class Api(object):
             resp.raise_for_status()
         except requests.RequestException as e:
             return {'bio-check-error': f"A connection to that endpoint could not be established: {e}"}
+
+    def _poll_results(self, submission: dict) -> dict:
+        job_id = submission['job_id']
+        output = None
+        i = 0
+        while True:
+            if i == 100:
+                output = {'content': {'results': 'timeout'}}
+                break 
+            result = self.get_output(job_id=job_id)    
+            status = result['content']['status']
+            if not 'COMPLETED' in status:
+                print(f'Job is still: {status}')
+                time.sleep(1)
+                i += 1
+            else:
+                output = result
+                break 
+                
+        return output
         
     def get_output(self, job_id: str, download_dest: str = None, filename: str = None) -> Union[Dict[str, Union[str, Dict]], RequestError]:
         """
@@ -217,4 +239,22 @@ def save_plot(func):
         if save_dest is not None:
             dest = save_dest + '.pdf'
             self.export_plot(fig=fig, save_dest=dest)
+    return wrapper
+
+
+def fetch_job(func):
+    """
+    Decorator for `Api().visualize_` methods.
+
+    Args:
+        - **func**: `Callable`: Decorated `Api().visualize_` method. Currently only implemented in `Verifier()`.
+    """
+    @wraps(func)
+    def wrapper(self, *args, **kwargs):
+        for _ in range(10):
+            output = func(self, *args, **kwargs)
+            if not output.get('content').get('status') == 'COMPLETED':
+                continue
+            else:
+                return output
     return wrapper
