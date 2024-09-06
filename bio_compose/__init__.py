@@ -13,7 +13,7 @@ def run_simulation(*args, **kwargs):
     pass
 
 
-def verify(*args, **kwargs) -> dict:
+def verify(*args, **kwargs):
     """
     Verify and compare the outputs of simulators for a given entrypoint file of either sbml or omex.
 
@@ -26,10 +26,11 @@ def verify(*args, **kwargs) -> dict:
         - **kwargs**: keyword arguments passed to the verification.
 
     Returns:
-        Verification result in the form of a dictionary.
+        Verification result instance. See documentation for more details.
     """
     import time
     from bio_compose.verifier import Verifier
+    from bio_compose.verifier import VerificationResult
 
     verifier = Verifier()
     simulators = kwargs.get('simulators')
@@ -53,4 +54,5 @@ def verify(*args, **kwargs) -> dict:
             else:
                 output = verification_result
                 break
-    return output
+
+    return VerificationResult(data=output)

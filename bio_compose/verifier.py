@@ -526,6 +526,32 @@ class Verifier(Api):
             raise IOError(f"This SBML model: {filename} cannot be written to {file_path}. Please check your paths and try again.")
 
 
+class VerificationResult(dict):
+    def __init__(self, data: dict):
+        self.data = data
+        self.update({'content': self.data.get('content')})
+        self.job_id = self.data.get('content').get('job_id')
+        self.verifier = Verifier()
+
+    def rmse(self, *args, **kwargs):
+        from functools import partial
+
+        rmse = self.verifier.get_rmse(self.job_id)
+        self.verifier.visualize_rmse(self.job_id, **kwargs)
+        return rmse
+
+    def observables(self):
+        observables = {}
+        results = self.data['content']['results']
+        for obs in results.keys():
+            obs_data = results[obs]
+            if 'output_data' == obs_data.keys():
+                observables[obs] = obs_data['output_data']
+
+        self.verifier.visualize_observables(job_id=self.job_id)
+        return observables
+
+
 # tests
 
 def test_verifier():
