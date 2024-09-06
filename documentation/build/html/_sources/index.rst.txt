@@ -13,8 +13,5 @@ Create, execute, and introspect reproducible composite simulations of dynamic bi
    :caption: Contents:
 
    installation
+   modules
 
-.. automodule:: bio_compose
-   :members:
-   :undoc-members:
-   :show-inheritance:
