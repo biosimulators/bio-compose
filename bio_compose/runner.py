@@ -110,3 +110,12 @@ class SimulationRunner(Api):
         headers = {'Content-Type': multidata.content_type}
 
         return self._execute_request(endpoint=endpoint, headers=headers, multidata=multidata, query_params=query_params)
+
+
+class SimulationResult(dict):
+    def __init__(self, data):
+        self.data = data
+        self.job_id = self.data.get('job_id')
+
+    def visualize(self):
+        pass

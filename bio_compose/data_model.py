@@ -147,7 +147,7 @@ class Api(object):
         except:
             import traceback
             tb_str = traceback.format_exc()
-            return RequestError(error=error_message)
+            return RequestError(error=tb_str)
 
     def get_job_status(self, job_id: str):
         output = self.get_output(job_id=job_id)
