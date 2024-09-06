@@ -69,6 +69,7 @@
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="#module-bio_compose.runner">bio_compose.runner module</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#bio_compose.runner.SimulationResult"><code class="docutils literal notranslate"><span class="pre">SimulationResult</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#bio_compose.runner.SimulationRunner"><code class="docutils literal notranslate"><span class="pre">SimulationRunner</span></code></a></li>
 </ul>
 </li>
@@ -327,6 +328,17 @@
 </section>
 <section id="module-bio_compose.runner">
 <span id="bio-compose-runner-module"></span><h2>bio_compose.runner module<a class="headerlink" href="#module-bio_compose.runner" title="Link to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="bio_compose.runner.SimulationResult">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">bio_compose.runner.</span></span><span class="sig-name descname"><span class="pre">SimulationResult</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/bio_compose/runner.html#SimulationResult"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#bio_compose.runner.SimulationResult" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="bio_compose.runner.SimulationResult.visualize">
+<span class="sig-name descname"><span class="pre">visualize</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/bio_compose/runner.html#SimulationResult.visualize"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#bio_compose.runner.SimulationResult.visualize" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
 <dl class="py class">
 <dt class="sig sig-object py" id="bio_compose.runner.SimulationRunner">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">bio_compose.runner.</span></span><span class="sig-name descname"><span class="pre">SimulationRunner</span></span><a class="reference internal" href="_modules/bio_compose/runner.html#SimulationRunner"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#bio_compose.runner.SimulationRunner" title="Link to this definition"></a></dt>
@@ -602,7 +614,16 @@
 <dl class="py function">
 <dt class="sig sig-object py" id="bio_compose.run_simulation">
 <span class="sig-prename descclassname"><span class="pre">bio_compose.</span></span><span class="sig-name descname"><span class="pre">run_simulation</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/bio_compose.html#run_simulation"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#bio_compose.run_simulation" title="Link to this definition"></a></dt>
-<dd></dd></dl>
+<dd><p>Run a simulation with BioCompose</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>args</strong> (<em>-</em>) – Positional arguments
+- 1 argument(<strong>smoldyn simulation only</strong>): smoldyn simulation configuration in which time parameters (dt, duration) are already defined.
+- 3 arguments(<strong>smoldyn simulation only</strong>): smoldyn configuration file, smoldyn simulation duration, smoldyn simulation dt
+- 5 arguments(<strong>sbml simulation only</strong>): sbml filepath, simulation start, simulation end, simulation steps, simulator</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="bio_compose.verify">

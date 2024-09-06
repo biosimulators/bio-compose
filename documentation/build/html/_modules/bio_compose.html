@@ -73,6 +73,7 @@
              
   <h1>Source code for bio_compose</h1><div class="highlight"><pre>
 <span></span><span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">time</span>
 
 
 <span class="n">current_dir</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="vm">__file__</span><span class="p">)</span>
@@ -85,8 +86,60 @@
 <div class="viewcode-block" id="run_simulation">
 <a class="viewcode-back" href="../bio_compose.html#bio_compose.run_simulation">[docs]</a>
 <span class="k">def</span> <span class="nf">run_simulation</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-    <span class="c1"># TODO: implement this</span>
-    <span class="k">pass</span></div>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Run a simulation with BioCompose</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        - args: Positional arguments</span>
+<span class="sd">            - 1 argument(**smoldyn simulation only**): smoldyn simulation configuration in which time parameters (dt, duration) are already defined.</span>
+<span class="sd">            - 3 arguments(**smoldyn simulation only**): smoldyn configuration file, smoldyn simulation duration, smoldyn simulation dt</span>
+<span class="sd">            - 5 arguments(**sbml simulation only**): sbml filepath, simulation start, simulation end, simulation steps, simulator</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="kn">from</span> <span class="nn">bio_compose.runner</span> <span class="kn">import</span> <span class="n">SimulationRunner</span><span class="p">,</span> <span class="n">SimulationResult</span>
+
+    <span class="c1"># set up submission</span>
+    <span class="n">runner</span> <span class="o">=</span> <span class="n">SimulationRunner</span><span class="p">()</span>
+    <span class="n">in_file</span> <span class="o">=</span> <span class="n">args</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">n_args</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">args</span><span class="p">)</span>
+    <span class="n">submission</span> <span class="o">=</span> <span class="kc">None</span>
+
+    <span class="k">if</span> <span class="n">n_args</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="n">submission</span> <span class="o">=</span> <span class="n">runner</span><span class="o">.</span><span class="n">run_smoldyn_simulation</span><span class="p">(</span><span class="n">smoldyn_configuration_filepath</span><span class="o">=</span><span class="n">in_file</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="n">n_args</span> <span class="o">==</span> <span class="mi">3</span><span class="p">:</span>
+        <span class="n">dur</span> <span class="o">=</span> <span class="n">args</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+        <span class="n">dt</span> <span class="o">=</span> <span class="n">args</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
+        <span class="n">submission</span> <span class="o">=</span> <span class="n">runner</span><span class="o">.</span><span class="n">run_smoldyn_simulation</span><span class="p">(</span><span class="n">smoldyn_configuration_filepath</span><span class="o">=</span><span class="n">in_file</span><span class="p">,</span> <span class="n">duration</span><span class="o">=</span><span class="n">dur</span><span class="p">,</span> <span class="n">dt</span><span class="o">=</span><span class="n">dt</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="n">n_args</span> <span class="o">==</span> <span class="mi">5</span><span class="p">:</span>
+        <span class="n">start</span> <span class="o">=</span> <span class="n">args</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+        <span class="n">end</span> <span class="o">=</span> <span class="n">args</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
+        <span class="n">steps</span> <span class="o">=</span> <span class="n">args</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span>
+        <span class="n">simulator</span> <span class="o">=</span> <span class="n">args</span><span class="p">[</span><span class="mi">4</span><span class="p">]</span>
+        <span class="n">submission</span> <span class="o">=</span> <span class="n">runner</span><span class="o">.</span><span class="n">run_utc_simulation</span><span class="p">(</span><span class="n">sbml_filepath</span><span class="o">=</span><span class="n">in_file</span><span class="p">,</span> <span class="n">start</span><span class="o">=</span><span class="n">start</span><span class="p">,</span> <span class="n">end</span><span class="o">=</span><span class="n">end</span><span class="p">,</span> <span class="n">steps</span><span class="o">=</span><span class="n">steps</span><span class="p">,</span> <span class="n">simulator</span><span class="o">=</span><span class="n">simulator</span><span class="p">)</span>
+
+    <span class="c1"># fetch results</span>
+    <span class="n">job_id</span> <span class="o">=</span> <span class="n">submission</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;job_id&#39;</span><span class="p">)</span>
+    <span class="n">output</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="n">timeout</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;timeout&#39;</span><span class="p">,</span> <span class="mi">100</span><span class="p">)</span>
+    <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="k">if</span> <span class="n">job_id</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">i</span> <span class="o">==</span> <span class="n">timeout</span><span class="p">:</span>
+                <span class="k">break</span>
+            <span class="n">simulation_result</span> <span class="o">=</span> <span class="n">runner</span><span class="o">.</span><span class="n">get_output</span><span class="p">(</span><span class="n">job_id</span><span class="o">=</span><span class="n">job_id</span><span class="p">)</span>
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">simulation_result</span><span class="p">,</span> <span class="nb">dict</span><span class="p">):</span>
+                <span class="n">status</span> <span class="o">=</span> <span class="n">simulation_result</span><span class="p">[</span><span class="s1">&#39;content&#39;</span><span class="p">][</span><span class="s1">&#39;status&#39;</span><span class="p">]</span>
+                <span class="k">if</span> <span class="ow">not</span> <span class="s1">&#39;COMPLETED&#39;</span> <span class="ow">in</span> <span class="n">status</span><span class="p">:</span>
+                    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Not complete: &#39;</span><span class="p">,</span> <span class="n">i</span><span class="p">,</span> <span class="n">status</span><span class="p">)</span>
+                    <span class="n">i</span> <span class="o">+=</span> <span class="mi">1</span>
+                    <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">output</span> <span class="o">=</span> <span class="n">simulation_result</span>
+                    <span class="k">break</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">i</span> <span class="o">+=</span> <span class="mi">1</span>
+
+    <span class="k">return</span> <span class="n">SimulationResult</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">output</span><span class="p">)</span></div>
 
 
 
@@ -107,9 +160,7 @@
 <span class="sd">    Returns:</span>
 <span class="sd">        Verification result instance. See documentation for more details.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="kn">import</span> <span class="nn">time</span>
-    <span class="kn">from</span> <span class="nn">bio_compose.verifier</span> <span class="kn">import</span> <span class="n">Verifier</span>
-    <span class="kn">from</span> <span class="nn">bio_compose.verifier</span> <span class="kn">import</span> <span class="n">VerificationResult</span>
+    <span class="kn">from</span> <span class="nn">bio_compose.verifier</span> <span class="kn">import</span> <span class="n">Verifier</span><span class="p">,</span> <span class="n">VerificationResult</span>
 
     <span class="n">verifier</span> <span class="o">=</span> <span class="n">Verifier</span><span class="p">()</span>
     <span class="n">simulators</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;simulators&#39;</span><span class="p">)</span>
