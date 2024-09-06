@@ -92,7 +92,7 @@
 
 <div class="viewcode-block" id="verify">
 <a class="viewcode-back" href="../bio_compose.html#bio_compose.verify">[docs]</a>
-<span class="k">def</span> <span class="nf">verify</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
+<span class="k">def</span> <span class="nf">verify</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Verify and compare the outputs of simulators for a given entrypoint file of either sbml or omex.</span>
 
@@ -105,10 +105,11 @@
 <span class="sd">        - **kwargs**: keyword arguments passed to the verification.</span>
 
 <span class="sd">    Returns:</span>
-<span class="sd">        Verification result in the form of a dictionary.</span>
+<span class="sd">        Verification result instance. See documentation for more details.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="kn">import</span> <span class="nn">time</span>
     <span class="kn">from</span> <span class="nn">bio_compose.verifier</span> <span class="kn">import</span> <span class="n">Verifier</span>
+    <span class="kn">from</span> <span class="nn">bio_compose.verifier</span> <span class="kn">import</span> <span class="n">VerificationResult</span>
 
     <span class="n">verifier</span> <span class="o">=</span> <span class="n">Verifier</span><span class="p">()</span>
     <span class="n">simulators</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;simulators&#39;</span><span class="p">)</span>
@@ -132,7 +133,8 @@
             <span class="k">else</span><span class="p">:</span>
                 <span class="n">output</span> <span class="o">=</span> <span class="n">verification_result</span>
                 <span class="k">break</span>
-    <span class="k">return</span> <span class="n">output</span></div>
+
+    <span class="k">return</span> <span class="n">VerificationResult</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">output</span><span class="p">)</span></div>
 
 </pre></div>
 
