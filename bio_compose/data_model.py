@@ -122,16 +122,9 @@ class Api(object):
                 self._output = data
 
                 return data
-        except Exception as e:
+        except:
             import traceback
             tb_str = traceback.format_exc()
-            error_message = (
-                f"An unexpected error occurred while processing your request:\n"
-                f"Error Type: {type(e).__name__}\n"
-                f"Error Details: {str(e)}\n"
-                f"Traceback:\n{tb_str}"
-            )
-
             return RequestError(error=error_message)
 
     def get_job_status(self, job_id: str):
