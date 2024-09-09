@@ -41,9 +41,14 @@
   </form>
 </div>
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
-              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+              <p class="caption" role="heading"><span class="caption-text">Getting started</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="../installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../getting-started.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../getting-started.html#verification">Verification</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../getting-started.html#simulation-runs">Simulation Runs</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">BioCompose modules</span></p>
+<ul>
 <li class="toctree-l1"><a class="reference internal" href="../modules.html">bio_compose</a></li>
 </ul>
 
@@ -91,13 +96,12 @@
 <div class="viewcode-block" id="run_simulation">
 <a class="viewcode-back" href="../bio_compose.html#bio_compose.run_simulation">[docs]</a>
 <span class="k">def</span> <span class="nf">run_simulation</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">SimulationResult</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Run a simulation with BioCompose.</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Run a simulation with BioCompose.</span>
 
-<span class="sd">    :param args: Positional arguments</span>
-<span class="sd">        * 1 argument (smoldyn simulation only): smoldyn simulation configuration in which time parameters (dt, duration) are already defined.</span>
-<span class="sd">        * 3 arguments (smoldyn simulation only): smoldyn configuration file, smoldyn simulation duration, smoldyn simulation dt</span>
-<span class="sd">        * 5 arguments (sbml simulation only): sbml filepath, simulation start, simulation end, simulation steps, simulator</span>
+<span class="sd">    :param args: Positional arguments:</span>
+<span class="sd">            * 1 argument (smoldyn simulation only): smoldyn simulation configuration in which time parameters (dt, duration) are already defined.</span>
+<span class="sd">            * 3 arguments (smoldyn simulation only): smoldyn configuration file, smoldyn simulation duration, smoldyn simulation dt</span>
+<span class="sd">            * 5 arguments (sbml simulation only): sbml filepath, simulation start, simulation end, simulation steps, simulator</span>
 
 <span class="sd">    :param kwargs: Keyword arguments</span>
 

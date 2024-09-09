@@ -15,13 +15,12 @@ with open(version_file_path, 'r') as f:
 
 
 def run_simulation(*args, **kwargs) -> SimulationResult:
-    """
-    Run a simulation with BioCompose.
+    """Run a simulation with BioCompose.
 
-    :param args: Positional arguments
-        * 1 argument (smoldyn simulation only): smoldyn simulation configuration in which time parameters (dt, duration) are already defined.
-        * 3 arguments (smoldyn simulation only): smoldyn configuration file, smoldyn simulation duration, smoldyn simulation dt
-        * 5 arguments (sbml simulation only): sbml filepath, simulation start, simulation end, simulation steps, simulator
+    :param args: Positional arguments:
+            * 1 argument (smoldyn simulation only): smoldyn simulation configuration in which time parameters (dt, duration) are already defined.
+            * 3 arguments (smoldyn simulation only): smoldyn configuration file, smoldyn simulation duration, smoldyn simulation dt
+            * 5 arguments (sbml simulation only): sbml filepath, simulation start, simulation end, simulation steps, simulator
 
     :param kwargs: Keyword arguments
 
