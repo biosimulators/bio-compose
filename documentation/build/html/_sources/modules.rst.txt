@@ -1,5 +1,5 @@
-bio_compose
-===========
+API Documentation
+=================
 
 .. toctree::
    :maxdepth: 4
