@@ -17,10 +17,11 @@ with open(version_file_path, 'r') as f:
 def run_simulation(*args, **kwargs) -> SimulationResult:
     """Run a simulation with BioCompose.
 
-    :param args: Positional arguments:
-            * 1 argument (smoldyn simulation only): smoldyn simulation configuration in which time parameters (dt, duration) are already defined.
-            * 3 arguments (smoldyn simulation only): smoldyn configuration file, smoldyn simulation duration, smoldyn simulation dt
-            * 5 arguments (sbml simulation only): sbml filepath, simulation start, simulation end, simulation steps, simulator
+    :param args: Positional arguments
+
+    * 1 argument: smoldyn simulation configuration in which time parameters (dt, duration) are already defined. **Smoldyn simulation only**.
+    * 3 arguments: smoldyn configuration file, smoldyn simulation duration, smoldyn simulation dt. **Smoldyn simulation only**.
+    * 5 arguments: sbml filepath, simulation start, simulation end, simulation steps, simulator. **SBML simulation only**.
 
     :param kwargs: Keyword arguments
 
@@ -75,20 +76,20 @@ def run_simulation(*args, **kwargs) -> SimulationResult:
     return SimulationResult(data=output)
 
 
-def verify(*args, **kwargs):
-    """
-    Verify and compare the outputs of simulators for a given entrypoint file of either sbml or omex.
+def verify(*args, **kwargs) -> VerificationResult:
+    """Verify and compare the outputs of simulators for a given entrypoint file of either sbml or omex.
 
-    Args:
-        **args**: positional arguments passed to the verification.
-            1 argument(`str`): submit an sbml or omex verification with no time params.
-            2 arguments(`str`, `list[str]`): omex filepath, simulators to include in the verification.
-            4 arguments(`str`, `int`, `int`, `int`): sbml filepath, start, stop, steps.
-            5 arguments(`str`, `int`, `int`, `int`, `list[str]`): sbml filepath, start, stop, steps, simulators.
-        **kwargs**: keyword arguments passed to the verification.
+    :param args: Positional arguments
 
-    Returns:
-        Verification result instance. See documentation for more details.
+    * 1 argument: submit an sbml or omex verification with no time params. **OMEX verification only**.
+    * 2 arguments: omex filepath, simulators to include in the verification. **OMEX verification only**.
+    * 4 arguments: sbml filepath, start, stop, steps. **SBML verification only**.
+    * 5 arguments: sbml filepath, start, stop, steps, simulators. **SBML verification only**.
+
+    :param kwargs: keyword arguments passed to the verification.
+
+    :return: instance of verification results.
+    :rtype: bio_compose.runner.VerificationResult
     """
     verifier = Verifier()
     simulators = kwargs.get('simulators')

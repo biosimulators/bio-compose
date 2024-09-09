@@ -95,10 +95,11 @@
 <span class="k">def</span> <span class="nf">run_simulation</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">SimulationResult</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Run a simulation with BioCompose.</span>
 
-<span class="sd">    :param args: Positional arguments:</span>
-<span class="sd">            * 1 argument (smoldyn simulation only): smoldyn simulation configuration in which time parameters (dt, duration) are already defined.</span>
-<span class="sd">            * 3 arguments (smoldyn simulation only): smoldyn configuration file, smoldyn simulation duration, smoldyn simulation dt</span>
-<span class="sd">            * 5 arguments (sbml simulation only): sbml filepath, simulation start, simulation end, simulation steps, simulator</span>
+<span class="sd">    :param args: Positional arguments</span>
+
+<span class="sd">    * 1 argument: smoldyn simulation configuration in which time parameters (dt, duration) are already defined. **Smoldyn simulation only**.</span>
+<span class="sd">    * 3 arguments: smoldyn configuration file, smoldyn simulation duration, smoldyn simulation dt. **Smoldyn simulation only**.</span>
+<span class="sd">    * 5 arguments: sbml filepath, simulation start, simulation end, simulation steps, simulator. **SBML simulation only**.</span>
 
 <span class="sd">    :param kwargs: Keyword arguments</span>
 
@@ -156,20 +157,20 @@
 
 <div class="viewcode-block" id="verify">
 <a class="viewcode-back" href="../bio_compose.html#bio_compose.verify">[docs]</a>
-<span class="k">def</span> <span class="nf">verify</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Verify and compare the outputs of simulators for a given entrypoint file of either sbml or omex.</span>
+<span class="k">def</span> <span class="nf">verify</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">VerificationResult</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Verify and compare the outputs of simulators for a given entrypoint file of either sbml or omex.</span>
 
-<span class="sd">    Args:</span>
-<span class="sd">        **args**: positional arguments passed to the verification.</span>
-<span class="sd">            1 argument(`str`): submit an sbml or omex verification with no time params.</span>
-<span class="sd">            2 arguments(`str`, `list[str]`): omex filepath, simulators to include in the verification.</span>
-<span class="sd">            4 arguments(`str`, `int`, `int`, `int`): sbml filepath, start, stop, steps.</span>
-<span class="sd">            5 arguments(`str`, `int`, `int`, `int`, `list[str]`): sbml filepath, start, stop, steps, simulators.</span>
-<span class="sd">        **kwargs**: keyword arguments passed to the verification.</span>
+<span class="sd">    :param args: Positional arguments</span>
 
-<span class="sd">    Returns:</span>
-<span class="sd">        Verification result instance. See documentation for more details.</span>
+<span class="sd">    * 1 argument: submit an sbml or omex verification with no time params. **OMEX verification only**.</span>
+<span class="sd">    * 2 arguments: omex filepath, simulators to include in the verification. **OMEX verification only**.</span>
+<span class="sd">    * 4 arguments: sbml filepath, start, stop, steps. **SBML verification only**.</span>
+<span class="sd">    * 5 arguments: sbml filepath, start, stop, steps, simulators. **SBML verification only**.</span>
+
+<span class="sd">    :param kwargs: keyword arguments passed to the verification.</span>
+
+<span class="sd">    :return: instance of verification results.</span>
+<span class="sd">    :rtype: bio_compose.runner.VerificationResult</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">verifier</span> <span class="o">=</span> <span class="n">Verifier</span><span class="p">()</span>
     <span class="n">simulators</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;simulators&#39;</span><span class="p">)</span>
