@@ -7,14 +7,21 @@ BioCompose documentation
 ========================
 Create, execute, and introspect reproducible composite simulations of dynamic biological systems.
 
-.. image:: ./bio-compose.png
+.. image:: ./bio_compose.png
    :alt: BioCompose logo
 
 .. toctree::
    :maxdepth: 2
-   :caption: Getting started
+   :caption: Installation
 
-   getting-started
+   installation
+
+.. toctree::
+   :maxdepth: 2
+   :caption: Getting Started
+
+   verification
+   simulation_runs
 
 .. toctree::
    :maxdepth: 2

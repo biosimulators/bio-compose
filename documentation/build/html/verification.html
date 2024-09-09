@@ -1,9 +1,10 @@
 <!DOCTYPE html>
 <html class="writer-html5" lang="en" data-content_root="./">
 <head>
-  <meta charset="utf-8" />
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Python Module Index &mdash; BioCompose 0.5.4 documentation</title>
+  <title>Verification &mdash; BioCompose 0.5.4 documentation</title>
       <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=fa44fd50" />
       <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=19f00094" />
 
@@ -20,9 +21,8 @@
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
- 
-
-
+    <link rel="next" title="Simulation Runs" href="simulation_runs.html" />
+    <link rel="prev" title="Installation" href="installation.html" /> 
 </head>
 
 <body class="wy-body-for-nav"> 
@@ -49,8 +49,8 @@
 <li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Getting Started</span></p>
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="verification.html">Verification</a></li>
+<ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Verification</a></li>
 <li class="toctree-l1"><a class="reference internal" href="simulation_runs.html">Simulation Runs</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">BioCompose modules</span></p>
@@ -72,8 +72,9 @@
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
       <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
-      <li class="breadcrumb-item active">Python Module Index</li>
+      <li class="breadcrumb-item active">Verification</li>
       <li class="wy-breadcrumbs-aside">
+            <a href="_sources/verification.rst.txt" rel="nofollow"> View page source</a>
       </li>
   </ul>
   <hr/>
@@ -81,59 +82,39 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
+  <section id="verification">
+<h1>Verification<a class="headerlink" href="#verification" title="Link to this heading"></a></h1>
+<p>Running a verification with <cite>bio-compose</cite> can be achieved in a few simple steps.</p>
+<p>Running a <strong>OMEX verifications</strong>:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">bio_compose</span> <span class="kn">import</span> <span class="n">verify</span>
 
-   <h1>Python Module Index</h1>
+<span class="n">filepath</span> <span class="o">=</span> <span class="s1">&#39;/path/to/a/valid/omex/file.omex&#39;</span>
+<span class="n">simulators</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;amici&#39;</span><span class="p">,</span> <span class="s1">&#39;copasi&#39;</span><span class="p">,</span> <span class="s1">&#39;tellurium&#39;</span><span class="p">]</span>
 
-   <div class="modindex-jumpbox">
-   <a href="#cap-b"><strong>b</strong></a>
-   </div>
+<span class="n">verification</span> <span class="o">=</span> <span class="n">verify</span><span class="p">(</span><span class="n">filepath</span><span class="p">,</span> <span class="n">simulators</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Running <strong>SBML verifications</strong>:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">bio_compose</span> <span class="kn">import</span> <span class="n">verify</span>
 
-   <table class="indextable modindextable">
-     <tr class="pcap"><td></td><td>&#160;</td><td></td></tr>
-     <tr class="cap" id="cap-b"><td></td><td>
-       <strong>b</strong></td><td></td></tr>
-     <tr>
-       <td><img src="_static/minus.png" class="toggler"
-              id="toggle-1" style="display: none" alt="-" /></td>
-       <td>
-       <a href="bio_compose.html#module-bio_compose"><code class="xref">bio_compose</code></a></td><td>
-       <em></em></td></tr>
-     <tr class="cg-1">
-       <td></td>
-       <td>&#160;&#160;&#160;
-       <a href="bio_compose.html#module-bio_compose.bundles"><code class="xref">bio_compose.bundles</code></a></td><td>
-       <em></em></td></tr>
-     <tr class="cg-1">
-       <td></td>
-       <td>&#160;&#160;&#160;
-       <a href="bio_compose.html#module-bio_compose.composer"><code class="xref">bio_compose.composer</code></a></td><td>
-       <em></em></td></tr>
-     <tr class="cg-1">
-       <td></td>
-       <td>&#160;&#160;&#160;
-       <a href="bio_compose.html#module-bio_compose.data_model"><code class="xref">bio_compose.data_model</code></a></td><td>
-       <em></em></td></tr>
-     <tr class="cg-1">
-       <td></td>
-       <td>&#160;&#160;&#160;
-       <a href="bio_compose.html#module-bio_compose.processing_tools"><code class="xref">bio_compose.processing_tools</code></a></td><td>
-       <em></em></td></tr>
-     <tr class="cg-1">
-       <td></td>
-       <td>&#160;&#160;&#160;
-       <a href="bio_compose.html#module-bio_compose.runner"><code class="xref">bio_compose.runner</code></a></td><td>
-       <em></em></td></tr>
-     <tr class="cg-1">
-       <td></td>
-       <td>&#160;&#160;&#160;
-       <a href="bio_compose.html#module-bio_compose.verifier"><code class="xref">bio_compose.verifier</code></a></td><td>
-       <em></em></td></tr>
-   </table>
+<span class="n">filepath</span> <span class="o">=</span> <span class="s1">&#39;/path/to/a/valid/sbml/file.xml&#39;</span>
+<span class="n">simulators</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;amici&#39;</span><span class="p">,</span> <span class="s1">&#39;copasi&#39;</span><span class="p">,</span> <span class="s1">&#39;tellurium&#39;</span><span class="p">]</span>
+<span class="n">start_time</span> <span class="o">=</span> <span class="mi">0</span>
+<span class="n">duration</span> <span class="o">=</span> <span class="mi">100</span>
+<span class="n">n_steps</span> <span class="o">=</span> <span class="mi">1000</span>
+
+<span class="n">verification</span> <span class="o">=</span> <span class="n">verify</span><span class="p">(</span><span class="n">filepath</span><span class="p">,</span> <span class="n">start_time</span><span class="p">,</span> <span class="n">duration</span><span class="p">,</span> <span class="n">n_steps</span><span class="p">,</span> <span class="n">simulators</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
 
 
            </div>
           </div>
-          <footer>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="installation.html" class="btn btn-neutral float-left" title="Installation" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="simulation_runs.html" class="btn btn-neutral float-right" title="Simulation Runs" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
 
   <hr/>
 
