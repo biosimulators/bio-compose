@@ -671,35 +671,18 @@ save_dest: <cite>str</cite>: path to save the figure. If this value is passed, t
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>*args</strong> – <p>Positional arguments:
-1 argument (smoldyn simulation only):</p>
-<blockquote>
-<div><ul>
-<li><p>smoldyn simulation configuration in which time parameters (dt, duration) are already defined.</p></li>
-</ul>
-</div></blockquote>
-<dl class="simple">
-<dt>3 arguments (smoldyn simulation only):</dt><dd><ul>
-<li><p>smoldyn configuration file</p></li>
-<li><p>smoldyn simulation duration</p></li>
-<li><p>smoldyn simulation dt</p></li>
-</ul>
-</dd>
-<dt>5 arguments (sbml simulation only):</dt><dd><ul>
-<li><p>sbml filepath</p></li>
-<li><p>simulation start</p></li>
-<li><p>simulation end</p></li>
-<li><p>simulation steps</p></li>
-<li><p>simulator</p></li>
-</ul>
-</dd>
-</dl>
-</p></li>
-<li><p><strong>**kwargs</strong> – Keyword arguments.</p></li>
+<li><p><strong>args</strong> – Positional arguments
+* 1 argument (smoldyn simulation only): smoldyn simulation configuration in which time parameters (dt, duration) are already defined.
+* 3 arguments (smoldyn simulation only): smoldyn configuration file, smoldyn simulation duration, smoldyn simulation dt
+* 5 arguments (sbml simulation only): sbml filepath, simulation start, simulation end, simulation steps, simulator</p></li>
+<li><p><strong>kwargs</strong> – Keyword arguments</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p><cite>SimulationResult</cite> instance of simulation results.</p>
+<dd class="field-even"><p>instance of simulation results.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="#bio_compose.runner.SimulationResult" title="bio_compose.runner.SimulationResult">bio_compose.runner.SimulationResult</a></p>
 </dd>
 </dl>
 </dd></dl>

@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>bio_compose &mdash; BioCompose 0.3.2 documentation</title>
+  <title>bio_compose &mdash; BioCompose 0.5.4 documentation</title>
       <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=fa44fd50" />
       <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=19f00094" />
 
@@ -14,7 +14,7 @@
   
         <script src="../_static/jquery.js?v=5d32c60e"></script>
         <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-        <script src="../_static/documentation_options.js?v=71d9d8e6"></script>
+        <script src="../_static/documentation_options.js?v=e1a677a5"></script>
         <script src="../_static/doctools.js?v=9a2dae69"></script>
         <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../_static/js/theme.js"></script>
@@ -94,27 +94,15 @@
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Run a simulation with BioCompose.</span>
 
-<span class="sd">    Args:</span>
-<span class="sd">        *args: Positional arguments:</span>
-<span class="sd">            1 argument (smoldyn simulation only):</span>
-<span class="sd">                - smoldyn simulation configuration in which time parameters (dt, duration) are already defined.</span>
+<span class="sd">    :param args: Positional arguments</span>
+<span class="sd">        * 1 argument (smoldyn simulation only): smoldyn simulation configuration in which time parameters (dt, duration) are already defined.</span>
+<span class="sd">        * 3 arguments (smoldyn simulation only): smoldyn configuration file, smoldyn simulation duration, smoldyn simulation dt</span>
+<span class="sd">        * 5 arguments (sbml simulation only): sbml filepath, simulation start, simulation end, simulation steps, simulator</span>
 
-<span class="sd">            3 arguments (smoldyn simulation only):</span>
-<span class="sd">                - smoldyn configuration file</span>
-<span class="sd">                - smoldyn simulation duration</span>
-<span class="sd">                - smoldyn simulation dt</span>
+<span class="sd">    :param kwargs: Keyword arguments</span>
 
-<span class="sd">            5 arguments (sbml simulation only):</span>
-<span class="sd">                - sbml filepath</span>
-<span class="sd">                - simulation start</span>
-<span class="sd">                - simulation end</span>
-<span class="sd">                - simulation steps</span>
-<span class="sd">                - simulator</span>
-
-<span class="sd">        **kwargs: Keyword arguments.</span>
-
-<span class="sd">    Returns:</span>
-<span class="sd">        `SimulationResult` instance of simulation results.</span>
+<span class="sd">    :return: instance of simulation results.</span>
+<span class="sd">    :rtype: bio_compose.runner.SimulationResult</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="c1"># set up submission</span>
     <span class="n">runner</span> <span class="o">=</span> <span class="n">SimulationRunner</span><span class="p">()</span>

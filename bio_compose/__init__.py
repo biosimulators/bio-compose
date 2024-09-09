@@ -18,27 +18,15 @@ def run_simulation(*args, **kwargs) -> SimulationResult:
     """
     Run a simulation with BioCompose.
 
-    Args:
-        *args: Positional arguments:
-            1 argument (smoldyn simulation only):
-                - smoldyn simulation configuration in which time parameters (dt, duration) are already defined.
+    :param args: Positional arguments
+        * 1 argument (smoldyn simulation only): smoldyn simulation configuration in which time parameters (dt, duration) are already defined.
+        * 3 arguments (smoldyn simulation only): smoldyn configuration file, smoldyn simulation duration, smoldyn simulation dt
+        * 5 arguments (sbml simulation only): sbml filepath, simulation start, simulation end, simulation steps, simulator
 
-            3 arguments (smoldyn simulation only):
-                - smoldyn configuration file
-                - smoldyn simulation duration
-                - smoldyn simulation dt
+    :param kwargs: Keyword arguments
 
-            5 arguments (sbml simulation only):
-                - sbml filepath
-                - simulation start
-                - simulation end
-                - simulation steps
-                - simulator
-
-        **kwargs: Keyword arguments.
-
-    Returns:
-        `SimulationResult` instance of simulation results.
+    :return: instance of simulation results.
+    :rtype: bio_compose.runner.SimulationResult
     """
     # set up submission
     runner = SimulationRunner()
