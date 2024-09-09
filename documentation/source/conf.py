@@ -15,21 +15,24 @@ import sphinx_rtd_theme
 project = 'BioCompose'
 copyright = '2024, Alexander A. Patrie'
 author = 'Alexander A. Patrie'
-release = '0.3.2'
+release = '0.5.4'
 
 # -- General configuration ---------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#general-configuration
 
 extensions = [
-    'sphinx.ext.autodoc',
-    # 'sphinx_rtd_theme',
-    # 'sphinx_autodoc_typehints',
-    'sphinx.ext.napoleon',
-    'sphinx.ext.viewcode'
+    "sphinx.ext.autodoc",
+    "sphinx_rtd_theme",
+    "sphinx.ext.autosummary",
+    "sphinx.ext.napoleon",
+    "sphinx.ext.mathjax",
+    "sphinx.ext.viewcode"
 ]
 
 templates_path = ['_templates']
 exclude_patterns = []
+autoclass_content = "both"
+autosummary_generate = True
 
 # -- Options for HTML output -------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#options-for-html-output
