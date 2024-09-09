@@ -3,7 +3,7 @@ Verification
 
 Running a verification with `bio-compose` can be achieved in a few simple steps.
 
-Running a **OMEX verifications**:
+Running **OMEX verifications**:
 
 .. code-block:: python
 
