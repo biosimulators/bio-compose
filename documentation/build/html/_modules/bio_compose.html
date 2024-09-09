@@ -92,13 +92,26 @@
 <a class="viewcode-back" href="../bio_compose.html#bio_compose.run_simulation">[docs]</a>
 <span class="k">def</span> <span class="nf">run_simulation</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">SimulationResult</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Run a simulation with BioCompose</span>
+<span class="sd">    Run a simulation with BioCompose.</span>
 
 <span class="sd">    Args:</span>
-<span class="sd">        - **args**: Positional arguments:</span>
-<span class="sd">            1 argument(**smoldyn simulation only**): smoldyn simulation configuration in which time parameters (dt, duration) are already defined.</span>
-<span class="sd">            3 arguments(**smoldyn simulation only**): smoldyn configuration file, smoldyn simulation duration, smoldyn simulation dt</span>
-<span class="sd">            5 arguments(**sbml simulation only**): sbml filepath, simulation start, simulation end, simulation steps, simulator.</span>
+<span class="sd">        *args: Positional arguments:</span>
+<span class="sd">            1 argument (smoldyn simulation only):</span>
+<span class="sd">                - smoldyn simulation configuration in which time parameters (dt, duration) are already defined.</span>
+
+<span class="sd">            3 arguments (smoldyn simulation only):</span>
+<span class="sd">                - smoldyn configuration file</span>
+<span class="sd">                - smoldyn simulation duration</span>
+<span class="sd">                - smoldyn simulation dt</span>
+
+<span class="sd">            5 arguments (sbml simulation only):</span>
+<span class="sd">                - sbml filepath</span>
+<span class="sd">                - simulation start</span>
+<span class="sd">                - simulation end</span>
+<span class="sd">                - simulation steps</span>
+<span class="sd">                - simulator</span>
+
+<span class="sd">        **kwargs: Keyword arguments.</span>
 
 <span class="sd">    Returns:</span>
 <span class="sd">        `SimulationResult` instance of simulation results.</span>

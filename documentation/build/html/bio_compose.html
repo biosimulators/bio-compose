@@ -662,13 +662,36 @@ save_dest: <cite>str</cite>: path to save the figure. If this value is passed, t
 <dl class="py function">
 <dt class="sig sig-object py" id="bio_compose.run_simulation">
 <span class="sig-prename descclassname"><span class="pre">bio_compose.</span></span><span class="sig-name descname"><span class="pre">run_simulation</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#bio_compose.runner.SimulationResult" title="bio_compose.runner.SimulationResult"><span class="pre">SimulationResult</span></a></span></span><a class="reference internal" href="_modules/bio_compose.html#run_simulation"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#bio_compose.run_simulation" title="Link to this definition"></a></dt>
-<dd><p>Run a simulation with BioCompose</p>
+<dd><p>Run a simulation with BioCompose.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>args</strong> (<em>-</em>) – Positional arguments:
-1 argument(<strong>smoldyn simulation only</strong>): smoldyn simulation configuration in which time parameters (dt, duration) are already defined.
-3 arguments(<strong>smoldyn simulation only</strong>): smoldyn configuration file, smoldyn simulation duration, smoldyn simulation dt
-5 arguments(<strong>sbml simulation only</strong>): sbml filepath, simulation start, simulation end, simulation steps, simulator.</p>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>*args</strong> – <p>Positional arguments:
+1 argument (smoldyn simulation only):</p>
+<blockquote>
+<div><ul>
+<li><p>smoldyn simulation configuration in which time parameters (dt, duration) are already defined.</p></li>
+</ul>
+</div></blockquote>
+<dl class="simple">
+<dt>3 arguments (smoldyn simulation only):</dt><dd><ul>
+<li><p>smoldyn configuration file</p></li>
+<li><p>smoldyn simulation duration</p></li>
+<li><p>smoldyn simulation dt</p></li>
+</ul>
+</dd>
+<dt>5 arguments (sbml simulation only):</dt><dd><ul>
+<li><p>sbml filepath</p></li>
+<li><p>simulation start</p></li>
+<li><p>simulation end</p></li>
+<li><p>simulation steps</p></li>
+<li><p>simulator</p></li>
+</ul>
+</dd>
+</dl>
+</p></li>
+<li><p><strong>**kwargs</strong> – Keyword arguments.</p></li>
+</ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p><cite>SimulationResult</cite> instance of simulation results.</p>
