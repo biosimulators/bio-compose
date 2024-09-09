@@ -12,20 +12,10 @@ Create, execute, and introspect reproducible composite simulations of dynamic bi
 
 .. toctree::
    :maxdepth: 2
-   :caption: Installation
+   :caption: Contents
 
    installation
-
-.. toctree::
-   :maxdepth: 2
-   :caption: Getting Started
-
    verification
    simulation_runs
-
-.. toctree::
-   :maxdepth: 2
-   :caption: BioCompose modules
-
    modules
 
