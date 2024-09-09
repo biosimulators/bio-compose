@@ -341,7 +341,25 @@
 <dl class="py method">
 <dt class="sig sig-object py" id="bio_compose.runner.SimulationResult.visualize">
 <span class="sig-name descname"><span class="pre">visualize</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/bio_compose/runner.html#SimulationResult.visualize"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#bio_compose.runner.SimulationResult.visualize" title="Link to this definition"></a></dt>
-<dd></dd></dl>
+<dd><p>Visualize simulation output (observables) data.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>**kwargs**</strong> – <dl class="simple">
+<dt>Visualization kwargs are as follows:</dt><dd><p>job_id: <cite>str</cite>: job id for the simulation observables output you wish to visualize.
+hspace: <cite>float</cite>: horizontal spacing between subplots. Defaults to 0.25.
+use_grid: <cite>bool</cite>: whether to use a grid for each subplot. Defaults to False.
+save_dest: <cite>str</cite>: path to save the figure. If this value is passed, the figure will be saved in pdf format to this location.</p>
+</dd>
+<dt>Returns:</dt><dd><p><cite>Tuple[matplotlib.Figure, Dict]</cite> of matplotlib Figure and simulation observables.</p>
+</dd>
+</dl>
+</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>IOError</strong> – If <cite>job_id</cite> does not contain a ‘results’ field.</p>
+</dd>
+</dl>
+</dd></dl>
 
 </dd></dl>
 
@@ -409,20 +427,23 @@
 <dl class="py method">
 <dt class="sig sig-object py" id="bio_compose.runner.SimulationRunner.visualize_observables">
 <span class="sig-name descname"><span class="pre">visualize_observables</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">job_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">hspace</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0.25</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">use_grid</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">save_dest</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/bio_compose/runner.html#SimulationRunner.visualize_observables"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#bio_compose.runner.SimulationRunner.visualize_observables" title="Link to this definition"></a></dt>
-<dd><p>Visualize simulation output (observables) data.
-:param - <strong>job_id</strong>: <cite>str</cite>: job id for the simulation observables output you wish to visualize.
-:param - <strong>hspace</strong>: <cite>float</cite>: horizontal spacing between subplots. Defaults to 0.25.
-:param - <strong>use_grid</strong>: <cite>bool</cite>: whether to use a grid for each subplot. Defaults to False.
-:param - <strong>save_dest</strong>: <cite>str</cite>: path to save the figure. If this value is passed, the figure will be saved in pdf format to this location.</p>
-<blockquote>
-<div><dl class="simple">
+<dd><p>Visualize simulation output (observables) data.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>job_id</strong> (<em>-</em>) – <cite>str</cite>: job id for the simulation observables output you wish to visualize.</p></li>
+<li><p><strong>hspace</strong> (<em>-</em>) – <cite>float</cite>: horizontal spacing between subplots. Defaults to 0.25.</p></li>
+<li><p><strong>use_grid</strong> (<em>-</em>) – <cite>bool</cite>: whether to use a grid for each subplot. Defaults to False.</p></li>
+<li><p><strong>save_dest</strong> (<em>-</em>) – <p><cite>str</cite>: path to save the figure. If this value is passed, the figure will be saved in pdf format to this location.</p>
+<dl class="simple">
 <dt>Returns:</dt><dd><p><cite>Tuple[matplotlib.Figure, Dict]</cite> of matplotlib Figure and simulation observables.</p>
 </dd>
 </dl>
-</div></blockquote>
-<dl class="field-list simple">
-<dt class="field-odd">Raises<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>IOError</strong> – If <cite>job_id</cite> does not contain a ‘results’ field.</p>
+</p></li>
+</ul>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>IOError</strong> – If <cite>job_id</cite> does not contain a ‘results’ field.</p>
 </dd>
 </dl>
 </dd></dl>
@@ -640,14 +661,17 @@
 <span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-bio_compose" title="Link to this heading"></a></h2>
 <dl class="py function">
 <dt class="sig sig-object py" id="bio_compose.run_simulation">
-<span class="sig-prename descclassname"><span class="pre">bio_compose.</span></span><span class="sig-name descname"><span class="pre">run_simulation</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/bio_compose.html#run_simulation"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#bio_compose.run_simulation" title="Link to this definition"></a></dt>
+<span class="sig-prename descclassname"><span class="pre">bio_compose.</span></span><span class="sig-name descname"><span class="pre">run_simulation</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#bio_compose.runner.SimulationResult" title="bio_compose.runner.SimulationResult"><span class="pre">SimulationResult</span></a></span></span><a class="reference internal" href="_modules/bio_compose.html#run_simulation"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#bio_compose.run_simulation" title="Link to this definition"></a></dt>
 <dd><p>Run a simulation with BioCompose</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>args</strong> (<em>-</em>) – Positional arguments
-- 1 argument(<strong>smoldyn simulation only</strong>): smoldyn simulation configuration in which time parameters (dt, duration) are already defined.
-- 3 arguments(<strong>smoldyn simulation only</strong>): smoldyn configuration file, smoldyn simulation duration, smoldyn simulation dt
-- 5 arguments(<strong>sbml simulation only</strong>): sbml filepath, simulation start, simulation end, simulation steps, simulator</p>
+<dd class="field-odd"><p><strong>args</strong> (<em>-</em>) – Positional arguments:
+1 argument(<strong>smoldyn simulation only</strong>): smoldyn simulation configuration in which time parameters (dt, duration) are already defined.
+3 arguments(<strong>smoldyn simulation only</strong>): smoldyn configuration file, smoldyn simulation duration, smoldyn simulation dt
+5 arguments(<strong>sbml simulation only</strong>): sbml filepath, simulation start, simulation end, simulation steps, simulator.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><cite>SimulationResult</cite> instance of simulation results.</p>
 </dd>
 </dl>
 </dd></dl>
@@ -659,12 +683,12 @@
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>args</strong> (<em>-</em>) – positional arguments passed to the verification.
-- 1 argument(<cite>str</cite>): submit an sbml or omex verification with no time params.
-- 2 arguments(<cite>str</cite>, <cite>list[str]</cite>): omex filepath, simulators to include in the verification.
-- 4 arguments(<cite>str</cite>, <cite>int</cite>, <cite>int</cite>, <cite>int</cite>): sbml filepath, start, stop, steps.
-- 5 arguments(<cite>str</cite>, <cite>int</cite>, <cite>int</cite>, <cite>int</cite>, <cite>list[str]</cite>): sbml filepath, start, stop, steps, simulators.</p></li>
-<li><p><strong>kwargs</strong> (<em>-</em>) – keyword arguments passed to the verification.</p></li>
+<li><p><strong>**args**</strong> – positional arguments passed to the verification.
+1 argument(<cite>str</cite>): submit an sbml or omex verification with no time params.
+2 arguments(<cite>str</cite>, <cite>list[str]</cite>): omex filepath, simulators to include in the verification.
+4 arguments(<cite>str</cite>, <cite>int</cite>, <cite>int</cite>, <cite>int</cite>): sbml filepath, start, stop, steps.
+5 arguments(<cite>str</cite>, <cite>int</cite>, <cite>int</cite>, <cite>int</cite>, <cite>list[str]</cite>): sbml filepath, start, stop, steps, simulators.</p></li>
+<li><p><strong>**kwargs**</strong> – keyword arguments passed to the verification.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>

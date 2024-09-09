@@ -115,15 +115,19 @@ class SimulationRunner(Api):
     def visualize_observables(self, job_id: str, hspace: float = 0.25, use_grid: bool = False, save_dest: str = None):
         """
         Visualize simulation output (observables) data.
+
         Args:
             - **job_id**: `str`: job id for the simulation observables output you wish to visualize.
             - **hspace**: `float`: horizontal spacing between subplots. Defaults to 0.25.
             - **use_grid**: `bool`: whether to use a grid for each subplot. Defaults to False.
             - **save_dest**: `str`: path to save the figure. If this value is passed, the figure will be saved in pdf format to this location.
+
          Returns:
             `Tuple[matplotlib.Figure, Dict]` of matplotlib Figure and simulation observables.
+
         Raises:
             `IOError`: If `job_id` does not contain a 'results' field.
+
         """
         import matplotlib.pyplot as plt 
         import seaborn as sns
@@ -152,4 +156,19 @@ class SimulationResult(dict):
         self.runner = SimulationRunner()
 
     def visualize(self, **kwargs):
+        """
+        Visualize simulation output (observables) data.
+
+        Args:
+            **kwargs**: Visualization kwargs are as follows:
+                job_id: `str`: job id for the simulation observables output you wish to visualize.
+                hspace: `float`: horizontal spacing between subplots. Defaults to 0.25.
+                use_grid: `bool`: whether to use a grid for each subplot. Defaults to False.
+                save_dest: `str`: path to save the figure. If this value is passed, the figure will be saved in pdf format to this location.
+
+         Returns:
+            `Tuple[matplotlib.Figure, Dict]` of matplotlib Figure and simulation observables.
+        Raises:
+            `IOError`: If `job_id` does not contain a 'results' field.
+                """
         return self.runner.visualize_observables(job_id=self.job_id, **kwargs)

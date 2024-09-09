@@ -203,15 +203,19 @@
     <span class="k">def</span> <span class="nf">visualize_observables</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">job_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">hspace</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.25</span><span class="p">,</span> <span class="n">use_grid</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span> <span class="n">save_dest</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Visualize simulation output (observables) data.</span>
+
 <span class="sd">        Args:</span>
 <span class="sd">            - **job_id**: `str`: job id for the simulation observables output you wish to visualize.</span>
 <span class="sd">            - **hspace**: `float`: horizontal spacing between subplots. Defaults to 0.25.</span>
 <span class="sd">            - **use_grid**: `bool`: whether to use a grid for each subplot. Defaults to False.</span>
 <span class="sd">            - **save_dest**: `str`: path to save the figure. If this value is passed, the figure will be saved in pdf format to this location.</span>
+
 <span class="sd">         Returns:</span>
 <span class="sd">            `Tuple[matplotlib.Figure, Dict]` of matplotlib Figure and simulation observables.</span>
+
 <span class="sd">        Raises:</span>
 <span class="sd">            `IOError`: If `job_id` does not contain a &#39;results&#39; field.</span>
+
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span> 
         <span class="kn">import</span> <span class="nn">seaborn</span> <span class="k">as</span> <span class="nn">sns</span>
@@ -246,6 +250,21 @@
 <div class="viewcode-block" id="SimulationResult.visualize">
 <a class="viewcode-back" href="../../bio_compose.html#bio_compose.runner.SimulationResult.visualize">[docs]</a>
     <span class="k">def</span> <span class="nf">visualize</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Visualize simulation output (observables) data.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            **kwargs**: Visualization kwargs are as follows:</span>
+<span class="sd">                job_id: `str`: job id for the simulation observables output you wish to visualize.</span>
+<span class="sd">                hspace: `float`: horizontal spacing between subplots. Defaults to 0.25.</span>
+<span class="sd">                use_grid: `bool`: whether to use a grid for each subplot. Defaults to False.</span>
+<span class="sd">                save_dest: `str`: path to save the figure. If this value is passed, the figure will be saved in pdf format to this location.</span>
+
+<span class="sd">         Returns:</span>
+<span class="sd">            `Tuple[matplotlib.Figure, Dict]` of matplotlib Figure and simulation observables.</span>
+<span class="sd">        Raises:</span>
+<span class="sd">            `IOError`: If `job_id` does not contain a &#39;results&#39; field.</span>
+<span class="sd">                &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">runner</span><span class="o">.</span><span class="n">visualize_observables</span><span class="p">(</span><span class="n">job_id</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">job_id</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
 </div>
 

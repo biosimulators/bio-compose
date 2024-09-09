@@ -1,6 +1,10 @@
 import os
 import time
 
+from bio_compose.processing_tools import get_job_signature
+from bio_compose.runner import SimulationRunner, SimulationResult
+from bio_compose.verifier import Verifier, VerificationResult
+
 
 current_dir = os.path.dirname(__file__)
 version_file_path = os.path.join(current_dir, '_VERSION')
@@ -10,20 +14,19 @@ with open(version_file_path, 'r') as f:
     __version__ = f.read().strip()
 
 
-def run_simulation(*args, **kwargs):
+def run_simulation(*args, **kwargs) -> SimulationResult:
     """
     Run a simulation with BioCompose
 
     Args:
-        - args: Positional arguments
-            - 1 argument(**smoldyn simulation only**): smoldyn simulation configuration in which time parameters (dt, duration) are already defined.
-            - 3 arguments(**smoldyn simulation only**): smoldyn configuration file, smoldyn simulation duration, smoldyn simulation dt
-            - 5 arguments(**sbml simulation only**): sbml filepath, simulation start, simulation end, simulation steps, simulator
+        - **args**: Positional arguments:
+            1 argument(**smoldyn simulation only**): smoldyn simulation configuration in which time parameters (dt, duration) are already defined.
+            3 arguments(**smoldyn simulation only**): smoldyn configuration file, smoldyn simulation duration, smoldyn simulation dt
+            5 arguments(**sbml simulation only**): sbml filepath, simulation start, simulation end, simulation steps, simulator.
 
+    Returns:
+        `SimulationResult` instance of simulation results.
     """
-    from bio_compose.processing_tools import get_job_signature
-    from bio_compose.runner import SimulationRunner, SimulationResult
-
     # set up submission
     runner = SimulationRunner()
     in_file = args[0]
@@ -77,19 +80,16 @@ def verify(*args, **kwargs):
     Verify and compare the outputs of simulators for a given entrypoint file of either sbml or omex.
 
     Args:
-        - **args**: positional arguments passed to the verification.
-            - 1 argument(`str`): submit an sbml or omex verification with no time params.
-            - 2 arguments(`str`, `list[str]`): omex filepath, simulators to include in the verification.
-            - 4 arguments(`str`, `int`, `int`, `int`): sbml filepath, start, stop, steps.
-            - 5 arguments(`str`, `int`, `int`, `int`, `list[str]`): sbml filepath, start, stop, steps, simulators.
-        - **kwargs**: keyword arguments passed to the verification.
+        **args**: positional arguments passed to the verification.
+            1 argument(`str`): submit an sbml or omex verification with no time params.
+            2 arguments(`str`, `list[str]`): omex filepath, simulators to include in the verification.
+            4 arguments(`str`, `int`, `int`, `int`): sbml filepath, start, stop, steps.
+            5 arguments(`str`, `int`, `int`, `int`, `list[str]`): sbml filepath, start, stop, steps, simulators.
+        **kwargs**: keyword arguments passed to the verification.
 
     Returns:
         Verification result instance. See documentation for more details.
     """
-    from bio_compose.processing_tools import get_job_signature
-    from bio_compose.verifier import Verifier, VerificationResult
-
     verifier = Verifier()
     simulators = kwargs.get('simulators')
     run_sbml = False

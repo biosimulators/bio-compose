@@ -49,7 +49,7 @@ echo "$version" > ./bio_compose/_VERSION
 cd documentation || exit 1
 make html
 cd .. || exit 1
-commit
+./commit.sh
 
 # Create and push git tag
 git tag -m "Version v$version" "v$version"
