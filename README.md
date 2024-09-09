@@ -8,7 +8,7 @@
 
 ## **Documentation**: 
 
-The complete `BioCompose` documentation can be found here: https://biocompose.readthedocs.io/en/latest/
+The complete `BioCompose` documentation can be found here: https://bio-compose.readthedocs.io/en/latest/index.html
 
 ## **Getting Started**:
 
