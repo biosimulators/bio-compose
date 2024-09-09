@@ -340,7 +340,7 @@ class Verifier(Api):
         return fig
 
     @save_plot
-    def visualize_observables(self, job_id: str, hspace: float = 0.25, use_grid: bool = False, save_dest: str = None) -> Figure:
+    def visualize_observables(self, job_id: str, hspace: float = 0.25, use_grid: bool = False, save_dest: str = None):
         """
         Visualize simulation output (observables) data, not comparison data, with subplots for each species.
 
@@ -351,7 +351,7 @@ class Verifier(Api):
             - **save_dest**: `str`: path to save the figure. If this value is passed, the figure will be saved in pdf format to this location.
 
          Returns:
-            `matplotlib.pyplot.Figure` of a plot grid
+            `Tuple[matplotlib.Figure, Dict]` of matplotlib Figure and simulation observables indexed by simulator
 
         Raises:
             `IOError`: If `job_id` does not contain a 'results' field.
@@ -376,11 +376,13 @@ class Verifier(Api):
         if n_simulators == 1:
             axes = [axes]
 
+        obs = {observable: {} for observable in observables}
         # iterate over simulators and plot each observable (by iterating over observables)
         for idx, simulator in enumerate(simulators):
             ax = axes[idx]
             for observable in observables:
                 value_data = species_data_content[observable]['output_data'][simulator]
+                obs[observable][simulator] = value_data
                 sns.lineplot(data=value_data, ax=ax, label=observable)
 
             sim = simulator.replace(simulator[0], simulator[0].upper())
@@ -397,10 +399,10 @@ class Verifier(Api):
         plt.subplots_adjust(hspace=hspace)
         plt.show()
 
-        return fig
+        return fig, obs
 
     @save_plot
-    def visualize_rmse(self, job_id: str, fig_dimensions: tuple[int, int] = None, color_mapping: list[str] = None, save_dest: str = None) -> Figure:
+    def visualize_rmse(self, job_id: str, fig_dimensions: tuple[int, int] = None, color_mapping: list[str] = None, save_dest: str = None):
         """
         Visualize the root-mean-squared error between simulator verification outputs as a heatmap.
 
@@ -411,7 +413,7 @@ class Verifier(Api):
             - **save_dest**: `str`: destination at which to save figure. Defaults to `None`.
 
          Returns:
-            `matplotlib.pyplot.Figure` of a plot grid
+            `Tuple[matplotlib.Figure, Dict]` of matplotlib Figure and simulator RMSE scores
         """
         # extract data
         rmse_matrix = self.get_rmse(job_id)
@@ -450,7 +452,7 @@ class Verifier(Api):
         plt.tight_layout()
         plt.show()
 
-        return fig
+        return fig, dict(zip(simulators, rmse_data))
 
     def visualize_comparison(self, data: Dict, simulators: List[str], comparison_type='proximity', color_mapping: List[str] = None) -> Figure:
         """
@@ -535,21 +537,10 @@ class VerificationResult(dict):
 
     def rmse(self, *args, **kwargs):
         from functools import partial
+        return self.verifier.visualize_rmse(self.job_id, **kwargs)
 
-        rmse = self.verifier.get_rmse(self.job_id)
-        self.verifier.visualize_rmse(self.job_id, **kwargs)
-        return rmse
-
-    def observables(self):
-        observables = {}
-        results = self.data['content']['results']
-        for obs in results.keys():
-            obs_data = results[obs]
-            if 'output_data' == obs_data.keys():
-                observables[obs] = obs_data['output_data']
-
-        self.verifier.visualize_observables(job_id=self.job_id)
-        return observables
+    def observables(self, **kwargs):
+        return self.verifier.visualize_observables(job_id=self.job_id, **kwargs)
 
 
 # tests

@@ -5,6 +5,7 @@ import time
 current_dir = os.path.dirname(__file__)
 version_file_path = os.path.join(current_dir, '_VERSION')
 
+
 with open(version_file_path, 'r') as f:
     __version__ = f.read().strip()
 
@@ -20,6 +21,7 @@ def run_simulation(*args, **kwargs):
             - 5 arguments(**sbml simulation only**): sbml filepath, simulation start, simulation end, simulation steps, simulator
 
     """
+    from bio_compose.processing_tools import get_job_signature
     from bio_compose.runner import SimulationRunner, SimulationResult
 
     # set up submission
@@ -41,20 +43,24 @@ def run_simulation(*args, **kwargs):
         simulator = args[4]
         submission = runner.run_utc_simulation(sbml_filepath=in_file, start=start, end=end, steps=steps, simulator=simulator)
 
-    # fetch results
+    # fetch result params
     job_id = submission.get('job_id')
     output = {}
     timeout = kwargs.get('timeout', 100)
+
+    # poll gateway for results
     i = 0
     if job_id is not None:
+        print(f'Submission Results for Job ID {job_id}: ')
         while True:
             if i == timeout:
                 break
             simulation_result = runner.get_output(job_id=job_id)
             if isinstance(simulation_result, dict):
                 status = simulation_result['content']['status']
+                last4 = get_job_signature(job_id)
                 if not 'COMPLETED' in status:
-                    print('Not complete: ', i, status)
+                    print(f'Status for job ending in {last4}: {status}')
                     i += 1
                     time.sleep(1)
                 else:
@@ -81,6 +87,7 @@ def verify(*args, **kwargs):
     Returns:
         Verification result instance. See documentation for more details.
     """
+    from bio_compose.processing_tools import get_job_signature
     from bio_compose.verifier import Verifier, VerificationResult
 
     verifier = Verifier()
@@ -90,20 +97,34 @@ def verify(*args, **kwargs):
         if isinstance(arg, int):
             run_sbml = True
     submission = None
+
+    # parse executor 
     if run_sbml:
         submission = verifier.verify_sbml(*args, **kwargs)
     else:
         submission = verifier.verify_omex(*args, **kwargs)
+
+    # fetch params
     job_id = submission.get('job_id')
-    output = None
+    timeout = kwargs.get('timeout', 100)
+    output = {}
+
+    # poll gateway for results
+    i = 0
     if job_id is not None:
+        print(f'Submission Results for Job ID {job_id}: ')
         while True:
+            if i == timeout:
+                break
             verification_result = verifier.get_output(job_id=job_id)
             status = verification_result['content']['status']
+            last4 = get_job_signature(job_id)
             if not 'COMPLETED' in status:
+                print(f'Status for job ending in {last4}: {status}')
+                i += 1
                 time.sleep(1)
             else:
                 output = verification_result
                 break
-
+    
     return VerificationResult(data=output)

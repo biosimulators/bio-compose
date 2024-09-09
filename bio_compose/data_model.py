@@ -234,11 +234,13 @@ def save_plot(func):
     """
     @wraps(func)
     def wrapper(self, *args, **kwargs):
-        fig = func(self, *args, **kwargs)
+        fig, data = func(self, *args, **kwargs)
         save_dest = kwargs.get('save_dest', None)
         if save_dest is not None:
             dest = save_dest + '.pdf'
             self.export_plot(fig=fig, save_dest=dest)
+        return data
+
     return wrapper
 
 

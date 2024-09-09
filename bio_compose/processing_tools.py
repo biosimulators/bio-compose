@@ -25,3 +25,7 @@ def generate_color_gradient(data_names) -> List[str]:
 
     return hex_colors
 
+
+def get_job_signature(job_id: str) -> str:
+    return "".join([l for i, l in enumerate(job_id) if i > len(job_id) - 5])
+    

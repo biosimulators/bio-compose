@@ -121,10 +121,13 @@ class SimulationRunner(Api):
             - **use_grid**: `bool`: whether to use a grid for each subplot. Defaults to False.
             - **save_dest**: `str`: path to save the figure. If this value is passed, the figure will be saved in pdf format to this location.
          Returns:
-            `matplotlib.pyplot.Figure` of a plot grid
+            `Tuple[matplotlib.Figure, Dict]` of matplotlib Figure and simulation observables.
         Raises:
             `IOError`: If `job_id` does not contain a 'results' field.
         """
+        import matplotlib.pyplot as plt 
+        import seaborn as sns
+        
         # grab output from job id
         output = self.get_output(job_id)
         fig = plt.figure()
@@ -136,7 +139,9 @@ class SimulationRunner(Api):
         plt.subplots_adjust(hspace=hspace)
         plt.show()
 
-        return fig
+        species_data_content['source'] = output['content'].get('source')
+
+        return fig, species_data_content
 
 
 class SimulationResult(dict):
@@ -144,6 +149,7 @@ class SimulationResult(dict):
         self.data = data
         self.update({'content': self.data.get('content')})
         self.job_id = self.data.get('content').get('job_id')
+        self.runner = SimulationRunner()
 
-    def visualize(self):
-        pass
+    def visualize(self, **kwargs):
+        return self.runner.visualize_observables(job_id=self.job_id, **kwargs)
