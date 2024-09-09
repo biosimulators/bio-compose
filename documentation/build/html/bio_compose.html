@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>bio_compose package &mdash; BioCompose 0.3.2 documentation</title>
+  <title>bio_compose package &mdash; BioCompose 0.5.4 documentation</title>
       <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=fa44fd50" />
       <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=19f00094" />
 
@@ -15,7 +15,7 @@
   
         <script src="_static/jquery.js?v=5d32c60e"></script>
         <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-        <script src="_static/documentation_options.js?v=71d9d8e6"></script>
+        <script src="_static/documentation_options.js?v=e1a677a5"></script>
         <script src="_static/doctools.js?v=9a2dae69"></script>
         <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="_static/js/theme.js"></script>
@@ -151,6 +151,8 @@
 <dt class="sig sig-object py" id="bio_compose.composer.Composer">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">bio_compose.composer.</span></span><span class="sig-name descname"><span class="pre">Composer</span></span><a class="reference internal" href="_modules/bio_compose/composer.html#Composer"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#bio_compose.composer.Composer" title="Link to this definition"></a></dt>
 <dd><p>Bases: <a class="reference internal" href="#bio_compose.data_model.Api" title="bio_compose.data_model.Api"><code class="xref py py-class docutils literal notranslate"><span class="pre">Api</span></code></a></p>
+<p>A new instance of the Verifier class. NOTE: this may clash with your record keeping in a notebook, so it is highly recommended that users
+treat instances of this class as quasi-singletons, although not necessary for fundamental interaction.</p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="bio_compose.composer.Composer.data">
 <span class="sig-name descname"><span class="pre">data</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Dict</span></em><a class="headerlink" href="#bio_compose.composer.Composer.data" title="Link to this definition"></a></dt>
@@ -189,6 +191,7 @@
 </ul>
 </dd>
 </dl>
+<p>Generic base instance which is inherited by any flavor (tag group) of the BioCompose REST API. Polymorphism of this base class should pertain entirely to the tag group domain with which it is associated (e.g., ‘execute-simulations’, ‘verification’, etc.)</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="bio_compose.data_model.Api.export_csv">
 <span class="sig-name descname"><span class="pre">export_csv</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Dict</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">save_dest</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/bio_compose/data_model.html#Api.export_csv"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#bio_compose.data_model.Api.export_csv" title="Link to this definition"></a></dt>
@@ -368,6 +371,7 @@ save_dest: <cite>str</cite>: path to save the figure. If this value is passed, t
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">bio_compose.runner.</span></span><span class="sig-name descname"><span class="pre">SimulationRunner</span></span><a class="reference internal" href="_modules/bio_compose/runner.html#SimulationRunner"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#bio_compose.runner.SimulationRunner" title="Link to this definition"></a></dt>
 <dd><p>Bases: <a class="reference internal" href="#bio_compose.data_model.Api" title="bio_compose.data_model.Api"><code class="xref py py-class docutils literal notranslate"><span class="pre">Api</span></code></a></p>
 <p>API which handles all aspects of running either UTC or Smoldyn (Brownian Motion) simulations using the REST API.</p>
+<p>A new instance of the SimulationRunner class. NOTE: this may clash with your record keeping in a notebook, so it is highly recommended that users treat instances of this class as quasi-singletons, although not necessary for fundamental interaction.</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="bio_compose.runner.SimulationRunner.generate_simularium_file">
 <span class="sig-name descname"><span class="pre">generate_simularium_file</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">smoldyn_output_filepath</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">box_size</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">filename</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Dict</span></span></span><a class="reference internal" href="_modules/bio_compose/runner.html#SimulationRunner.generate_simularium_file"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#bio_compose.runner.SimulationRunner.generate_simularium_file" title="Link to this definition"></a></dt>
@@ -474,6 +478,7 @@ save_dest: <cite>str</cite>: path to save the figure. If this value is passed, t
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">bio_compose.verifier.</span></span><span class="sig-name descname"><span class="pre">Verifier</span></span><a class="reference internal" href="_modules/bio_compose/verifier.html#Verifier"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#bio_compose.verifier.Verifier" title="Link to this definition"></a></dt>
 <dd><p>Bases: <a class="reference internal" href="#bio_compose.data_model.Api" title="bio_compose.data_model.Api"><code class="xref py py-class docutils literal notranslate"><span class="pre">Api</span></code></a></p>
 <p>API for verifying (running and comparing) the results of multiple simulators for a given SBML model.</p>
+<p>A new instance of the Verifier class. <strong>NOTE</strong>: this may clash with your record keeping in a notebook, so it is highly recommended that users treat instances of this class as quasi-singletons, although not necessary for fundamental interaction.</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="bio_compose.verifier.Verifier.get_compatible">
 <span class="sig-name descname"><span class="pre">get_compatible</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">file</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">versions</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">Any</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="p"><span class="pre">...</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference internal" href="#bio_compose.data_model.RequestError" title="bio_compose.data_model.RequestError"><span class="pre">RequestError</span></a></span></span><a class="reference internal" href="_modules/bio_compose/verifier.html#Verifier.get_compatible"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#bio_compose.verifier.Verifier.get_compatible" title="Link to this definition"></a></dt>
