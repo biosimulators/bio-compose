@@ -1,4 +1,4 @@
-bio\_compose package
+API Documentation
 ====================
 
 Submodules
