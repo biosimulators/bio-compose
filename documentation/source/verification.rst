@@ -14,15 +14,6 @@ Running **OMEX verifications**:
 
     verification = verify(filepath, simulators)
 
-Visualizing verifications:
-
-.. code-block:: python
-    # visualize observables
-    verification.observables()
-
-    # visualize root-mean-square error scores for all simulators involved in the verification.
-    verification.rmse(save_dest='/my/save/path/for/observables')
-
 Running **SBML verifications**:
 
 .. code-block:: python
@@ -36,3 +27,10 @@ Running **SBML verifications**:
     n_steps = 1000
 
     verification = verify(filepath, start_time, duration, n_steps, simulators)
+
+Visualizing verifications:
+
+.. code-block:: python
+    
+    verification.observables()  # visualize observables
+    verification.rmse(save_dest='/my/save/path/for/observables')  # visualize root-mean-square error scores for all simulators involved in the verification.

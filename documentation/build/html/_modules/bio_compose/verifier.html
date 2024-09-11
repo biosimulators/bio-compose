@@ -295,8 +295,8 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">try</span><span class="p">:</span>
             <span class="n">output</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_output</span><span class="p">(</span><span class="n">job_id</span><span class="o">=</span><span class="n">job_id</span><span class="p">)</span>
-            <span class="k">return</span> <span class="n">output</span><span class="p">[</span><span class="s1">&#39;content&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;results&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;rmse&#39;</span><span class="p">)</span> <span class="ow">or</span> <span class="p">{}</span>
-        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">output</span><span class="p">[</span><span class="s1">&#39;content&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;results&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;rmse&#39;</span><span class="p">,</span> <span class="p">{})</span> 
+        <span class="k">except</span><span class="p">:</span>
             <span class="kn">import</span> <span class="nn">traceback</span>
             <span class="n">tb_str</span> <span class="o">=</span> <span class="n">traceback</span><span class="o">.</span><span class="n">format_exc</span><span class="p">()</span>
             <span class="n">error_message</span> <span class="o">=</span> <span class="p">(</span>
@@ -505,19 +505,19 @@
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Visualize the root-mean-squared error between simulator verification outputs as a heatmap.</span>
 
-<span class="sd">        Args:</span>
-<span class="sd">            - **job_id**: `str`: verification job id. This value can be easily derived from either of `Verifier`&#39;s `.verify_...` methods.</span>
-<span class="sd">            - **fig_dimensions**: `Tuple[int, int], optional`: The value to use as the `figsize` parameter for a call to `matplotlib.pyplot.figure()`. If `None` is passed, default to (8, 6).</span>
-<span class="sd">            - **color_mapping**: `List[str], optional`: list of colors to use for each simulator in the grid. Defaults to None.</span>
-<span class="sd">            - **save_dest**: `str`: destination at which to save figure. Defaults to `None`.</span>
+<span class="sd">        :param job_id: (`str`) verification job id. This value can be easily derived from either of `Verifier`&#39;s `.verify_...` methods.</span>
+<span class="sd">        :param fig_dimensions: (`Tuple[int, int], optional`) The value to use as the `figsize` parameter for a call to `matplotlib.pyplot.figure()`. If `None` is passed, default to (8, 6).</span>
+<span class="sd">        :param color_mapping: (`List[str], optional`) list of colors to use for each simulator in the grid. Defaults to None.</span>
+<span class="sd">        :param save_dest: `(str`) destination at which to save figure. Defaults to `None`.</span>
 
-<span class="sd">         Returns:</span>
-<span class="sd">            `Tuple[matplotlib.Figure, Dict]` of matplotlib Figure and simulator RMSE scores</span>
+<span class="sd">        :return: matplotlib Figure and simulator RMSE scores</span>
+<span class="sd">        :rtype: `Tuple[matplotlib.Figure, Dict]`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="c1"># extract data</span>
         <span class="n">rmse_matrix</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_rmse</span><span class="p">(</span><span class="n">job_id</span><span class="p">)</span>
-        <span class="k">if</span> <span class="s1">&#39;error&#39;</span> <span class="ow">in</span> <span class="n">rmse_matrix</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
-            <span class="k">raise</span> <span class="ne">IOError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;The job for </span><span class="si">{</span><span class="n">job_id</span><span class="si">}</span><span class="s2"> is either not ready or has an error. Please check the output.&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">rmse_matrix</span> <span class="ow">or</span> <span class="s1">&#39;error&#39;</span> <span class="ow">in</span> <span class="n">rmse_matrix</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;The job for </span><span class="si">{</span><span class="n">job_id</span><span class="si">}</span><span class="s2"> is either not ready or has an error in rmse scoring. Please check the output.&quot;</span><span class="p">)</span>
+
         <span class="n">simulators</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">rmse_matrix</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
         <span class="n">n_simulators</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">simulators</span><span class="p">)</span>
 
