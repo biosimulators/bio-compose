@@ -1,6 +1,7 @@
 import asyncio
 import time 
 import os
+from warnings import warn 
 from dataclasses import asdict, dataclass
 from functools import wraps
 from typing import Dict, List, Union, Any, Callable
@@ -234,12 +235,16 @@ def save_plot(func):
     """
     @wraps(func)
     def wrapper(self, *args, **kwargs):
-        fig, data = func(self, *args, **kwargs)
-        save_dest = kwargs.get('save_dest', None)
-        if save_dest is not None:
-            dest = save_dest + '.pdf'
-            self.export_plot(fig=fig, save_dest=dest)
-        return data
+        try:
+            fig, data = func(self, *args, **kwargs)
+            save_dest = kwargs.get('save_dest', None)
+            if save_dest is not None:
+                dest = save_dest + '.pdf'
+                self.export_plot(fig=fig, save_dest=dest)
+            return data
+        except ValueError as e:   
+            warn(str(e))
+            return {}
 
     return wrapper
 

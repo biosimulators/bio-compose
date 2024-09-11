@@ -208,8 +208,8 @@ class Verifier(Api):
         """
         try:
             output = self.get_output(job_id=job_id)
-            return output['content'].get('results').get('rmse') or {}
-        except Exception as e:
+            return output['content'].get('results').get('rmse', {}) 
+        except:
             import traceback
             tb_str = traceback.format_exc()
             error_message = (
@@ -406,19 +406,19 @@ class Verifier(Api):
         """
         Visualize the root-mean-squared error between simulator verification outputs as a heatmap.
 
-        Args:
-            - **job_id**: `str`: verification job id. This value can be easily derived from either of `Verifier`'s `.verify_...` methods.
-            - **fig_dimensions**: `Tuple[int, int], optional`: The value to use as the `figsize` parameter for a call to `matplotlib.pyplot.figure()`. If `None` is passed, default to (8, 6).
-            - **color_mapping**: `List[str], optional`: list of colors to use for each simulator in the grid. Defaults to None.
-            - **save_dest**: `str`: destination at which to save figure. Defaults to `None`.
+        :param job_id: (`str`) verification job id. This value can be easily derived from either of `Verifier`'s `.verify_...` methods.
+        :param fig_dimensions: (`Tuple[int, int], optional`) The value to use as the `figsize` parameter for a call to `matplotlib.pyplot.figure()`. If `None` is passed, default to (8, 6).
+        :param color_mapping: (`List[str], optional`) list of colors to use for each simulator in the grid. Defaults to None.
+        :param save_dest: `(str`) destination at which to save figure. Defaults to `None`.
 
-         Returns:
-            `Tuple[matplotlib.Figure, Dict]` of matplotlib Figure and simulator RMSE scores
+        :return: matplotlib Figure and simulator RMSE scores
+        :rtype: `Tuple[matplotlib.Figure, Dict]`
         """
         # extract data
         rmse_matrix = self.get_rmse(job_id)
-        if 'error' in rmse_matrix.keys():
-            raise IOError(f"The job for {job_id} is either not ready or has an error. Please check the output.")
+        if not rmse_matrix or 'error' in rmse_matrix.keys():
+            raise ValueError(f"The job for {job_id} is either not ready or has an error in rmse scoring. Please check the output.")
+
         simulators = list(rmse_matrix.keys())
         n_simulators = len(simulators)
 
