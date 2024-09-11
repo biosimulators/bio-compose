@@ -536,6 +536,10 @@ class VerificationResult(dict):
         self.verifier = Verifier()
 
     def rmse(self, *args, **kwargs):
+        """Visualize root-mean-square error scoring for this verification result data.
+        :param kwargs: (`Union[Tuple[int, int], List[str], str]`) kwargs for `Verifier.visualize_rmse`: fig_dimensions, color_mapping, save_dest.
+        
+        """
         from functools import partial
         return self.verifier.visualize_rmse(self.job_id, **kwargs)
 
