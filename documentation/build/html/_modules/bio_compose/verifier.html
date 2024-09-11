@@ -644,6 +644,10 @@
 <div class="viewcode-block" id="VerificationResult.rmse">
 <a class="viewcode-back" href="../../bio_compose.html#bio_compose.verifier.VerificationResult.rmse">[docs]</a>
     <span class="k">def</span> <span class="nf">rmse</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Visualize root-mean-square error scoring for this verification result data.</span>
+<span class="sd">        :param kwargs: (`Union[Tuple[int, int], List[str], str]`) kwargs for `Verifier.visualize_rmse`: fig_dimensions, color_mapping, save_dest.</span>
+<span class="sd">        </span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="kn">from</span> <span class="nn">functools</span> <span class="kn">import</span> <span class="n">partial</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">verifier</span><span class="o">.</span><span class="n">visualize_rmse</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">job_id</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
 
