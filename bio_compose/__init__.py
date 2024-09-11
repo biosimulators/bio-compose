@@ -1,5 +1,6 @@
 import os
 import time
+from functools import wraps
 
 from bio_compose.processing_tools import get_job_signature
 from bio_compose.runner import SimulationRunner, SimulationResult
@@ -13,6 +14,27 @@ version_file_path = os.path.join(current_dir, '_VERSION')
 with open(version_file_path, 'r') as f:
     __version__ = f.read().strip()
 
+
+def iterate(func):
+    def wrapper(*args, **kwargs):
+        buffer_time = 5
+        verification = func(*args, **kwargs)
+        status = verification.get('content', {}).get('status', '')
+        words = "Running verification "
+        first = None
+        msg = ''
+        for _ in range(buffer_time):
+            msg += '='
+            if iteration == 0:
+                first = words
+            else:
+                first = "".join([" " for _ in words])
+            print(first + msg + ">", end='\r')
+            time.sleep(0.30)
+        complete =  first + "".join(["=" for _ in range(buffer_time)]) + ">"
+        print(complete + f" {status}!")
+    return wrapper
+    
 
 def run_simulation(*args, **kwargs) -> SimulationResult:
     """Run a simulation with BioCompose.
@@ -88,6 +110,11 @@ def verify(*args, **kwargs) -> VerificationResult:
 
     :param kwargs: keyword arguments passed to the verification.
 
+    * keyword arguments either of the `bio_compose.verifier.Verifier.verify_...` methods. See verifier module documentation for more details.
+    * timeout: (`int`) number of iterations to perform polling before function halts. Defaults to 50
+    * buffer_time: (`Union[int, float]`) initial buffer time of data-fetching. Defaults to 5
+    * poll_time: (`Union[int, float]`) poll time of data-fetching which is applied if the result is not yet ready.
+
     :return: instance of verification results.
     :rtype: bio_compose.runner.VerificationResult
     """
@@ -107,25 +134,76 @@ def verify(*args, **kwargs) -> VerificationResult:
 
     # fetch params
     job_id = submission.get('job_id')
-    timeout = kwargs.get('timeout', 100)
-    output = {}
+    timeout = kwargs.get('timeout', 50)
+    buffer_time = kwargs.get('buffer_time', 5)
+    poll_time = kwargs.get('poll_time', 5)
 
     # poll gateway for results
-    i = 0
+    n_attempts = 0
+    output = {}
     if job_id is not None:
-        print(f'Submission Results for Job ID {job_id}: ')
+        # submit request and buffer
+        verification_result = verifier.get_output(job_id=job_id)
+        msg = ''
+        for _ in range(buffer_time):
+            msg += '='
+            print("Submitting verification " + msg + ">", end='\r')
+            time.sleep(0.2)
+
+        # confirm submission
+        complete = "".join(["=" for _ in range(buffer_time)])
+        time.sleep(0.2)
+        initial_status = verification_result.get('content', {}).get('status', '')
+        if initial_status.startswith("SUBMITTED"):
+            print("Submitting verification " + complete + ">" + f" verification submitted!\n")
+            print(f"VERIFICATION JOB ID:\n{job_id}\n")
+            time.sleep(0.5)
+
+        
+        # set output data from result data if it is ready, otherwise sleep and reiterate
+        current_status = verifier.get_output(job_id=job_id).get('content', {}).get('status', '')
+        # polling loop
         while True:
-            if i == timeout:
-                break
-            verification_result = verifier.get_output(job_id=job_id)
-            status = verification_result['content']['status']
-            last4 = get_job_signature(job_id)
-            if not 'COMPLETED' in status:
-                print(f'Status for job ending in {last4}: {status}')
-                i += 1
-                time.sleep(1)
+            # dynamic message render
+            message = f'> Status for job ending in {get_job_signature(job_id)}: {current_status} '
+            if not "COMPLETED" in current_status:
+                for _ in range(poll_time * 3):
+                    print("".join([" " for _ in message]), end='\r')
+                    message += '='
+                    print(message + ">|", end='\r')
+                    time.sleep(0.2)
             else:
-                output = verification_result
+                print(f'\nVerification complete!')
+                
+            if not 'COMPLETED' in current_status:
+                # quit iteration if timeout is reached
+                if n_attempts == timeout:
+                    break
+                # iteration
+                n_attempts += 1
+                current_status = verifier.get_output(job_id=job_id).get('content', {}).get('status', '')
+            else:
+                output = verifier.get_output(job_id=job_id)
                 break
     
     return VerificationResult(data=output)
+
+
+
+ 
+
+# def iterate():
+#     words = "Running verification "
+#     first = None
+#     msg = ''
+#     for _ in range(buffer_time):
+#         msg += '='
+#         if iteration == 0:
+#             first = words
+#         else:
+#             first = "".join([" " for _ in words])
+#         print(first + msg + ">", end='\r')
+#         time.sleep(0.30)
+# 
+#     complete =  first + "".join(["=" for _ in range(buffer_time)]) + ">"
+#     print(complete + f" {status}!")
