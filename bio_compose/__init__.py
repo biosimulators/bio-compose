@@ -33,6 +33,7 @@ def iterate(func):
             time.sleep(0.30)
         complete =  first + "".join(["=" for _ in range(buffer_time)]) + ">"
         print(complete + f" {status}!")
+        return verification
     return wrapper
     
 
@@ -103,7 +104,7 @@ def verify(*args, **kwargs) -> VerificationResult:
 
     :param args: Positional arguments
 
-    * 1 argument: submit an sbml or omex verification with no time params. **OMEX verification only**.
+    * 1 argument: submit omex verification with no time params. **OMEX verification only**.
     * 2 arguments: omex filepath, simulators to include in the verification. **OMEX verification only**.
     * 4 arguments: sbml filepath, start, stop, steps. **SBML verification only**.
     * 5 arguments: sbml filepath, start, stop, steps, simulators. **SBML verification only**.
@@ -119,7 +120,10 @@ def verify(*args, **kwargs) -> VerificationResult:
     :rtype: bio_compose.runner.VerificationResult
     """
     verifier = Verifier()
-    simulators = kwargs.get('simulators')
+    if len(args) == 2:
+        simulators = args[1]
+    else:
+        simulators = kwargs.get('simulators')
     run_sbml = False
     for arg in args:
         if isinstance(arg, int):
@@ -187,8 +191,6 @@ def verify(*args, **kwargs) -> VerificationResult:
                 break
     
     return VerificationResult(data=output)
-
-
 
  
 

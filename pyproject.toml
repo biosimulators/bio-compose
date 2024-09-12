@@ -7,6 +7,10 @@ authors = ["Alex Patrie <alexanderpatrie@gmail.com>"]
 readme = "README.md"
 packages = [{include = "bio_compose"}, {include = "tests"}]
 
+[tool.poetry.scripts]
+verify = "bio_compose.__main__:verification_cli"
+run-simulation = "bio_compose.__main__:simulation_run_cli"
+
 [tool.poetry.dependencies]
 python = ">=3.10"
 requests-toolbelt = "^1.0.0"
@@ -30,3 +34,4 @@ python_files = "main.py"
 [build-system]
 requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
+
