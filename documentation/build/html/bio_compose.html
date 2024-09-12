@@ -712,7 +712,7 @@ save_dest: <cite>str</cite>: path to save the figure. If this value is passed, t
 </dd>
 </dl>
 <ul class="simple">
-<li><p>1 argument: submit an sbml or omex verification with no time params. <strong>OMEX verification only</strong>.</p></li>
+<li><p>1 argument: submit omex verification with no time params. <strong>OMEX verification only</strong>.</p></li>
 <li><p>2 arguments: omex filepath, simulators to include in the verification. <strong>OMEX verification only</strong>.</p></li>
 <li><p>4 arguments: sbml filepath, start, stop, steps. <strong>SBML verification only</strong>.</p></li>
 <li><p>5 arguments: sbml filepath, start, stop, steps, simulators. <strong>SBML verification only</strong>.</p></li>
@@ -727,6 +727,7 @@ save_dest: <cite>str</cite>: path to save the figure. If this value is passed, t
 <li><p>timeout: (<cite>int</cite>) number of iterations to perform polling before function halts. Defaults to 50</p></li>
 <li><p>buffer_time: (<cite>Union[int, float]</cite>) initial buffer time of data-fetching. Defaults to 5</p></li>
 <li><p>poll_time: (<cite>Union[int, float]</cite>) poll time of data-fetching which is applied if the result is not yet ready.</p></li>
+<li><p>verbose: (<cite>bool</cite>) whether to print status updates to stdout. Defaults to True.</p></li>
 </ul>
 <dl class="field-list simple">
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
