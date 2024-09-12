@@ -17,5 +17,6 @@ Create, execute, and introspect reproducible composite simulations of dynamic bi
    installation
    verification
    simulation_runs
+   cli
    modules
 
