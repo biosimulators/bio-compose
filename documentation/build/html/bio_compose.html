@@ -51,41 +51,37 @@
 <li class="toctree-l1"><a class="reference internal" href="cli.html">Command Line Interface</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="modules.html">API Documentation</a><ul class="current">
 <li class="toctree-l2 current"><a class="current reference internal" href="#">bio_compose</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#submodules">Submodules</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#module-bio_compose.bundles">bio_compose.bundles module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#bio_compose.run_simulation"><code class="docutils literal notranslate"><span class="pre">run_simulation()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#bio_compose.verify"><code class="docutils literal notranslate"><span class="pre">verify()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-bio_compose.bundles">bio_compose.bundles</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="#bio_compose.bundles.BioBundle"><code class="docutils literal notranslate"><span class="pre">BioBundle</span></code></a></li>
 </ul>
 </li>
-<li class="toctree-l3"><a class="reference internal" href="#module-bio_compose.composer">bio_compose.composer module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#module-bio_compose.composer">bio_compose.composer</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="#bio_compose.composer.Composer"><code class="docutils literal notranslate"><span class="pre">Composer</span></code></a></li>
 </ul>
 </li>
-<li class="toctree-l3"><a class="reference internal" href="#module-bio_compose.data_model">bio_compose.data_model module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#module-bio_compose.data_model">bio_compose.data_model</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="#bio_compose.data_model.Api"><code class="docutils literal notranslate"><span class="pre">Api</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#bio_compose.data_model.RequestError"><code class="docutils literal notranslate"><span class="pre">RequestError</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#bio_compose.data_model.fetch_job"><code class="docutils literal notranslate"><span class="pre">fetch_job()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#bio_compose.data_model.save_plot"><code class="docutils literal notranslate"><span class="pre">save_plot()</span></code></a></li>
 </ul>
 </li>
-<li class="toctree-l3"><a class="reference internal" href="#module-bio_compose.processing_tools">bio_compose.processing_tools module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#module-bio_compose.processing_tools">bio_compose.processing_tools</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="#bio_compose.processing_tools.generate_color_gradient"><code class="docutils literal notranslate"><span class="pre">generate_color_gradient()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#bio_compose.processing_tools.get_job_signature"><code class="docutils literal notranslate"><span class="pre">get_job_signature()</span></code></a></li>
 </ul>
 </li>
-<li class="toctree-l3"><a class="reference internal" href="#module-bio_compose.runner">bio_compose.runner module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#module-bio_compose.runner">bio_compose.runner</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="#bio_compose.runner.SimulationResult"><code class="docutils literal notranslate"><span class="pre">SimulationResult</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#bio_compose.runner.SimulationRunner"><code class="docutils literal notranslate"><span class="pre">SimulationRunner</span></code></a></li>
 </ul>
 </li>
-<li class="toctree-l3"><a class="reference internal" href="#module-bio_compose.verifier">bio_compose.verifier module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#module-bio_compose.verifier">bio_compose.verifier</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="#bio_compose.verifier.VerificationResult"><code class="docutils literal notranslate"><span class="pre">VerificationResult</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#bio_compose.verifier.Verifier"><code class="docutils literal notranslate"><span class="pre">Verifier</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#bio_compose.verifier.test_verifier"><code class="docutils literal notranslate"><span class="pre">test_verifier()</span></code></a></li>
-</ul>
-</li>
-<li class="toctree-l3"><a class="reference internal" href="#module-bio_compose">Module contents</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="#bio_compose.run_simulation"><code class="docutils literal notranslate"><span class="pre">run_simulation()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#bio_compose.verify"><code class="docutils literal notranslate"><span class="pre">verify()</span></code></a></li>
 </ul>
 </li>
 </ul>
@@ -119,13 +115,74 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <section id="bio-compose">
-<h1>bio_compose<a class="headerlink" href="#bio-compose" title="Link to this heading"></a></h1>
-<section id="submodules">
-<h2>Submodules<a class="headerlink" href="#submodules" title="Link to this heading"></a></h2>
-</section>
+  <section id="module-bio_compose">
+<span id="bio-compose"></span><h1>bio_compose<a class="headerlink" href="#module-bio_compose" title="Link to this heading"></a></h1>
+<dl class="py function">
+<dt class="sig sig-object py" id="bio_compose.run_simulation">
+<span class="sig-prename descclassname"><span class="pre">bio_compose.</span></span><span class="sig-name descname"><span class="pre">run_simulation</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#bio_compose.runner.SimulationResult" title="bio_compose.runner.SimulationResult"><span class="pre">SimulationResult</span></a></span></span><a class="reference internal" href="_modules/bio_compose.html#run_simulation"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#bio_compose.run_simulation" title="Link to this definition"></a></dt>
+<dd><p>Run a simulation with BioCompose.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>args</strong> – Positional arguments</p>
+</dd>
+</dl>
+<ul class="simple">
+<li><p>1 argument: smoldyn simulation configuration in which time parameters (dt, duration) are already defined. <strong>Smoldyn simulation only</strong>.</p></li>
+<li><p>3 arguments: smoldyn configuration file, smoldyn simulation duration, smoldyn simulation dt. <strong>Smoldyn simulation only</strong>.</p></li>
+<li><p>5 arguments: sbml filepath, simulation start, simulation end, simulation steps, simulator. <strong>SBML simulation only</strong>.</p></li>
+</ul>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>kwargs</strong> – Keyword arguments</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>instance of simulation results.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="#bio_compose.runner.SimulationResult" title="bio_compose.runner.SimulationResult">bio_compose.runner.SimulationResult</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="bio_compose.verify">
+<span class="sig-prename descclassname"><span class="pre">bio_compose.</span></span><span class="sig-name descname"><span class="pre">verify</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#bio_compose.verifier.VerificationResult" title="bio_compose.verifier.VerificationResult"><span class="pre">VerificationResult</span></a></span></span><a class="reference internal" href="_modules/bio_compose.html#verify"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#bio_compose.verify" title="Link to this definition"></a></dt>
+<dd><p>Verify and compare the outputs of simulators for a given entrypoint file of either sbml or omex.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>args</strong> – Positional arguments</p>
+</dd>
+</dl>
+<ul class="simple">
+<li><p>1 argument: submit omex verification with no time params. <strong>OMEX verification only</strong>.</p></li>
+<li><p>2 arguments: omex filepath, simulators to include in the verification. <strong>OMEX verification only</strong>.</p></li>
+<li><p>4 arguments: sbml filepath, start, stop, steps. <strong>SBML verification only</strong>.</p></li>
+<li><p>5 arguments: sbml filepath, start, stop, steps, simulators. <strong>SBML verification only</strong>.</p></li>
+</ul>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>kwargs</strong> – keyword arguments passed to the verification.</p>
+</dd>
+</dl>
+<ul class="simple">
+<li><p>keyword arguments either of the <cite>bio_compose.verifier.Verifier.verify_…</cite> methods. See verifier module documentation for more details.</p></li>
+<li><p>timeout: (<cite>int</cite>) number of iterations to perform polling before function halts. Defaults to 50</p></li>
+<li><p>buffer_time: (<cite>Union[int, float]</cite>) initial buffer time of data-fetching. Defaults to 5</p></li>
+<li><p>poll_time: (<cite>Union[int, float]</cite>) poll time of data-fetching which is applied if the result is not yet ready.</p></li>
+<li><p>verbose: (<cite>bool</cite>) whether to print status updates to stdout. Defaults to True.</p></li>
+</ul>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>instance of verification results.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>bio_compose.runner.VerificationResult</p>
+</dd>
+</dl>
+</dd></dl>
+
 <section id="module-bio_compose.bundles">
-<span id="bio-compose-bundles-module"></span><h2>bio_compose.bundles module<a class="headerlink" href="#module-bio_compose.bundles" title="Link to this heading"></a></h2>
+<span id="bio-compose-bundles"></span><h2>bio_compose.bundles<a class="headerlink" href="#module-bio_compose.bundles" title="Link to this heading"></a></h2>
 <dl class="py class">
 <dt class="sig sig-object py" id="bio_compose.bundles.BioBundle">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">bio_compose.bundles.</span></span><span class="sig-name descname"><span class="pre">BioBundle</span></span><a class="reference internal" href="_modules/bio_compose/bundles.html#BioBundle"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#bio_compose.bundles.BioBundle" title="Link to this definition"></a></dt>
@@ -149,7 +206,7 @@
 
 </section>
 <section id="module-bio_compose.composer">
-<span id="bio-compose-composer-module"></span><h2>bio_compose.composer module<a class="headerlink" href="#module-bio_compose.composer" title="Link to this heading"></a></h2>
+<span id="bio-compose-composer"></span><h2>bio_compose.composer<a class="headerlink" href="#module-bio_compose.composer" title="Link to this heading"></a></h2>
 <dl class="py class">
 <dt class="sig sig-object py" id="bio_compose.composer.Composer">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">bio_compose.composer.</span></span><span class="sig-name descname"><span class="pre">Composer</span></span><a class="reference internal" href="_modules/bio_compose/composer.html#Composer"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#bio_compose.composer.Composer" title="Link to this definition"></a></dt>
@@ -180,7 +237,7 @@ treat instances of this class as quasi-singletons, although not necessary for fu
 
 </section>
 <section id="module-bio_compose.data_model">
-<span id="bio-compose-data-model-module"></span><h2>bio_compose.data_model module<a class="headerlink" href="#module-bio_compose.data_model" title="Link to this heading"></a></h2>
+<span id="bio-compose-data-model"></span><h2>bio_compose.data_model<a class="headerlink" href="#module-bio_compose.data_model" title="Link to this heading"></a></h2>
 <dl class="py class">
 <dt class="sig sig-object py" id="bio_compose.data_model.Api">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">bio_compose.data_model.</span></span><span class="sig-name descname"><span class="pre">Api</span></span><a class="reference internal" href="_modules/bio_compose/data_model.html#Api"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#bio_compose.data_model.Api" title="Link to this definition"></a></dt>
@@ -317,7 +374,7 @@ treat instances of this class as quasi-singletons, although not necessary for fu
 
 </section>
 <section id="module-bio_compose.processing_tools">
-<span id="bio-compose-processing-tools-module"></span><h2>bio_compose.processing_tools module<a class="headerlink" href="#module-bio_compose.processing_tools" title="Link to this heading"></a></h2>
+<span id="bio-compose-processing-tools"></span><h2>bio_compose.processing_tools<a class="headerlink" href="#module-bio_compose.processing_tools" title="Link to this heading"></a></h2>
 <dl class="py function">
 <dt class="sig sig-object py" id="bio_compose.processing_tools.generate_color_gradient">
 <span class="sig-prename descclassname"><span class="pre">bio_compose.processing_tools.</span></span><span class="sig-name descname"><span class="pre">generate_color_gradient</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data_names</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/bio_compose/processing_tools.html#generate_color_gradient"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#bio_compose.processing_tools.generate_color_gradient" title="Link to this definition"></a></dt>
@@ -339,7 +396,7 @@ treat instances of this class as quasi-singletons, although not necessary for fu
 
 </section>
 <section id="module-bio_compose.runner">
-<span id="bio-compose-runner-module"></span><h2>bio_compose.runner module<a class="headerlink" href="#module-bio_compose.runner" title="Link to this heading"></a></h2>
+<span id="bio-compose-runner"></span><h2>bio_compose.runner<a class="headerlink" href="#module-bio_compose.runner" title="Link to this heading"></a></h2>
 <dl class="py class">
 <dt class="sig sig-object py" id="bio_compose.runner.SimulationResult">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">bio_compose.runner.</span></span><span class="sig-name descname"><span class="pre">SimulationResult</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/bio_compose/runner.html#SimulationResult"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#bio_compose.runner.SimulationResult" title="Link to this definition"></a></dt>
@@ -459,7 +516,7 @@ save_dest: <cite>str</cite>: path to save the figure. If this value is passed, t
 
 </section>
 <section id="module-bio_compose.verifier">
-<span id="bio-compose-verifier-module"></span><h2>bio_compose.verifier module<a class="headerlink" href="#module-bio_compose.verifier" title="Link to this heading"></a></h2>
+<span id="bio-compose-verifier"></span><h2>bio_compose.verifier<a class="headerlink" href="#module-bio_compose.verifier" title="Link to this heading"></a></h2>
 <dl class="py class">
 <dt class="sig sig-object py" id="bio_compose.verifier.VerificationResult">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">bio_compose.verifier.</span></span><span class="sig-name descname"><span class="pre">VerificationResult</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/bio_compose/verifier.html#VerificationResult"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#bio_compose.verifier.VerificationResult" title="Link to this definition"></a></dt>
@@ -666,73 +723,6 @@ save_dest: <cite>str</cite>: path to save the figure. If this value is passed, t
 <dt class="sig sig-object py" id="bio_compose.verifier.test_verifier">
 <span class="sig-prename descclassname"><span class="pre">bio_compose.verifier.</span></span><span class="sig-name descname"><span class="pre">test_verifier</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/bio_compose/verifier.html#test_verifier"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#bio_compose.verifier.test_verifier" title="Link to this definition"></a></dt>
 <dd></dd></dl>
-
-</section>
-<section id="module-bio_compose">
-<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-bio_compose" title="Link to this heading"></a></h2>
-<dl class="py function">
-<dt class="sig sig-object py" id="bio_compose.run_simulation">
-<span class="sig-prename descclassname"><span class="pre">bio_compose.</span></span><span class="sig-name descname"><span class="pre">run_simulation</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#bio_compose.runner.SimulationResult" title="bio_compose.runner.SimulationResult"><span class="pre">SimulationResult</span></a></span></span><a class="reference internal" href="_modules/bio_compose.html#run_simulation"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#bio_compose.run_simulation" title="Link to this definition"></a></dt>
-<dd><p>Run a simulation with BioCompose.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>args</strong> – Positional arguments</p>
-</dd>
-</dl>
-<ul class="simple">
-<li><p>1 argument: smoldyn simulation configuration in which time parameters (dt, duration) are already defined. <strong>Smoldyn simulation only</strong>.</p></li>
-<li><p>3 arguments: smoldyn configuration file, smoldyn simulation duration, smoldyn simulation dt. <strong>Smoldyn simulation only</strong>.</p></li>
-<li><p>5 arguments: sbml filepath, simulation start, simulation end, simulation steps, simulator. <strong>SBML simulation only</strong>.</p></li>
-</ul>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>kwargs</strong> – Keyword arguments</p>
-</dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>instance of simulation results.</p>
-</dd>
-<dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><a class="reference internal" href="#bio_compose.runner.SimulationResult" title="bio_compose.runner.SimulationResult">bio_compose.runner.SimulationResult</a></p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="bio_compose.verify">
-<span class="sig-prename descclassname"><span class="pre">bio_compose.</span></span><span class="sig-name descname"><span class="pre">verify</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#bio_compose.verifier.VerificationResult" title="bio_compose.verifier.VerificationResult"><span class="pre">VerificationResult</span></a></span></span><a class="reference internal" href="_modules/bio_compose.html#verify"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#bio_compose.verify" title="Link to this definition"></a></dt>
-<dd><p>Verify and compare the outputs of simulators for a given entrypoint file of either sbml or omex.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>args</strong> – Positional arguments</p>
-</dd>
-</dl>
-<ul class="simple">
-<li><p>1 argument: submit omex verification with no time params. <strong>OMEX verification only</strong>.</p></li>
-<li><p>2 arguments: omex filepath, simulators to include in the verification. <strong>OMEX verification only</strong>.</p></li>
-<li><p>4 arguments: sbml filepath, start, stop, steps. <strong>SBML verification only</strong>.</p></li>
-<li><p>5 arguments: sbml filepath, start, stop, steps, simulators. <strong>SBML verification only</strong>.</p></li>
-</ul>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>kwargs</strong> – keyword arguments passed to the verification.</p>
-</dd>
-</dl>
-<ul class="simple">
-<li><p>keyword arguments either of the <cite>bio_compose.verifier.Verifier.verify_…</cite> methods. See verifier module documentation for more details.</p></li>
-<li><p>timeout: (<cite>int</cite>) number of iterations to perform polling before function halts. Defaults to 50</p></li>
-<li><p>buffer_time: (<cite>Union[int, float]</cite>) initial buffer time of data-fetching. Defaults to 5</p></li>
-<li><p>poll_time: (<cite>Union[int, float]</cite>) poll time of data-fetching which is applied if the result is not yet ready.</p></li>
-<li><p>verbose: (<cite>bool</cite>) whether to print status updates to stdout. Defaults to True.</p></li>
-</ul>
-<dl class="field-list simple">
-<dt class="field-odd">Returns<span class="colon">:</span></dt>
-<dd class="field-odd"><p>instance of verification results.</p>
-</dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p>bio_compose.runner.VerificationResult</p>
-</dd>
-</dl>
-</dd></dl>
 
 </section>
 </section>

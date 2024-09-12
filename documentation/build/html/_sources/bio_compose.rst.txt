@@ -1,10 +1,12 @@
 bio_compose
-====================
+===========
 
-Submodules
-----------
+.. automodule:: bio_compose
+   :members:
+   :undoc-members:
+   :show-inheritance:
 
-bio\_compose.bundles module
+bio\_compose.bundles
 ---------------------------
 
 .. automodule:: bio_compose.bundles
@@ -12,7 +14,7 @@ bio\_compose.bundles module
    :undoc-members:
    :show-inheritance:
 
-bio\_compose.composer module
+bio\_compose.composer
 ----------------------------
 
 .. automodule:: bio_compose.composer
@@ -20,7 +22,7 @@ bio\_compose.composer module
    :undoc-members:
    :show-inheritance:
 
-bio\_compose.data\_model module
+bio\_compose.data\_model
 -------------------------------
 
 .. automodule:: bio_compose.data_model
@@ -28,7 +30,7 @@ bio\_compose.data\_model module
    :undoc-members:
    :show-inheritance:
 
-bio\_compose.processing\_tools module
+bio\_compose.processing\_tools
 -------------------------------------
 
 .. automodule:: bio_compose.processing_tools
@@ -36,7 +38,7 @@ bio\_compose.processing\_tools module
    :undoc-members:
    :show-inheritance:
 
-bio\_compose.runner module
+bio\_compose.runner
 --------------------------
 
 .. automodule:: bio_compose.runner
@@ -44,7 +46,7 @@ bio\_compose.runner module
    :undoc-members:
    :show-inheritance:
 
-bio\_compose.verifier module
+bio\_compose.verifier
 ----------------------------
 
 .. automodule:: bio_compose.verifier
@@ -52,10 +54,4 @@ bio\_compose.verifier module
    :undoc-members:
    :show-inheritance:
 
-Module contents
----------------
 
-.. automodule:: bio_compose
-   :members:
-   :undoc-members:
-   :show-inheritance:
