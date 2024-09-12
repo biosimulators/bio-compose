@@ -4,7 +4,7 @@
 # matching PyPI.
 
 
-# set -e
+set -e
 
 version="$1"
 
@@ -17,6 +17,14 @@ fi
 function get_version {
    python -c "import toml; print(toml.load('pyproject.toml')['tool']['poetry']['version'])"
 }
+
+# Check that we are on main
+branch="$(git rev-parse --abbrev-ref HEAD)"
+if [ "$branch" != "main" ]; then
+    echo "You are on $branch but should be on main for releases."
+    echo "Aborting."
+    exit 1
+fi
 
 current_version=$(get_version)
 if [ "$current_version" != "$version" ]; then
@@ -31,25 +39,23 @@ fi
 if [ ! -z "$(git status --untracked-files=no --porcelain)" ]; then
     echo "You have changes that have yet to be committed."
     echo "Aborting PyPI upload and attempting to commit your changes."
-    exit 1
-fi
-
-# Check that we are on main
-branch="$(git rev-parse --abbrev-ref HEAD)"
-if [ "$branch" != "main" ]; then
-    echo "You are on $branch but should be on main for releases."
-    echo "Aborting."
-    exit 1
+    # exit 1
+    git add --all
+    echo "Enter commit message: "
+    read -r msg
+    git commit -m "$msg"
+    git push
 fi
 
 # update internal version
 echo "$version" > ./bio_compose/_VERSION
 
 # update documentation
-cd documentation || exit 1
-make html
-cd .. || exit 1
-./commit.sh
+./scripts/update_docs.sh
+# cd documentation || exit 1
+# make html
+# cd .. || exit 1
+# ./commit.sh
 
 # Create and push git tag
 git tag -m "Version v$version" "v$version"
