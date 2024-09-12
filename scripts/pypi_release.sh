@@ -4,7 +4,7 @@
 # matching PyPI.
 
 
-set -e
+# set -e
 
 version="$1"
 
@@ -39,23 +39,18 @@ fi
 if [ ! -z "$(git status --untracked-files=no --porcelain)" ]; then
     echo "You have changes that have yet to be committed."
     echo "Aborting PyPI upload and attempting to commit your changes."
-    # exit 1
-    git add --all
-    echo "Enter commit message: "
-    read -r msg
-    git commit -m "$msg"
-    git push
+    exit 1
 fi
 
 # update internal version
 echo "$version" > ./bio_compose/_VERSION
 
 # update documentation
-./scripts/update_docs.sh
-# cd documentation || exit 1
-# make html
-# cd .. || exit 1
-# ./commit.sh
+# ./scripts/update_docs.sh
+cd documentation || exit 1
+make html
+cd .. || exit 1
+./commit.sh
 
 # Create and push git tag
 git tag -m "Version v$version" "v$version"
