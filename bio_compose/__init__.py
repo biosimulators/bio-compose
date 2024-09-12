@@ -13,28 +13,6 @@ version_file_path = os.path.join(current_dir, '_VERSION')
 
 with open(version_file_path, 'r') as f:
     __version__ = f.read().strip()
-
-
-def iterate(func):
-    def wrapper(*args, **kwargs):
-        buffer_time = 5
-        verification = func(*args, **kwargs)
-        status = verification.get('content', {}).get('status', '')
-        words = "Running verification "
-        first = None
-        msg = ''
-        for _ in range(buffer_time):
-            msg += '='
-            if iteration == 0:
-                first = words
-            else:
-                first = "".join([" " for _ in words])
-            print(first + msg + ">", end='\r')
-            time.sleep(0.30)
-        complete =  first + "".join(["=" for _ in range(buffer_time)]) + ">"
-        print(complete + f" {status}!")
-        return verification
-    return wrapper
     
 
 def run_simulation(*args, **kwargs) -> SimulationResult:
@@ -201,21 +179,3 @@ def verify(*args, **kwargs) -> VerificationResult:
                 break
     
     return VerificationResult(data=output)
-
- 
-
-# def iterate():
-#     words = "Running verification "
-#     first = None
-#     msg = ''
-#     for _ in range(buffer_time):
-#         msg += '='
-#         if iteration == 0:
-#             first = words
-#         else:
-#             first = "".join([" " for _ in words])
-#         print(first + msg + ">", end='\r')
-#         time.sleep(0.30)
-# 
-#     complete =  first + "".join(["=" for _ in range(buffer_time)]) + ">"
-#     print(complete + f" {status}!")

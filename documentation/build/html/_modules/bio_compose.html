@@ -90,31 +90,6 @@
 
 <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">version_file_path</span><span class="p">,</span> <span class="s1">&#39;r&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
     <span class="n">__version__</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">read</span><span class="p">()</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
-
-
-<div class="viewcode-block" id="iterate">
-<a class="viewcode-back" href="../bio_compose.html#bio_compose.iterate">[docs]</a>
-<span class="k">def</span> <span class="nf">iterate</span><span class="p">(</span><span class="n">func</span><span class="p">):</span>
-    <span class="k">def</span> <span class="nf">wrapper</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-        <span class="n">buffer_time</span> <span class="o">=</span> <span class="mi">5</span>
-        <span class="n">verification</span> <span class="o">=</span> <span class="n">func</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
-        <span class="n">status</span> <span class="o">=</span> <span class="n">verification</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;content&#39;</span><span class="p">,</span> <span class="p">{})</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;status&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">)</span>
-        <span class="n">words</span> <span class="o">=</span> <span class="s2">&quot;Running verification &quot;</span>
-        <span class="n">first</span> <span class="o">=</span> <span class="kc">None</span>
-        <span class="n">msg</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
-        <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">buffer_time</span><span class="p">):</span>
-            <span class="n">msg</span> <span class="o">+=</span> <span class="s1">&#39;=&#39;</span>
-            <span class="k">if</span> <span class="n">iteration</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
-                <span class="n">first</span> <span class="o">=</span> <span class="n">words</span>
-            <span class="k">else</span><span class="p">:</span>
-                <span class="n">first</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="s2">&quot; &quot;</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="n">words</span><span class="p">])</span>
-            <span class="nb">print</span><span class="p">(</span><span class="n">first</span> <span class="o">+</span> <span class="n">msg</span> <span class="o">+</span> <span class="s2">&quot;&gt;&quot;</span><span class="p">,</span> <span class="n">end</span><span class="o">=</span><span class="s1">&#39;</span><span class="se">\r</span><span class="s1">&#39;</span><span class="p">)</span>
-            <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mf">0.30</span><span class="p">)</span>
-        <span class="n">complete</span> <span class="o">=</span>  <span class="n">first</span> <span class="o">+</span> <span class="s2">&quot;&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="s2">&quot;=&quot;</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">buffer_time</span><span class="p">)])</span> <span class="o">+</span> <span class="s2">&quot;&gt;&quot;</span>
-        <span class="nb">print</span><span class="p">(</span><span class="n">complete</span> <span class="o">+</span> <span class="sa">f</span><span class="s2">&quot; </span><span class="si">{</span><span class="n">status</span><span class="si">}</span><span class="s2">!&quot;</span><span class="p">)</span>
-        <span class="k">return</span> <span class="n">verification</span>
-    <span class="k">return</span> <span class="n">wrapper</span></div>
-
     
 
 <div class="viewcode-block" id="run_simulation">
@@ -287,24 +262,6 @@
     
     <span class="k">return</span> <span class="n">VerificationResult</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">output</span><span class="p">)</span></div>
 
-
- 
-
-<span class="c1"># def iterate():</span>
-<span class="c1">#     words = &quot;Running verification &quot;</span>
-<span class="c1">#     first = None</span>
-<span class="c1">#     msg = &#39;&#39;</span>
-<span class="c1">#     for _ in range(buffer_time):</span>
-<span class="c1">#         msg += &#39;=&#39;</span>
-<span class="c1">#         if iteration == 0:</span>
-<span class="c1">#             first = words</span>
-<span class="c1">#         else:</span>
-<span class="c1">#             first = &quot;&quot;.join([&quot; &quot; for _ in words])</span>
-<span class="c1">#         print(first + msg + &quot;&gt;&quot;, end=&#39;\r&#39;)</span>
-<span class="c1">#         time.sleep(0.30)</span>
-<span class="c1"># </span>
-<span class="c1">#     complete =  first + &quot;&quot;.join([&quot;=&quot; for _ in range(buffer_time)]) + &quot;&gt;&quot;</span>
-<span class="c1">#     print(complete + f&quot; {status}!&quot;)</span>
 </pre></div>
 
            </div>
