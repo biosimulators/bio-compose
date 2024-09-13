@@ -213,9 +213,6 @@ class Verifier(Api):
             import traceback
             tb_str = traceback.format_exc()
             error_message = (
-                f"An unexpected error occurred while processing your request:\n"
-                f"Error Type: {type(e).__name__}\n"
-                f"Error Details: {str(e)}\n"
                 f"Traceback:\n{tb_str}"
             )
 
@@ -262,83 +259,6 @@ class Verifier(Api):
             return RequestError(error=str(e))
 
     # -- visualizations
-    def visualize_outputs(
-            self,
-            data: Dict,
-            simulators: List[str],
-            output_start: int,
-            output_end: int,
-            num_points: int,
-            hue: str = 'simulators',
-            use_grid: bool = False,
-            color_mapping: List[str] = None
-    ) -> Figure:
-        """
-        Visualize simulation output data, not comparison data, with subplots for each species.
-
-        Args:
-            - **data**: `dict`: simulation output data
-            - **simulators**: `list[str]`: list of simulators
-            - **output_start**: `int`: start time of simulation output recording.
-            - **output_end**: `int`: end time of simulation output recording.
-            - **num_points**: `int`: number of points in simulation output time series.
-            - **hue**: `str`: hue upon which the line plot colors are based. Options are: `'simulators'` or `'species'`. Defaults to 'simulators'. If `'simulators'` is passed, each column will be of its own color. If `'species'` is passed, each row will be of its own color.
-            - **use_grid**: `bool`: whether to use a grid for each subplot. Defaults to False.
-            - **color_mapping**: `list[str]`: list of colors to use for each subplot. Defaults to None.
-
-        Returns:
-            `matplotlib.pyplot.Figure` of a plot grid
-
-        """
-        # grid plot params
-        species_data_content = data['content']['results']
-        species_names = list(species_data_content.keys())
-        num_species = len(species_names)
-        num_simulators = len(simulators)
-
-        # plot data params
-        t = np.linspace(output_start, output_end, num_points + 1)  # TODO: extract this dynamically.
-
-        simulator_hue = hue.lower() == 'simulators'
-        hue_group = simulators if simulator_hue else species_names
-
-        if color_mapping is not None:
-            line_colors = color_mapping
-        else:
-            line_colors = generate_color_gradient(hue_group)
-
-        # TODO: extract simulator names dynamically as well.
-
-        fig, axes = plt.subplots(nrows=num_species, ncols=num_simulators, figsize=(15, 5 * num_species))
-
-        if num_species == 1:
-            axes = [axes]
-
-        # iterate over grid rows
-        for i, species_name in enumerate(species_names):
-            # iterate over grid cols
-            for j, simulator_name in enumerate(simulators):
-                ax = axes[i][j]
-                species_data = data['content']['results'][species_name]
-                output_data = species_data.get('output_data')
-
-                if output_data:
-                    # create one plot in each column mapped to each individual simulator output (for clarity :) )
-                    simulator_output = output_data[simulator_name]
-                    color_index = j if simulator_hue else i
-                    sns.lineplot(ax=ax, color=line_colors[color_index], x=t, y=simulator_output, label=f"{simulator_name}")
-
-                    # set row title
-                    ax.set_title(f"{species_name} simulation outputs for {simulator_name}")
-                    ax.legend()
-                    ax.grid(use_grid)
-
-        # TODO: adjust this
-        plt.tight_layout()
-        plt.show()
-
-        return fig
-
     @save_plot
     def visualize_observables(self, job_id: str, hspace: float = 0.25, use_grid: bool = False, save_dest: str = None):
         """
@@ -535,15 +455,14 @@ class VerificationResult(dict):
         self.job_id = self.data.get('content').get('job_id')
         self.verifier = Verifier()
 
-    def rmse(self, *args, **kwargs):
+    def get_rmse(self, *args, **kwargs):
         """Visualize root-mean-square error scoring for this verification result data.
         :param kwargs: (`Union[Tuple[int, int], List[str], str]`) kwargs for `Verifier.visualize_rmse`: fig_dimensions, color_mapping, save_dest.
         
         """
-        from functools import partial
         return self.verifier.visualize_rmse(self.job_id, **kwargs)
 
-    def observables(self, **kwargs):
+    def get_observables(self, **kwargs):
         return self.verifier.visualize_observables(job_id=self.job_id, **kwargs)
 
 
