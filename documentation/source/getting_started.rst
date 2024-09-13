@@ -42,3 +42,9 @@ Visualizing verifications:
 
     verification.get_output_observables()  # visualize observables
     verification.get_rmse(save_dest='/my/save/path/for/observables')  # visualize root-mean-square error scores for all simulators involved in the verification.
+
+Verifications for OMEX or SBML files can also be executed using the command-line interface which is installed with the package:
+
+.. code-block:: bash
+
+    verify /path/to/a/valid/omex/file.omex
