@@ -19,10 +19,10 @@ jobs:
       with:
         python-version: '3.10'  # Set the Python version you need
 
-    - name: Install make
-      run: |
-        sudo apt-get update 
-        sudo apt-get install -y make 
+    # - name: Install make
+    #   run: |
+    #     sudo apt-get update
+    #     sudo apt-get install -y make
 
     - name: Install Poetry
       run: |
@@ -44,10 +44,11 @@ jobs:
     #     make -C documentation clean
     #     make -C documentation html
 
-    - name: Create new github tags
-      run: |
-        git tag -m "Version v${{ env.VERSION }}" "v${{ env.VERSION }}"
-        git push --tags
+    # - name: Create new github tags
+    #   run: |
+    #     git tag -m "Version v${{ env.VERSION }}" "v${{ env.VERSION }}"
+    #     git push --tags
+
     - name: Publish new version on PyPI
       run: |
         poetry build
