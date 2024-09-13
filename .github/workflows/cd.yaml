@@ -46,9 +46,8 @@ jobs:
 
     - name: Create new github tags
       run: |
-        git tag -m ${{ env.VERSION }}
+        git tag -m "Version v${{ env.VERSION }}" "v${{ env.VERSION }}"
         git push --tags
-
     - name: Publish new version on PyPI
       run: |
         poetry build
