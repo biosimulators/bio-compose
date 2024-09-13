@@ -42,9 +42,6 @@ if [ ! -z "$(git status --untracked-files=no --porcelain)" ]; then
     exit 1
 fi
 
-# update internal version
-echo "$version" > ./bio_compose/_VERSION
-
 # update documentation
 # ./scripts/update_docs.sh
 cd documentation || exit 1

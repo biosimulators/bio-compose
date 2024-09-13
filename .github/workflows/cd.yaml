@@ -1,15 +1,15 @@
 name: Continuous Deployment
 
 on:
-  release:
-    types: [created]
+  workflow_dispatch:
+
 
 jobs:
   run_redundant_test:
     runs-on: ubuntu-latest
     steps:
     - name: Checkout code
-      uses: actions/checkout@v2
+      uses: actions/checkout@v3
 
     - name: Set up Python
       uses: actions/setup-python@v2
@@ -21,21 +21,52 @@ jobs:
         python -m pip install --upgrade pip
         pip install -r requirements.txt
 
-    # - name: Test BioCompose API
-    #   run: |
-    #     pytest
-
   release_new_version:
     needs: run_redundant_test
     runs-on: ubuntu-latest
     steps:
     - name: Checkout code
-      uses: actions/checkout@v2
+      uses: actions/checkout@v3
 
-    - name: Release new version on PyPI
+    - name: Set up Python
+      uses: actions/setup-python@v2
+      with:
+        python-version: '3.10'  # Set the Python version you need
+
+    - name: Install make
       run: |
-        echo "Run pypi_release.sh here"
-      # run: ./push.sh
+        sudo apt-get update 
+        sudo apt-get install -y make 
+
+    - name: Install Poetry
+      run: |
+        curl -sSL https://install.python-poetry.org | python3 -
+        echo "export PATH=$HOME/.local/bin:$PATH" >> $GITHUB_ENV
+        source $GITHUB_ENV
+
+    - name: Install dependencies
+      run: |
+        poetry install
+
+    - name: Extract project version
+      run: |
+        VERSION=$(python -c "import toml; print(toml.load('pyproject.toml')['tool']['poetry']['version'])")
+        echo "VERSION=$VERSION" >> $GITHUB_ENV
+
+    - name: Build Documentation
+      run: |
+        make -C documentation clean
+        make -C documentation html
+
+    - name: Create new github tags
+      run: |
+        git tag -m ${{ env.VERSION }}
+        git push --tags
+
+    - name: Publish new version on PyPI
+      run: |
+        poetry build
+        poetry publish --username __token__ --password ${{ secrets.ADMIN_PYPI_TOKEN }}
 
     - name: Notify Deployment
-      run: echo "Deployment successful on release ${{ github.ref }}"
+      run: echo "Version ${{ env.VERSION }} as been published on PyPI with release ${{ github.ref }}"

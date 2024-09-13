@@ -33,7 +33,11 @@ def verify(*args) -> VerificationResult:
     :return: instance of verification results.
     :rtype: bio_compose.verifier.VerificationResult
     """
-    verifier = Verifier()
+    verifier = API_VERIFIER
+
+    if len(args) == 0:
+        raise ValueError('At least one positional argument defining a file entrypoint is required.')
+
     if len(args) == 2:
         simulators = args[1]
     elif len(args) == 5:
@@ -88,3 +92,60 @@ def verify(*args) -> VerificationResult:
                 break
 
     return VerificationResult(data=output)
+
+
+def run_simulation(*args, **kwargs) -> SimulationResult:
+    """Run a simulation with BioCompose.
+
+    :param args: Positional arguments
+    * 1 argument: smoldyn simulation configuration in which time parameters (dt, duration) are already defined. **Smoldyn simulation only**.
+    * 3 arguments: smoldyn configuration file, smoldyn simulation duration, smoldyn simulation dt. **Smoldyn simulation only**.
+    * 5 arguments: sbml filepath, simulation start, simulation end, simulation steps, simulator. **SBML simulation only**.
+
+    :param kwargs: Keyword arguments
+
+    :return: instance of simulation results.
+    :rtype: bio_compose.runner.SimulationResult
+    """
+    # set up submission
+    runner = SimulationRunner()
+    in_file = args[0]
+    n_args = len(args)
+    submission = None
+    if n_args == 1:
+        submission = runner.run_smoldyn_simulation(smoldyn_configuration_filepath=in_file)
+    elif n_args == 3:
+        dur = args[1]
+        dt = args[2]
+        submission = runner.run_smoldyn_simulation(smoldyn_configuration_filepath=in_file, duration=dur, dt=dt)
+    elif n_args == 5:
+        start = args[1]
+        end = args[2]
+        steps = args[3]
+        simulator = args[4]
+        submission = runner.run_utc_simulation(sbml_filepath=in_file, start=start, end=end, steps=steps, simulator=simulator)
+    # fetch result params
+    job_id = submission.get('job_id')
+    output = {}
+    timeout = kwargs.get('timeout', 100)
+    # poll gateway for results
+    i = 0
+    if job_id is not None:
+        print(f'Submission Results for Job ID {job_id}: ')
+        while True:
+            if i == timeout:
+                break
+            simulation_result = runner.get_output(job_id=job_id)
+            if isinstance(simulation_result, dict):
+                status = simulation_result['content']['status']
+                last4 = get_job_signature(job_id)
+                if not 'COMPLETED' in status:
+                    print(f'Status for job ending in {last4}: {status}')
+                    i += 1
+                    time.sleep(1)
+                else:
+                    output = simulation_result
+                    break
+            else:
+                i += 1
+    return SimulationResult(data=output)
