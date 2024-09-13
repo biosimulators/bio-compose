@@ -462,7 +462,7 @@ class VerificationResult(dict):
         """
         return self.verifier.visualize_rmse(self.job_id, **kwargs)
 
-    def get_observables(self, **kwargs):
+    def get_output_observables(self, **kwargs):
         return self.verifier.visualize_observables(job_id=self.job_id, **kwargs)
 
 
