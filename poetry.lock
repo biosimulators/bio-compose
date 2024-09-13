@@ -1499,13 +1499,13 @@ test = ["cython (>=3.0)", "defusedxml (>=0.7.1)", "pytest (>=8.0)", "setuptools 
 
 [[package]]
 name = "sphinx-autodoc-typehints"
-version = "2.4.0"
+version = "2.4.1"
 description = "Type hints (PEP 484) support for the Sphinx autodoc extension"
 optional = false
 python-versions = ">=3.10"
 files = [
-    {file = "sphinx_autodoc_typehints-2.4.0-py3-none-any.whl", hash = "sha256:c9774d47e7d304cf975e073df49ebf19763dca94ac0295e7013b522b26cb18de"},
-    {file = "sphinx_autodoc_typehints-2.4.0.tar.gz", hash = "sha256:8f8281654ddf5709875429b7120d367f4edee39a131e13d5806e4f779a81bf0f"},
+    {file = "sphinx_autodoc_typehints-2.4.1-py3-none-any.whl", hash = "sha256:af37abb816ebd2cf56c7a8174fd2f34d0f2f84fbf58265f89429ae107212fe6f"},
+    {file = "sphinx_autodoc_typehints-2.4.1.tar.gz", hash = "sha256:cfe410920cecf08ade046bb387b0007edb83e992de59686c62d194c762f1e45c"},
 ]
 
 [package.dependencies]
@@ -1670,13 +1670,13 @@ files = [
 
 [[package]]
 name = "urllib3"
-version = "2.2.2"
+version = "2.2.3"
 description = "HTTP library with thread-safe connection pooling, file post, and more."
 optional = false
 python-versions = ">=3.8"
 files = [
-    {file = "urllib3-2.2.2-py3-none-any.whl", hash = "sha256:a448b2f64d686155468037e1ace9f2d2199776e17f0a46610480d311f73e3472"},
-    {file = "urllib3-2.2.2.tar.gz", hash = "sha256:dd505485549a7a552833da5e6063639d0d177c04f23bc3864e41e5dc5f612168"},
+    {file = "urllib3-2.2.3-py3-none-any.whl", hash = "sha256:ca899ca043dcb1bafa3e262d73aa25c465bfb49e0bd9dd5d59f1d0acba2f8fac"},
+    {file = "urllib3-2.2.3.tar.gz", hash = "sha256:e7d814a81dad81e6caf2ec9fdedb284ecc9c73076b62654547cc64ccdcae26e9"},
 ]
 
 [package.extras]
