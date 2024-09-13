@@ -45,14 +45,13 @@
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <p class="caption" role="heading"><span class="caption-text">Contents</span></p>
 <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="getting_started.html">Getting Started</a></li>
 <li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="verification.html">Verification</a></li>
 <li class="toctree-l1"><a class="reference internal" href="simulation_runs.html">Simulation Runs</a></li>
 <li class="toctree-l1"><a class="reference internal" href="cli.html">Command Line Interface</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="modules.html">API Documentation</a><ul class="current">
 <li class="toctree-l2 current"><a class="current reference internal" href="#">bio_compose</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#bio_compose.run_simulation"><code class="docutils literal notranslate"><span class="pre">run_simulation()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="#bio_compose.verify"><code class="docutils literal notranslate"><span class="pre">verify()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#module-bio_compose.bundles">bio_compose.bundles</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="#bio_compose.bundles.BioBundle"><code class="docutils literal notranslate"><span class="pre">BioBundle</span></code></a></li>
 </ul>
@@ -117,70 +116,6 @@
              
   <section id="module-bio_compose">
 <span id="bio-compose"></span><h1>bio_compose<a class="headerlink" href="#module-bio_compose" title="Link to this heading"></a></h1>
-<dl class="py function">
-<dt class="sig sig-object py" id="bio_compose.run_simulation">
-<span class="sig-prename descclassname"><span class="pre">bio_compose.</span></span><span class="sig-name descname"><span class="pre">run_simulation</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#bio_compose.runner.SimulationResult" title="bio_compose.runner.SimulationResult"><span class="pre">SimulationResult</span></a></span></span><a class="reference internal" href="_modules/bio_compose.html#run_simulation"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#bio_compose.run_simulation" title="Link to this definition"></a></dt>
-<dd><p>Run a simulation with BioCompose.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>args</strong> – Positional arguments</p>
-</dd>
-</dl>
-<ul class="simple">
-<li><p>1 argument: smoldyn simulation configuration in which time parameters (dt, duration) are already defined. <strong>Smoldyn simulation only</strong>.</p></li>
-<li><p>3 arguments: smoldyn configuration file, smoldyn simulation duration, smoldyn simulation dt. <strong>Smoldyn simulation only</strong>.</p></li>
-<li><p>5 arguments: sbml filepath, simulation start, simulation end, simulation steps, simulator. <strong>SBML simulation only</strong>.</p></li>
-</ul>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>kwargs</strong> – Keyword arguments</p>
-</dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>instance of simulation results.</p>
-</dd>
-<dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><a class="reference internal" href="#bio_compose.runner.SimulationResult" title="bio_compose.runner.SimulationResult">bio_compose.runner.SimulationResult</a></p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="bio_compose.verify">
-<span class="sig-prename descclassname"><span class="pre">bio_compose.</span></span><span class="sig-name descname"><span class="pre">verify</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#bio_compose.verifier.VerificationResult" title="bio_compose.verifier.VerificationResult"><span class="pre">VerificationResult</span></a></span></span><a class="reference internal" href="_modules/bio_compose.html#verify"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#bio_compose.verify" title="Link to this definition"></a></dt>
-<dd><p>Verify and compare the outputs of simulators for a given entrypoint file of either sbml or omex.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>args</strong> – Positional arguments</p>
-</dd>
-</dl>
-<ul class="simple">
-<li><p>1 argument: submit omex verification with no time params. <strong>OMEX verification only</strong>.</p></li>
-<li><p>2 arguments: omex filepath, simulators to include in the verification. <strong>OMEX verification only</strong>.</p></li>
-<li><p>4 arguments: sbml filepath, start, stop, steps. <strong>SBML verification only</strong>.</p></li>
-<li><p>5 arguments: sbml filepath, start, stop, steps, simulators. <strong>SBML verification only</strong>.</p></li>
-</ul>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>kwargs</strong> – keyword arguments passed to the verification.</p>
-</dd>
-</dl>
-<ul class="simple">
-<li><p>keyword arguments either of the <cite>bio_compose.verifier.Verifier.verify_…</cite> methods. See verifier module documentation for more details.</p></li>
-<li><p>timeout: (<cite>int</cite>) number of iterations to perform polling before function halts. Defaults to 50</p></li>
-<li><p>buffer_time: (<cite>Union[int, float]</cite>) initial buffer time of data-fetching. Defaults to 5</p></li>
-<li><p>poll_time: (<cite>Union[int, float]</cite>) poll time of data-fetching which is applied if the result is not yet ready.</p></li>
-<li><p>verbose: (<cite>bool</cite>) whether to print status updates to stdout. Defaults to True.</p></li>
-</ul>
-<dl class="field-list simple">
-<dt class="field-odd">Returns<span class="colon">:</span></dt>
-<dd class="field-odd"><p>instance of verification results.</p>
-</dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p>bio_compose.runner.VerificationResult</p>
-</dd>
-</dl>
-</dd></dl>
-
 <section id="module-bio_compose.bundles">
 <span id="bio-compose-bundles"></span><h2>bio_compose.bundles<a class="headerlink" href="#module-bio_compose.bundles" title="Link to this heading"></a></h2>
 <dl class="py class">
@@ -522,13 +457,13 @@ save_dest: <cite>str</cite>: path to save the figure. If this value is passed, t
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">bio_compose.verifier.</span></span><span class="sig-name descname"><span class="pre">VerificationResult</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/bio_compose/verifier.html#VerificationResult"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#bio_compose.verifier.VerificationResult" title="Link to this definition"></a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></p>
 <dl class="py method">
-<dt class="sig sig-object py" id="bio_compose.verifier.VerificationResult.observables">
-<span class="sig-name descname"><span class="pre">observables</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/bio_compose/verifier.html#VerificationResult.observables"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#bio_compose.verifier.VerificationResult.observables" title="Link to this definition"></a></dt>
+<dt class="sig sig-object py" id="bio_compose.verifier.VerificationResult.get_output_observables">
+<span class="sig-name descname"><span class="pre">get_output_observables</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/bio_compose/verifier.html#VerificationResult.get_output_observables"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#bio_compose.verifier.VerificationResult.get_output_observables" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="bio_compose.verifier.VerificationResult.rmse">
-<span class="sig-name descname"><span class="pre">rmse</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/bio_compose/verifier.html#VerificationResult.rmse"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#bio_compose.verifier.VerificationResult.rmse" title="Link to this definition"></a></dt>
+<dt class="sig sig-object py" id="bio_compose.verifier.VerificationResult.get_rmse">
+<span class="sig-name descname"><span class="pre">get_rmse</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/bio_compose/verifier.html#VerificationResult.get_rmse"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#bio_compose.verifier.VerificationResult.get_rmse" title="Link to this definition"></a></dt>
 <dd><p>Visualize root-mean-square error scoring for this verification result data.
 :param kwargs: (<cite>Union[Tuple[int, int], List[str], str]</cite>) kwargs for <cite>Verifier.visualize_rmse</cite>: fig_dimensions, color_mapping, save_dest.</p>
 </dd></dl>
@@ -668,29 +603,6 @@ save_dest: <cite>str</cite>: path to save the figure. If this value is passed, t
 </dd>
 <dt class="field-even">Raises<span class="colon">:</span></dt>
 <dd class="field-even"><p><strong>IOError</strong> – If <cite>job_id</cite> does not contain a ‘results’ field.</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="bio_compose.verifier.Verifier.visualize_outputs">
-<span class="sig-name descname"><span class="pre">visualize_outputs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Dict</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">simulators</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output_start</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output_end</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_points</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">hue</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'simulators'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">use_grid</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">color_mapping</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Figure</span></span></span><a class="reference internal" href="_modules/bio_compose/verifier.html#Verifier.visualize_outputs"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#bio_compose.verifier.Verifier.visualize_outputs" title="Link to this definition"></a></dt>
-<dd><p>Visualize simulation output data, not comparison data, with subplots for each species.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>data</strong> (<em>-</em>) – <cite>dict</cite>: simulation output data</p></li>
-<li><p><strong>simulators</strong> (<em>-</em>) – <cite>list[str]</cite>: list of simulators</p></li>
-<li><p><strong>output_start</strong> (<em>-</em>) – <cite>int</cite>: start time of simulation output recording.</p></li>
-<li><p><strong>output_end</strong> (<em>-</em>) – <cite>int</cite>: end time of simulation output recording.</p></li>
-<li><p><strong>num_points</strong> (<em>-</em>) – <cite>int</cite>: number of points in simulation output time series.</p></li>
-<li><p><strong>hue</strong> (<em>-</em>) – <cite>str</cite>: hue upon which the line plot colors are based. Options are: <cite>‘simulators’</cite> or <cite>‘species’</cite>. Defaults to ‘simulators’. If <cite>‘simulators’</cite> is passed, each column will be of its own color. If <cite>‘species’</cite> is passed, each row will be of its own color.</p></li>
-<li><p><strong>use_grid</strong> (<em>-</em>) – <cite>bool</cite>: whether to use a grid for each subplot. Defaults to False.</p></li>
-<li><p><strong>color_mapping</strong> (<em>-</em>) – <cite>list[str]</cite>: list of colors to use for each subplot. Defaults to None.</p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p><cite>matplotlib.pyplot.Figure</cite> of a plot grid</p>
 </dd>
 </dl>
 </dd></dl>

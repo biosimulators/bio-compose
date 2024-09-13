@@ -14,6 +14,7 @@ Create, execute, and introspect reproducible composite simulations of dynamic bi
    :maxdepth: 2
    :caption: Contents
 
+   getting_started
    installation
    verification
    simulation_runs

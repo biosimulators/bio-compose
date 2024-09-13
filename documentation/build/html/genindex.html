@@ -43,6 +43,7 @@
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <p class="caption" role="heading"><span class="caption-text">Contents</span></p>
 <ul>
+<li class="toctree-l1"><a class="reference internal" href="getting_started.html">Getting Started</a></li>
 <li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="verification.html">Verification</a></li>
 <li class="toctree-l1"><a class="reference internal" href="simulation_runs.html">Simulation Runs</a></li>
@@ -85,7 +86,6 @@
  | <a href="#F"><strong>F</strong></a>
  | <a href="#G"><strong>G</strong></a>
  | <a href="#M"><strong>M</strong></a>
- | <a href="#O"><strong>O</strong></a>
  | <a href="#R"><strong>R</strong></a>
  | <a href="#S"><strong>S</strong></a>
  | <a href="#T"><strong>T</strong></a>
@@ -216,18 +216,24 @@
 </li>
       <li><a href="bio_compose.html#bio_compose.verifier.Verifier.get_compatible">get_compatible() (bio_compose.verifier.Verifier method)</a>
 </li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="bio_compose.html#bio_compose.processing_tools.get_job_signature">get_job_signature() (in module bio_compose.processing_tools)</a>
 </li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="bio_compose.html#bio_compose.data_model.Api.get_job_status">get_job_status() (bio_compose.data_model.Api method)</a>
 </li>
       <li><a href="bio_compose.html#bio_compose.data_model.Api.get_observables">get_observables() (bio_compose.data_model.Api method)</a>
 </li>
       <li><a href="bio_compose.html#bio_compose.data_model.Api.get_output">get_output() (bio_compose.data_model.Api method)</a>
 </li>
-      <li><a href="bio_compose.html#bio_compose.verifier.Verifier.get_rmse">get_rmse() (bio_compose.verifier.Verifier method)</a>
+      <li><a href="bio_compose.html#bio_compose.verifier.VerificationResult.get_output_observables">get_output_observables() (bio_compose.verifier.VerificationResult method)</a>
 </li>
+      <li><a href="bio_compose.html#bio_compose.verifier.VerificationResult.get_rmse">get_rmse() (bio_compose.verifier.VerificationResult method)</a>
+
+      <ul>
+        <li><a href="bio_compose.html#bio_compose.verifier.Verifier.get_rmse">(bio_compose.verifier.Verifier method)</a>
+</li>
+      </ul></li>
   </ul></td>
 </tr></table>
 
@@ -256,14 +262,6 @@
   </ul></td>
 </tr></table>
 
-<h2 id="O">O</h2>
-<table style="width: 100%" class="indextable genindextable"><tr>
-  <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="bio_compose.html#bio_compose.verifier.VerificationResult.observables">observables() (bio_compose.verifier.VerificationResult method)</a>
-</li>
-  </ul></td>
-</tr></table>
-
 <h2 id="R">R</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
@@ -271,13 +269,9 @@
 </li>
       <li><a href="bio_compose.html#bio_compose.data_model.RequestError">RequestError (class in bio_compose.data_model)</a>
 </li>
-      <li><a href="bio_compose.html#bio_compose.verifier.VerificationResult.rmse">rmse() (bio_compose.verifier.VerificationResult method)</a>
-</li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="bio_compose.html#bio_compose.composer.Composer.run_composition">run_composition() (bio_compose.composer.Composer method)</a>
-</li>
-      <li><a href="bio_compose.html#bio_compose.run_simulation">run_simulation() (in module bio_compose)</a>
 </li>
       <li><a href="bio_compose.html#bio_compose.runner.SimulationRunner.run_smoldyn_simulation">run_smoldyn_simulation() (bio_compose.runner.SimulationRunner method)</a>
 </li>
@@ -323,8 +317,6 @@
 </li>
       <li><a href="bio_compose.html#bio_compose.verifier.Verifier">Verifier (class in bio_compose.verifier)</a>
 </li>
-      <li><a href="bio_compose.html#bio_compose.verify">verify() (in module bio_compose)</a>
-</li>
       <li><a href="bio_compose.html#bio_compose.verifier.Verifier.verify_omex">verify_omex() (bio_compose.verifier.Verifier method)</a>
 </li>
       <li><a href="bio_compose.html#bio_compose.verifier.Verifier.verify_sbml">verify_sbml() (bio_compose.verifier.Verifier method)</a>
@@ -341,8 +333,6 @@
         <li><a href="bio_compose.html#bio_compose.verifier.Verifier.visualize_observables">(bio_compose.verifier.Verifier method)</a>
 </li>
       </ul></li>
-      <li><a href="bio_compose.html#bio_compose.verifier.Verifier.visualize_outputs">visualize_outputs() (bio_compose.verifier.Verifier method)</a>
-</li>
       <li><a href="bio_compose.html#bio_compose.verifier.Verifier.visualize_rmse">visualize_rmse() (bio_compose.verifier.Verifier method)</a>
 </li>
   </ul></td>
