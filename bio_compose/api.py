@@ -7,12 +7,17 @@ from bio_compose.runner import SimulationRunner, SimulationResult
 from bio_compose.verifier import Verifier, VerificationResult
 
 
+__all__ = [
+    'get_compatible_verification_simulators',
+    'verify'
+]
+
 API_VERIFIER = Verifier()
 API_RUNNER = SimulationRunner()
 
 
-def get_compatible_simulators(entrypoint_file: str) -> list:
-    pass
+def get_compatible_verification_simulators(entrypoint_file: str, return_versions: bool = False) -> list:
+    return API_VERIFIER.get_compatible(entrypoint_file, return_versions)
 
 
 def verify(*args) -> VerificationResult:
@@ -71,7 +76,7 @@ def verify(*args) -> VerificationResult:
 
             # report job status
             current_status = verifier.get_output(job_id=job_id).get('content', {}).get('status', '')
-            print(f'> Status for job ending in {get_job_signature(job_id)}: {current_status} ', end='\r')
+            print(f'> Status for job ending in {get_job_signature(job_id)}: {current_status} ')
 
             # finish if job failed or completed, otherwise re-poll
             stop_conditions = ["COMPLETED", "FAILED"]
