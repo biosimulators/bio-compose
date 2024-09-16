@@ -6,6 +6,7 @@ description = "Create, execute, and introspect reproducible composite simulation
 authors = ["Alex Patrie <alexanderpatrie@gmail.com>"]
 readme = "README.md"
 packages = [{include = "bio_compose"}, {include = "tests"}]
+include = ["pyproject.toml"]
 
 [tool.poetry.scripts]
 verify = "bio_compose.__main__:verification_cli"
