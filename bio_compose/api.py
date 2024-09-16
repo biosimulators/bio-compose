@@ -8,12 +8,6 @@ from bio_compose.runner import SimulationRunner, SimulationResult
 from bio_compose.verifier import Verifier, VerificationResult
 
 
-__all__ = [
-    'get_output',
-    'get_compatible_verification_simulators',
-    'verify'
-]
-
 API_VERIFIER = Verifier()
 API_RUNNER = SimulationRunner()
 
@@ -123,6 +117,7 @@ def run_simulation(*args, **kwargs) -> SimulationResult:
     """Run a simulation with BioCompose.
 
     :param args: Positional arguments
+
     * 1 argument: smoldyn simulation configuration in which time parameters (dt, duration) are already defined. **Smoldyn simulation only**.
     * 3 arguments: smoldyn configuration file, smoldyn simulation duration, smoldyn simulation dt. **Smoldyn simulation only**.
     * 5 arguments: sbml filepath, simulation start, simulation end, simulation steps, simulator. **SBML simulation only**.

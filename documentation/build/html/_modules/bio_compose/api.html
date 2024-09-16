@@ -86,12 +86,6 @@
 <span class="kn">from</span> <span class="nn">bio_compose.verifier</span> <span class="kn">import</span> <span class="n">Verifier</span><span class="p">,</span> <span class="n">VerificationResult</span>
 
 
-<span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span>
-    <span class="s1">&#39;get_output&#39;</span><span class="p">,</span>
-    <span class="s1">&#39;get_compatible_verification_simulators&#39;</span><span class="p">,</span>
-    <span class="s1">&#39;verify&#39;</span>
-<span class="p">]</span>
-
 <span class="n">API_VERIFIER</span> <span class="o">=</span> <span class="n">Verifier</span><span class="p">()</span>
 <span class="n">API_RUNNER</span> <span class="o">=</span> <span class="n">SimulationRunner</span><span class="p">()</span>
 
@@ -206,10 +200,13 @@
 
 
 
+<div class="viewcode-block" id="run_simulation">
+<a class="viewcode-back" href="../../bio_compose.html#bio_compose.api.run_simulation">[docs]</a>
 <span class="k">def</span> <span class="nf">run_simulation</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">SimulationResult</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Run a simulation with BioCompose.</span>
 
 <span class="sd">    :param args: Positional arguments</span>
+
 <span class="sd">    * 1 argument: smoldyn simulation configuration in which time parameters (dt, duration) are already defined. **Smoldyn simulation only**.</span>
 <span class="sd">    * 3 arguments: smoldyn configuration file, smoldyn simulation duration, smoldyn simulation dt. **Smoldyn simulation only**.</span>
 <span class="sd">    * 5 arguments: sbml filepath, simulation start, simulation end, simulation steps, simulator. **SBML simulation only**.</span>
@@ -260,7 +257,8 @@
                     <span class="k">break</span>
             <span class="k">else</span><span class="p">:</span>
                 <span class="n">i</span> <span class="o">+=</span> <span class="mi">1</span>
-    <span class="k">return</span> <span class="n">SimulationResult</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">output</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">SimulationResult</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">output</span><span class="p">)</span></div>
+
 </pre></div>
 
            </div>

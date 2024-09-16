@@ -1,7 +1,12 @@
 import os
 import toml
 
-from bio_compose.api import *
+from bio_compose.api import (
+    get_output,
+    get_compatible_verification_simulators,
+    verify,
+    run_simulation
+)
 
 
 pyproject_file_path = os.path.join(os.path.dirname(__file__), '..', 'pyproject.toml')
@@ -11,4 +16,10 @@ except:
     __version__ = ' '
 
 
-__all__ = ['__version__'] + globals().get('__all__', [])
+__all__ = [
+    '__version__',
+    'get_output',
+    'get_compatible_verification_simulators',
+    'verify',
+    'run_simulation'
+]

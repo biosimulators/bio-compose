@@ -54,6 +54,7 @@
 <li class="toctree-l2 current"><a class="current reference internal" href="#">bio_compose</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#bio_compose.api.get_compatible_verification_simulators"><code class="docutils literal notranslate"><span class="pre">get_compatible_verification_simulators()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#bio_compose.api.get_output"><code class="docutils literal notranslate"><span class="pre">get_output()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#bio_compose.api.run_simulation"><code class="docutils literal notranslate"><span class="pre">run_simulation()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#bio_compose.api.verify"><code class="docutils literal notranslate"><span class="pre">verify()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#module-bio_compose.bundles">bio_compose.bundles</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="#bio_compose.bundles.BioBundle"><code class="docutils literal notranslate"><span class="pre">BioBundle</span></code></a></li>
@@ -156,6 +157,33 @@
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p><cite>Dict</cite></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="bio_compose.api.run_simulation">
+<span class="sig-prename descclassname"><span class="pre">bio_compose.api.</span></span><span class="sig-name descname"><span class="pre">run_simulation</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#bio_compose.runner.SimulationResult" title="bio_compose.runner.SimulationResult"><span class="pre">SimulationResult</span></a></span></span><a class="reference internal" href="_modules/bio_compose/api.html#run_simulation"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#bio_compose.api.run_simulation" title="Link to this definition"></a></dt>
+<dd><p>Run a simulation with BioCompose.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>args</strong> – Positional arguments</p>
+</dd>
+</dl>
+<ul class="simple">
+<li><p>1 argument: smoldyn simulation configuration in which time parameters (dt, duration) are already defined. <strong>Smoldyn simulation only</strong>.</p></li>
+<li><p>3 arguments: smoldyn configuration file, smoldyn simulation duration, smoldyn simulation dt. <strong>Smoldyn simulation only</strong>.</p></li>
+<li><p>5 arguments: sbml filepath, simulation start, simulation end, simulation steps, simulator. <strong>SBML simulation only</strong>.</p></li>
+</ul>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>kwargs</strong> – Keyword arguments</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>instance of simulation results.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="#bio_compose.runner.SimulationResult" title="bio_compose.runner.SimulationResult">bio_compose.runner.SimulationResult</a></p>
 </dd>
 </dl>
 </dd></dl>
