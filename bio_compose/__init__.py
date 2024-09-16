@@ -9,3 +9,6 @@ try:
     __version__ = toml.load(pyproject_file_path)['tool']['poetry']['version']
 except:
     __version__ = ' '
+
+
+__all__ = ['__version__'] + globals().get('__all__', [])

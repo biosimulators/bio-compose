@@ -1,5 +1,6 @@
 import os
 import time
+from typing import *
 from functools import wraps
 
 from bio_compose.processing_tools import get_job_signature
@@ -8,6 +9,7 @@ from bio_compose.verifier import Verifier, VerificationResult
 
 
 __all__ = [
+    'get_output',
     'get_compatible_verification_simulators',
     'verify'
 ]
@@ -16,7 +18,30 @@ API_VERIFIER = Verifier()
 API_RUNNER = SimulationRunner()
 
 
-def get_compatible_verification_simulators(entrypoint_file: str, return_versions: bool = False) -> list:
+def get_output(job_id: str, download_dest: str = None, filename: str = None) -> Dict:
+    """
+    Fetch the current state of the job referenced with `job_id`. If the job has not yet been processed, it will return a `status` of `PENDING`. If the job is being processed by the service at the time of return, `status` will read `IN_PROGRESS`. If the job is complete, the job state will be returned, optionally with included result data (either JSON or downloadable file data).
+
+    :param job_id: (`str`) The id of the job submission.
+    :param download_dest: (`Optional[str]`) **File download outputs only**. Optional directory where the file will be downloaded if the output is a file. Defaults to the current directory.
+    :param filename: (`Optional[str]`) **File download outputs only**. Optional filename to save the downloaded file as if the output is a file. If not provided, the filename will be extracted from the Content-Disposition header.
+
+    :return: If the output is a JSON response, return the parsed JSON as a dictionary. If the output is a file, download the file and return the filepath. If an error occurs, return a RequestError.
+    :rtype: `Dict`
+    """
+    return API_VERIFIER.get_output(job_id)
+
+
+def get_compatible_verification_simulators(entrypoint_file: str, return_versions: bool = False):
+    """
+    Get all simulators and optionally their versions for a given file. The File is expected to be either an OMEX/COMBINE archive or SBML file.
+
+    :param entrypoint_file: (`str`) The path of the file to be checked.
+    :param return_versions: (`bool`) Whether to return the compatible version of the given compatible simulator. Defaults to `False`.
+
+    :return: A list of compatible simulators and the current compatible version of the given compatible simulator.
+    :rtype: `List[Union[Tuple[str, str], str]`
+    """
     return API_VERIFIER.get_compatible(entrypoint_file, return_versions)
 
 
