@@ -1,14 +1,14 @@
 name: Continuous Deployment
 
-# on:
-#   workflow_dispatch:
-
 on:
-  workflow_run:
-    workflows:
-      - Continuous Integration
-    types:
-      - completed
+  workflow_dispatch:
+
+# on:
+#   workflow_run:
+#     workflows:
+#       - Continuous Integration
+#     types:
+#       - completed
 
 jobs:
   release_new_version:

@@ -1,3 +1,4 @@
+from bio_compose import get_compatible_verification_simulators
 from bio_compose.verifier import Verifier
 from bio_compose.runner import SimulationRunner
 from bio_compose.composer import Composer
@@ -7,10 +8,17 @@ DEFAULT_START = 0
 DEFAULT_DURATION = 10
 DEFAULT_NSTEPS = 100
 DEFAULT_SBML_SIMULATORS = ['amici', 'copasi', 'tellurium']
+DEFAULT_SBML_TEST_FILE = './fixtures/sbml-core/BIOMD0000000001_url.xml'
+DEFAULT_OMEX_TEST_FILE = './fixtures/sbml-core/BIOMD0000000001.omex'
 
 test_runner = SimulationRunner()
 test_verifier = Verifier()
 test_composer = Composer()
+
+
+def test_get_compatible():
+    comp = get_compatible_verification_simulators(DEFAULT_OMEX_TEST_FILE)
+    assert len(comp)
 
 
 def test_run_smoldyn():

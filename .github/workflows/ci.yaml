@@ -24,4 +24,4 @@ jobs:
 
     - name: Test BioCompose 
       run: |
-        pytest 
+        pytest tests/main.py
