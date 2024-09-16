@@ -1,7 +1,7 @@
 bio_compose
 ===========
 
-.. automodule:: bio_compose
+.. automodule:: bio_compose.api
    :members:
    :undoc-members:
    :show-inheritance:

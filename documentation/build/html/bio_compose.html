@@ -52,6 +52,9 @@
 <li class="toctree-l1"><a class="reference internal" href="cli.html">Command Line Interface</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="modules.html">API Documentation</a><ul class="current">
 <li class="toctree-l2 current"><a class="current reference internal" href="#">bio_compose</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#bio_compose.api.get_compatible_verification_simulators"><code class="docutils literal notranslate"><span class="pre">get_compatible_verification_simulators()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#bio_compose.api.get_output"><code class="docutils literal notranslate"><span class="pre">get_output()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#bio_compose.api.verify"><code class="docutils literal notranslate"><span class="pre">verify()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#module-bio_compose.bundles">bio_compose.bundles</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="#bio_compose.bundles.BioBundle"><code class="docutils literal notranslate"><span class="pre">BioBundle</span></code></a></li>
 </ul>
@@ -114,8 +117,74 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <section id="module-bio_compose">
-<span id="bio-compose"></span><h1>bio_compose<a class="headerlink" href="#module-bio_compose" title="Link to this heading"></a></h1>
+  <section id="module-bio_compose.api">
+<span id="bio-compose"></span><h1>bio_compose<a class="headerlink" href="#module-bio_compose.api" title="Link to this heading"></a></h1>
+<dl class="py function">
+<dt class="sig sig-object py" id="bio_compose.api.get_compatible_verification_simulators">
+<span class="sig-prename descclassname"><span class="pre">bio_compose.api.</span></span><span class="sig-name descname"><span class="pre">get_compatible_verification_simulators</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">entrypoint_file</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">return_versions</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/bio_compose/api.html#get_compatible_verification_simulators"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#bio_compose.api.get_compatible_verification_simulators" title="Link to this definition"></a></dt>
+<dd><p>Get all simulators and optionally their versions for a given file. The File is expected to be either an OMEX/COMBINE archive or SBML file.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>entrypoint_file</strong> – (<cite>str</cite>) The path of the file to be checked.</p></li>
+<li><p><strong>return_versions</strong> – (<cite>bool</cite>) Whether to return the compatible version of the given compatible simulator. Defaults to <cite>False</cite>.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A list of compatible simulators and the current compatible version of the given compatible simulator.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><cite>List[Union[Tuple[str, str], str]</cite></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="bio_compose.api.get_output">
+<span class="sig-prename descclassname"><span class="pre">bio_compose.api.</span></span><span class="sig-name descname"><span class="pre">get_output</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">job_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">download_dest</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">filename</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Dict</span></span></span><a class="reference internal" href="_modules/bio_compose/api.html#get_output"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#bio_compose.api.get_output" title="Link to this definition"></a></dt>
+<dd><p>Fetch the current state of the job referenced with <cite>job_id</cite>. If the job has not yet been processed, it will return a <cite>status</cite> of <cite>PENDING</cite>. If the job is being processed by the service at the time of return, <cite>status</cite> will read <cite>IN_PROGRESS</cite>. If the job is complete, the job state will be returned, optionally with included result data (either JSON or downloadable file data).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>job_id</strong> – (<cite>str</cite>) The id of the job submission.</p></li>
+<li><p><strong>download_dest</strong> – (<cite>Optional[str]</cite>) <strong>File download outputs only</strong>. Optional directory where the file will be downloaded if the output is a file. Defaults to the current directory.</p></li>
+<li><p><strong>filename</strong> – (<cite>Optional[str]</cite>) <strong>File download outputs only</strong>. Optional filename to save the downloaded file as if the output is a file. If not provided, the filename will be extracted from the Content-Disposition header.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>If the output is a JSON response, return the parsed JSON as a dictionary. If the output is a file, download the file and return the filepath. If an error occurs, return a RequestError.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><cite>Dict</cite></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="bio_compose.api.verify">
+<span class="sig-prename descclassname"><span class="pre">bio_compose.api.</span></span><span class="sig-name descname"><span class="pre">verify</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#bio_compose.verifier.VerificationResult" title="bio_compose.verifier.VerificationResult"><span class="pre">VerificationResult</span></a></span></span><a class="reference internal" href="_modules/bio_compose/api.html#verify"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#bio_compose.api.verify" title="Link to this definition"></a></dt>
+<dd><p>Verify and compare the outputs of simulators for a given entrypoint file of either sbml or omex.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>args</strong> – Positional arguments</p>
+</dd>
+</dl>
+<ul class="simple">
+<li><p>1 argument: submit omex verification with no time params. <strong>OMEX verification only</strong>.</p></li>
+<li><p>2 arguments: omex filepath, simulators to include in the verification. <strong>OMEX verification only</strong>.</p></li>
+<li><p>4 arguments: sbml filepath, start, stop, steps. <strong>SBML verification only</strong>.</p></li>
+<li><p>5 arguments: sbml filepath, start, stop, steps, simulators. <strong>SBML verification only</strong>.</p></li>
+</ul>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>instance of verification results.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference internal" href="#bio_compose.verifier.VerificationResult" title="bio_compose.verifier.VerificationResult">bio_compose.verifier.VerificationResult</a></p>
+</dd>
+</dl>
+</dd></dl>
+
 <section id="module-bio_compose.bundles">
 <span id="bio-compose-bundles"></span><h2>bio_compose.bundles<a class="headerlink" href="#module-bio_compose.bundles" title="Link to this heading"></a></h2>
 <dl class="py class">

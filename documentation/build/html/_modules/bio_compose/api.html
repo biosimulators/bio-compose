@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>bio_compose.api &mdash; BioCompose 0.5.5 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=fa44fd50" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=19f00094" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="../../_static/documentation_options.js?v=45def3bc"></script>
+        <script src="../../_static/doctools.js?v=9a2dae69"></script>
+        <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            BioCompose
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../getting_started.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../verification.html">Verification</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../simulation_runs.html">Simulation Runs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../cli.html">Command Line Interface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../modules.html">API Documentation</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">BioCompose</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">bio_compose.api</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for bio_compose.api</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">time</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="kn">from</span> <span class="nn">functools</span> <span class="kn">import</span> <span class="n">wraps</span>
+
+<span class="kn">from</span> <span class="nn">bio_compose.processing_tools</span> <span class="kn">import</span> <span class="n">get_job_signature</span>
+<span class="kn">from</span> <span class="nn">bio_compose.runner</span> <span class="kn">import</span> <span class="n">SimulationRunner</span><span class="p">,</span> <span class="n">SimulationResult</span>
+<span class="kn">from</span> <span class="nn">bio_compose.verifier</span> <span class="kn">import</span> <span class="n">Verifier</span><span class="p">,</span> <span class="n">VerificationResult</span>
+
+
+<span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="s1">&#39;get_output&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;get_compatible_verification_simulators&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;verify&#39;</span>
+<span class="p">]</span>
+
+<span class="n">API_VERIFIER</span> <span class="o">=</span> <span class="n">Verifier</span><span class="p">()</span>
+<span class="n">API_RUNNER</span> <span class="o">=</span> <span class="n">SimulationRunner</span><span class="p">()</span>
+
+
+<div class="viewcode-block" id="get_output">
+<a class="viewcode-back" href="../../bio_compose.html#bio_compose.api.get_output">[docs]</a>
+<span class="k">def</span> <span class="nf">get_output</span><span class="p">(</span><span class="n">job_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">download_dest</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">filename</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Fetch the current state of the job referenced with `job_id`. If the job has not yet been processed, it will return a `status` of `PENDING`. If the job is being processed by the service at the time of return, `status` will read `IN_PROGRESS`. If the job is complete, the job state will be returned, optionally with included result data (either JSON or downloadable file data).</span>
+
+<span class="sd">    :param job_id: (`str`) The id of the job submission.</span>
+<span class="sd">    :param download_dest: (`Optional[str]`) **File download outputs only**. Optional directory where the file will be downloaded if the output is a file. Defaults to the current directory.</span>
+<span class="sd">    :param filename: (`Optional[str]`) **File download outputs only**. Optional filename to save the downloaded file as if the output is a file. If not provided, the filename will be extracted from the Content-Disposition header.</span>
+
+<span class="sd">    :return: If the output is a JSON response, return the parsed JSON as a dictionary. If the output is a file, download the file and return the filepath. If an error occurs, return a RequestError.</span>
+<span class="sd">    :rtype: `Dict`</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">API_VERIFIER</span><span class="o">.</span><span class="n">get_output</span><span class="p">(</span><span class="n">job_id</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="get_compatible_verification_simulators">
+<a class="viewcode-back" href="../../bio_compose.html#bio_compose.api.get_compatible_verification_simulators">[docs]</a>
+<span class="k">def</span> <span class="nf">get_compatible_verification_simulators</span><span class="p">(</span><span class="n">entrypoint_file</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">return_versions</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Get all simulators and optionally their versions for a given file. The File is expected to be either an OMEX/COMBINE archive or SBML file.</span>
+
+<span class="sd">    :param entrypoint_file: (`str`) The path of the file to be checked.</span>
+<span class="sd">    :param return_versions: (`bool`) Whether to return the compatible version of the given compatible simulator. Defaults to `False`.</span>
+
+<span class="sd">    :return: A list of compatible simulators and the current compatible version of the given compatible simulator.</span>
+<span class="sd">    :rtype: `List[Union[Tuple[str, str], str]`</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">API_VERIFIER</span><span class="o">.</span><span class="n">get_compatible</span><span class="p">(</span><span class="n">entrypoint_file</span><span class="p">,</span> <span class="n">return_versions</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="verify">
+<a class="viewcode-back" href="../../bio_compose.html#bio_compose.api.verify">[docs]</a>
+<span class="k">def</span> <span class="nf">verify</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">VerificationResult</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Verify and compare the outputs of simulators for a given entrypoint file of either sbml or omex.</span>
+
+<span class="sd">    :param args: Positional arguments</span>
+
+<span class="sd">    * 1 argument: submit omex verification with no time params. **OMEX verification only**.</span>
+<span class="sd">    * 2 arguments: omex filepath, simulators to include in the verification. **OMEX verification only**.</span>
+<span class="sd">    * 4 arguments: sbml filepath, start, stop, steps. **SBML verification only**.</span>
+<span class="sd">    * 5 arguments: sbml filepath, start, stop, steps, simulators. **SBML verification only**.</span>
+
+<span class="sd">    :return: instance of verification results.</span>
+<span class="sd">    :rtype: bio_compose.verifier.VerificationResult</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">verifier</span> <span class="o">=</span> <span class="n">API_VERIFIER</span>
+
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">args</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;At least one positional argument defining a file entrypoint is required.&#39;</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">args</span><span class="p">)</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
+        <span class="n">simulators</span> <span class="o">=</span> <span class="n">args</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+    <span class="k">elif</span> <span class="nb">len</span><span class="p">(</span><span class="n">args</span><span class="p">)</span> <span class="o">==</span> <span class="mi">5</span><span class="p">:</span>
+        <span class="n">simulators</span> <span class="o">=</span> <span class="n">args</span><span class="p">[</span><span class="mi">4</span><span class="p">]</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">simulators</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;amici&#39;</span><span class="p">,</span> <span class="s1">&#39;copasi&#39;</span><span class="p">,</span> <span class="s1">&#39;tellurium&#39;</span><span class="p">]</span>
+
+    <span class="n">run_sbml</span> <span class="o">=</span> <span class="kc">False</span>
+    <span class="k">for</span> <span class="n">arg</span> <span class="ow">in</span> <span class="n">args</span><span class="p">:</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">arg</span><span class="p">,</span> <span class="nb">int</span><span class="p">):</span>
+            <span class="n">run_sbml</span> <span class="o">=</span> <span class="kc">True</span>
+    <span class="n">submission</span> <span class="o">=</span> <span class="kc">None</span>
+
+    <span class="c1"># parse executor and run</span>
+    <span class="n">timeout</span> <span class="o">=</span> <span class="mi">50</span>
+    <span class="n">buffer_time</span> <span class="o">=</span> <span class="mi">5</span>
+    <span class="n">poll_time</span> <span class="o">=</span> <span class="mi">5</span>
+    <span class="n">submission_generator</span> <span class="o">=</span> <span class="n">verifier</span><span class="o">.</span><span class="n">verify_sbml</span> <span class="k">if</span> <span class="n">run_sbml</span> <span class="k">else</span> <span class="n">verifier</span><span class="o">.</span><span class="n">verify_omex</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Submitting verification...&quot;</span><span class="p">)</span>
+    <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="n">buffer_time</span><span class="p">)</span>
+
+    <span class="c1"># fetch params</span>
+    <span class="n">submission</span> <span class="o">=</span> <span class="n">submission_generator</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">)</span>
+    <span class="n">job_id</span> <span class="o">=</span> <span class="n">submission</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;job_id&#39;</span><span class="p">)</span>
+
+    <span class="c1"># poll gateway for results</span>
+    <span class="n">n_attempts</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="n">output</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="k">if</span> <span class="n">job_id</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="c1"># polling loop</span>
+        <span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
+            <span class="c1"># quit after reaching timeout</span>
+            <span class="n">n_attempts</span> <span class="o">+=</span> <span class="mi">1</span>
+            <span class="k">if</span> <span class="n">n_attempts</span> <span class="o">==</span> <span class="n">timeout</span><span class="p">:</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Timeout reached. Please try to call the function again.&#39;</span><span class="p">)</span>
+                <span class="k">break</span>
+
+            <span class="c1"># get result after buffering (submission) or refresh if re-iteration</span>
+            <span class="n">verification_result</span> <span class="o">=</span> <span class="n">verifier</span><span class="o">.</span><span class="n">get_output</span><span class="p">(</span><span class="n">job_id</span><span class="o">=</span><span class="n">job_id</span><span class="p">)</span>
+
+            <span class="c1"># report job status</span>
+            <span class="n">current_status</span> <span class="o">=</span> <span class="n">verifier</span><span class="o">.</span><span class="n">get_output</span><span class="p">(</span><span class="n">job_id</span><span class="o">=</span><span class="n">job_id</span><span class="p">)</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;content&#39;</span><span class="p">,</span> <span class="p">{})</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;status&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">)</span>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;&gt; Status for job ending in </span><span class="si">{</span><span class="n">get_job_signature</span><span class="p">(</span><span class="n">job_id</span><span class="p">)</span><span class="si">}</span><span class="s1">: </span><span class="si">{</span><span class="n">current_status</span><span class="si">}</span><span class="s1"> &#39;</span><span class="p">)</span>
+
+            <span class="c1"># finish if job failed or completed, otherwise re-poll</span>
+            <span class="n">stop_conditions</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;COMPLETED&quot;</span><span class="p">,</span> <span class="s2">&quot;FAILED&quot;</span><span class="p">]</span>
+            <span class="n">job_finished</span> <span class="o">=</span> <span class="nb">any</span><span class="p">([</span><span class="n">current_status</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="n">condition</span><span class="p">)</span> <span class="k">for</span> <span class="n">condition</span> <span class="ow">in</span> <span class="n">stop_conditions</span><span class="p">])</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">job_finished</span><span class="p">:</span>
+                <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="n">poll_time</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">output</span> <span class="o">=</span> <span class="n">verifier</span><span class="o">.</span><span class="n">get_output</span><span class="p">(</span><span class="n">job_id</span><span class="o">=</span><span class="n">job_id</span><span class="p">)</span>
+                <span class="k">break</span>
+
+    <span class="k">return</span> <span class="n">VerificationResult</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">output</span><span class="p">)</span></div>
+
+
+
+<span class="k">def</span> <span class="nf">run_simulation</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">SimulationResult</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Run a simulation with BioCompose.</span>
+
+<span class="sd">    :param args: Positional arguments</span>
+<span class="sd">    * 1 argument: smoldyn simulation configuration in which time parameters (dt, duration) are already defined. **Smoldyn simulation only**.</span>
+<span class="sd">    * 3 arguments: smoldyn configuration file, smoldyn simulation duration, smoldyn simulation dt. **Smoldyn simulation only**.</span>
+<span class="sd">    * 5 arguments: sbml filepath, simulation start, simulation end, simulation steps, simulator. **SBML simulation only**.</span>
+
+<span class="sd">    :param kwargs: Keyword arguments</span>
+
+<span class="sd">    :return: instance of simulation results.</span>
+<span class="sd">    :rtype: bio_compose.runner.SimulationResult</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># set up submission</span>
+    <span class="n">runner</span> <span class="o">=</span> <span class="n">SimulationRunner</span><span class="p">()</span>
+    <span class="n">in_file</span> <span class="o">=</span> <span class="n">args</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">n_args</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">args</span><span class="p">)</span>
+    <span class="n">submission</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="k">if</span> <span class="n">n_args</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="n">submission</span> <span class="o">=</span> <span class="n">runner</span><span class="o">.</span><span class="n">run_smoldyn_simulation</span><span class="p">(</span><span class="n">smoldyn_configuration_filepath</span><span class="o">=</span><span class="n">in_file</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="n">n_args</span> <span class="o">==</span> <span class="mi">3</span><span class="p">:</span>
+        <span class="n">dur</span> <span class="o">=</span> <span class="n">args</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+        <span class="n">dt</span> <span class="o">=</span> <span class="n">args</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
+        <span class="n">submission</span> <span class="o">=</span> <span class="n">runner</span><span class="o">.</span><span class="n">run_smoldyn_simulation</span><span class="p">(</span><span class="n">smoldyn_configuration_filepath</span><span class="o">=</span><span class="n">in_file</span><span class="p">,</span> <span class="n">duration</span><span class="o">=</span><span class="n">dur</span><span class="p">,</span> <span class="n">dt</span><span class="o">=</span><span class="n">dt</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="n">n_args</span> <span class="o">==</span> <span class="mi">5</span><span class="p">:</span>
+        <span class="n">start</span> <span class="o">=</span> <span class="n">args</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+        <span class="n">end</span> <span class="o">=</span> <span class="n">args</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
+        <span class="n">steps</span> <span class="o">=</span> <span class="n">args</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span>
+        <span class="n">simulator</span> <span class="o">=</span> <span class="n">args</span><span class="p">[</span><span class="mi">4</span><span class="p">]</span>
+        <span class="n">submission</span> <span class="o">=</span> <span class="n">runner</span><span class="o">.</span><span class="n">run_utc_simulation</span><span class="p">(</span><span class="n">sbml_filepath</span><span class="o">=</span><span class="n">in_file</span><span class="p">,</span> <span class="n">start</span><span class="o">=</span><span class="n">start</span><span class="p">,</span> <span class="n">end</span><span class="o">=</span><span class="n">end</span><span class="p">,</span> <span class="n">steps</span><span class="o">=</span><span class="n">steps</span><span class="p">,</span> <span class="n">simulator</span><span class="o">=</span><span class="n">simulator</span><span class="p">)</span>
+    <span class="c1"># fetch result params</span>
+    <span class="n">job_id</span> <span class="o">=</span> <span class="n">submission</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;job_id&#39;</span><span class="p">)</span>
+    <span class="n">output</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="n">timeout</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;timeout&#39;</span><span class="p">,</span> <span class="mi">100</span><span class="p">)</span>
+    <span class="c1"># poll gateway for results</span>
+    <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="k">if</span> <span class="n">job_id</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Submission Results for Job ID </span><span class="si">{</span><span class="n">job_id</span><span class="si">}</span><span class="s1">: &#39;</span><span class="p">)</span>
+        <span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">i</span> <span class="o">==</span> <span class="n">timeout</span><span class="p">:</span>
+                <span class="k">break</span>
+            <span class="n">simulation_result</span> <span class="o">=</span> <span class="n">runner</span><span class="o">.</span><span class="n">get_output</span><span class="p">(</span><span class="n">job_id</span><span class="o">=</span><span class="n">job_id</span><span class="p">)</span>
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">simulation_result</span><span class="p">,</span> <span class="nb">dict</span><span class="p">):</span>
+                <span class="n">status</span> <span class="o">=</span> <span class="n">simulation_result</span><span class="p">[</span><span class="s1">&#39;content&#39;</span><span class="p">][</span><span class="s1">&#39;status&#39;</span><span class="p">]</span>
+                <span class="n">last4</span> <span class="o">=</span> <span class="n">get_job_signature</span><span class="p">(</span><span class="n">job_id</span><span class="p">)</span>
+                <span class="k">if</span> <span class="ow">not</span> <span class="s1">&#39;COMPLETED&#39;</span> <span class="ow">in</span> <span class="n">status</span><span class="p">:</span>
+                    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Status for job ending in </span><span class="si">{</span><span class="n">last4</span><span class="si">}</span><span class="s1">: </span><span class="si">{</span><span class="n">status</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+                    <span class="n">i</span> <span class="o">+=</span> <span class="mi">1</span>
+                    <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">output</span> <span class="o">=</span> <span class="n">simulation_result</span>
+                    <span class="k">break</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">i</span> <span class="o">+=</span> <span class="mi">1</span>
+    <span class="k">return</span> <span class="n">SimulationResult</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">output</span><span class="p">)</span>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, Alexander A. Patrie.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
