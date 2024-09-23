@@ -75,7 +75,7 @@ def verify(*args) -> VerificationResult:
     buffer_time = 5
     poll_time = 5
     submission_generator = verifier.verify_sbml if run_sbml else verifier.verify_omex
-    print("Submitting verification...")
+    print("Submitting verification...", end='\r')
     time.sleep(buffer_time)
 
     # fetch params
@@ -169,3 +169,19 @@ def run_simulation(*args, **kwargs) -> SimulationResult:
             else:
                 i += 1
     return SimulationResult(data=output)
+
+
+def visualize_observables(job_id: str, save_dest: str = None, hspace: float = 0.25, use_grid: bool = False):
+    """
+    Visualize simulation output (observables) data, not comparison data, with subplots for each species.
+
+    :param job_id: (`str`) job id for the simulation observable output you wish to visualize.
+    :param save_dest: (`str`) path to save the figure. If this value is passed, the figure will be saved in pdf format to this location.
+    :param hspace: (`float`) horizontal spacing between subplots. Defaults to 0.25.
+    :param use_grid: (`bool`) whether to use a grid for each subplot. Defaults to False.
+    
+    :rtype: `Tuple[matplotlib.Figure, Dict]` 
+    :return: matplotlib Figure and simulation observables indexed by simulator
+    """
+    return API_VERIFIER.visualize_observables(job_id=job_id, save_dest=save_dest, hspace=hspace, use_grid=use_grid)
+    

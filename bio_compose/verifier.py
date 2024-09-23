@@ -287,6 +287,14 @@ class Verifier(Api):
         observables = [key for key in species_data_content.keys() if key not in excluded_observables]
         first_observable = species_data_content[observables[0]]
         simulators = list(first_observable['output_data'].keys())
+
+        # post-process to handle any strings (errors)
+        for sim in simulators:
+            data = first_observable['output_data'][sim]
+            if isinstance(data, str):
+                simulators.remove(sim)
+        
+        # count post processed sims
         n_simulators = len(simulators)
 
         # create subplots
@@ -302,6 +310,8 @@ class Verifier(Api):
             ax = axes[idx]
             for observable in observables:
                 value_data = species_data_content[observable]['output_data'][simulator]
+                if isinstance(value_data, str):
+                    continue 
                 obs[observable][simulator] = value_data
                 sns.lineplot(data=value_data, ax=ax, label=observable)
 

@@ -5,7 +5,8 @@ from bio_compose.api import (
     get_output,
     get_compatible_verification_simulators,
     verify,
-    run_simulation
+    run_simulation,
+    visualize_observables
 )
 
 
@@ -21,5 +22,6 @@ __all__ = [
     'get_output',
     'get_compatible_verification_simulators',
     'verify',
-    'run_simulation'
+    'run_simulation',
+    'visualize_observables'
 ]
