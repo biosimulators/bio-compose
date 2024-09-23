@@ -180,8 +180,23 @@ def visualize_observables(job_id: str, save_dest: str = None, hspace: float = 0.
     :param hspace: (`float`) horizontal spacing between subplots. Defaults to 0.25.
     :param use_grid: (`bool`) whether to use a grid for each subplot. Defaults to False.
     
-    :rtype: `Tuple[matplotlib.Figure, Dict]` 
     :return: matplotlib Figure and simulation observables indexed by simulator
+    :rtype: `Tuple[matplotlib.Figure, Dict]` 
     """
     return API_VERIFIER.visualize_observables(job_id=job_id, save_dest=save_dest, hspace=hspace, use_grid=use_grid)
+
+
+def visualize_rmse(job_id: str, save_dest: str = None, fig_dimensions: tuple[int, int] = None, color_mapping: list[str] = None):
+    """
+    Visualize the root-mean-squared error between simulator verification outputs as a heatmap.
+
+    :param job_id: (`str`) verification job id. This value can be easily derived from either of `Verifier`'s `.verify_...` methods.
+    :param save_dest: `(str`) destination at which to save figure. Defaults to `None`.
+    :param fig_dimensions: (`Tuple[int, int], optional`) The value to use as the `figsize` parameter for a call to `matplotlib.pyplot.figure()`. If `None` is passed, default to (8, 6).
+    :param color_mapping: (`List[str], optional`) list of colors to use for each simulator in the grid. Defaults to None.
+    
+    :return: matplotlib Figure and simulator RMSE scores
+    :rtype: `Tuple[matplotlib.Figure, Dict]`
+    """
+    return API_VERIFIER.visualize_rmse(job_id=job_id, save_dest=save_dest, fig_dimensions=fig_dimensions, color_mapping=color_mapping)
     

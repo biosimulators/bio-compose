@@ -272,10 +272,28 @@
 <span class="sd">    :param hspace: (`float`) horizontal spacing between subplots. Defaults to 0.25.</span>
 <span class="sd">    :param use_grid: (`bool`) whether to use a grid for each subplot. Defaults to False.</span>
 <span class="sd">    </span>
-<span class="sd">    :rtype: `Tuple[matplotlib.Figure, Dict]` </span>
 <span class="sd">    :return: matplotlib Figure and simulation observables indexed by simulator</span>
+<span class="sd">    :rtype: `Tuple[matplotlib.Figure, Dict]` </span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">return</span> <span class="n">API_VERIFIER</span><span class="o">.</span><span class="n">visualize_observables</span><span class="p">(</span><span class="n">job_id</span><span class="o">=</span><span class="n">job_id</span><span class="p">,</span> <span class="n">save_dest</span><span class="o">=</span><span class="n">save_dest</span><span class="p">,</span> <span class="n">hspace</span><span class="o">=</span><span class="n">hspace</span><span class="p">,</span> <span class="n">use_grid</span><span class="o">=</span><span class="n">use_grid</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="visualize_rmse">
+<a class="viewcode-back" href="../../bio_compose.html#bio_compose.api.visualize_rmse">[docs]</a>
+<span class="k">def</span> <span class="nf">visualize_rmse</span><span class="p">(</span><span class="n">job_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">save_dest</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">fig_dimensions</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">color_mapping</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Visualize the root-mean-squared error between simulator verification outputs as a heatmap.</span>
+
+<span class="sd">    :param job_id: (`str`) verification job id. This value can be easily derived from either of `Verifier`&#39;s `.verify_...` methods.</span>
+<span class="sd">    :param save_dest: `(str`) destination at which to save figure. Defaults to `None`.</span>
+<span class="sd">    :param fig_dimensions: (`Tuple[int, int], optional`) The value to use as the `figsize` parameter for a call to `matplotlib.pyplot.figure()`. If `None` is passed, default to (8, 6).</span>
+<span class="sd">    :param color_mapping: (`List[str], optional`) list of colors to use for each simulator in the grid. Defaults to None.</span>
+<span class="sd">    </span>
+<span class="sd">    :return: matplotlib Figure and simulator RMSE scores</span>
+<span class="sd">    :rtype: `Tuple[matplotlib.Figure, Dict]`</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">API_VERIFIER</span><span class="o">.</span><span class="n">visualize_rmse</span><span class="p">(</span><span class="n">job_id</span><span class="o">=</span><span class="n">job_id</span><span class="p">,</span> <span class="n">save_dest</span><span class="o">=</span><span class="n">save_dest</span><span class="p">,</span> <span class="n">fig_dimensions</span><span class="o">=</span><span class="n">fig_dimensions</span><span class="p">,</span> <span class="n">color_mapping</span><span class="o">=</span><span class="n">color_mapping</span><span class="p">)</span></div>
 
     
 </pre></div>

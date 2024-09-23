@@ -57,6 +57,7 @@
 <li class="toctree-l3"><a class="reference internal" href="#bio_compose.api.run_simulation"><code class="docutils literal notranslate"><span class="pre">run_simulation()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#bio_compose.api.verify"><code class="docutils literal notranslate"><span class="pre">verify()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#bio_compose.api.visualize_observables"><code class="docutils literal notranslate"><span class="pre">visualize_observables()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#bio_compose.api.visualize_rmse"><code class="docutils literal notranslate"><span class="pre">visualize_rmse()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#module-bio_compose.bundles">bio_compose.bundles</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="#bio_compose.bundles.BioBundle"><code class="docutils literal notranslate"><span class="pre">BioBundle</span></code></a></li>
 </ul>
@@ -227,11 +228,33 @@
 <li><p><strong>use_grid</strong> – (<cite>bool</cite>) whether to use a grid for each subplot. Defaults to False.</p></li>
 </ul>
 </dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><cite>Tuple[matplotlib.Figure, Dict]</cite></p>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>matplotlib Figure and simulation observables indexed by simulator</p>
 </dd>
-<dt class="field-odd">Returns<span class="colon">:</span></dt>
-<dd class="field-odd"><p>matplotlib Figure and simulation observables indexed by simulator</p>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><cite>Tuple[matplotlib.Figure, Dict]</cite></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="bio_compose.api.visualize_rmse">
+<span class="sig-prename descclassname"><span class="pre">bio_compose.api.</span></span><span class="sig-name descname"><span class="pre">visualize_rmse</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">job_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">save_dest</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fig_dimensions</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">int</span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">color_mapping</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/bio_compose/api.html#visualize_rmse"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#bio_compose.api.visualize_rmse" title="Link to this definition"></a></dt>
+<dd><p>Visualize the root-mean-squared error between simulator verification outputs as a heatmap.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>job_id</strong> – (<cite>str</cite>) verification job id. This value can be easily derived from either of <cite>Verifier</cite>’s <cite>.verify_…</cite> methods.</p></li>
+<li><p><strong>save_dest</strong> – <cite>(str</cite>) destination at which to save figure. Defaults to <cite>None</cite>.</p></li>
+<li><p><strong>fig_dimensions</strong> – (<cite>Tuple[int, int], optional</cite>) The value to use as the <cite>figsize</cite> parameter for a call to <cite>matplotlib.pyplot.figure()</cite>. If <cite>None</cite> is passed, default to (8, 6).</p></li>
+<li><p><strong>color_mapping</strong> – (<cite>List[str], optional</cite>) list of colors to use for each simulator in the grid. Defaults to None.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>matplotlib Figure and simulator RMSE scores</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><cite>Tuple[matplotlib.Figure, Dict]</cite></p>
 </dd>
 </dl>
 </dd></dl>
