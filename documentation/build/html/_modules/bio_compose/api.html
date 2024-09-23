@@ -161,7 +161,7 @@
     <span class="n">buffer_time</span> <span class="o">=</span> <span class="mi">5</span>
     <span class="n">poll_time</span> <span class="o">=</span> <span class="mi">5</span>
     <span class="n">submission_generator</span> <span class="o">=</span> <span class="n">verifier</span><span class="o">.</span><span class="n">verify_sbml</span> <span class="k">if</span> <span class="n">run_sbml</span> <span class="k">else</span> <span class="n">verifier</span><span class="o">.</span><span class="n">verify_omex</span>
-    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Submitting verification...&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Submitting verification...&quot;</span><span class="p">,</span> <span class="n">end</span><span class="o">=</span><span class="s1">&#39;</span><span class="se">\r</span><span class="s1">&#39;</span><span class="p">)</span>
     <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="n">buffer_time</span><span class="p">)</span>
 
     <span class="c1"># fetch params</span>
@@ -259,6 +259,25 @@
                 <span class="n">i</span> <span class="o">+=</span> <span class="mi">1</span>
     <span class="k">return</span> <span class="n">SimulationResult</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">output</span><span class="p">)</span></div>
 
+
+
+<div class="viewcode-block" id="visualize_observables">
+<a class="viewcode-back" href="../../bio_compose.html#bio_compose.api.visualize_observables">[docs]</a>
+<span class="k">def</span> <span class="nf">visualize_observables</span><span class="p">(</span><span class="n">job_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">save_dest</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">hspace</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.25</span><span class="p">,</span> <span class="n">use_grid</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Visualize simulation output (observables) data, not comparison data, with subplots for each species.</span>
+
+<span class="sd">    :param job_id: (`str`) job id for the simulation observable output you wish to visualize.</span>
+<span class="sd">    :param save_dest: (`str`) path to save the figure. If this value is passed, the figure will be saved in pdf format to this location.</span>
+<span class="sd">    :param hspace: (`float`) horizontal spacing between subplots. Defaults to 0.25.</span>
+<span class="sd">    :param use_grid: (`bool`) whether to use a grid for each subplot. Defaults to False.</span>
+<span class="sd">    </span>
+<span class="sd">    :rtype: `Tuple[matplotlib.Figure, Dict]` </span>
+<span class="sd">    :return: matplotlib Figure and simulation observables indexed by simulator</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">API_VERIFIER</span><span class="o">.</span><span class="n">visualize_observables</span><span class="p">(</span><span class="n">job_id</span><span class="o">=</span><span class="n">job_id</span><span class="p">,</span> <span class="n">save_dest</span><span class="o">=</span><span class="n">save_dest</span><span class="p">,</span> <span class="n">hspace</span><span class="o">=</span><span class="n">hspace</span><span class="p">,</span> <span class="n">use_grid</span><span class="o">=</span><span class="n">use_grid</span><span class="p">)</span></div>
+
+    
 </pre></div>
 
            </div>

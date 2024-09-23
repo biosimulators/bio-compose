@@ -381,6 +381,14 @@
         <span class="n">observables</span> <span class="o">=</span> <span class="p">[</span><span class="n">key</span> <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">species_data_content</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span> <span class="k">if</span> <span class="n">key</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">excluded_observables</span><span class="p">]</span>
         <span class="n">first_observable</span> <span class="o">=</span> <span class="n">species_data_content</span><span class="p">[</span><span class="n">observables</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span>
         <span class="n">simulators</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">first_observable</span><span class="p">[</span><span class="s1">&#39;output_data&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
+
+        <span class="c1"># post-process to handle any strings (errors)</span>
+        <span class="k">for</span> <span class="n">sim</span> <span class="ow">in</span> <span class="n">simulators</span><span class="p">:</span>
+            <span class="n">data</span> <span class="o">=</span> <span class="n">first_observable</span><span class="p">[</span><span class="s1">&#39;output_data&#39;</span><span class="p">][</span><span class="n">sim</span><span class="p">]</span>
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+                <span class="n">simulators</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">sim</span><span class="p">)</span>
+        
+        <span class="c1"># count post processed sims</span>
         <span class="n">n_simulators</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">simulators</span><span class="p">)</span>
 
         <span class="c1"># create subplots</span>
@@ -396,6 +404,8 @@
             <span class="n">ax</span> <span class="o">=</span> <span class="n">axes</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span>
             <span class="k">for</span> <span class="n">observable</span> <span class="ow">in</span> <span class="n">observables</span><span class="p">:</span>
                 <span class="n">value_data</span> <span class="o">=</span> <span class="n">species_data_content</span><span class="p">[</span><span class="n">observable</span><span class="p">][</span><span class="s1">&#39;output_data&#39;</span><span class="p">][</span><span class="n">simulator</span><span class="p">]</span>
+                <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value_data</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+                    <span class="k">continue</span> 
                 <span class="n">obs</span><span class="p">[</span><span class="n">observable</span><span class="p">][</span><span class="n">simulator</span><span class="p">]</span> <span class="o">=</span> <span class="n">value_data</span>
                 <span class="n">sns</span><span class="o">.</span><span class="n">lineplot</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">value_data</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="n">observable</span><span class="p">)</span>
 

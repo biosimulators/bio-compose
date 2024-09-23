@@ -56,6 +56,7 @@
 <li class="toctree-l3"><a class="reference internal" href="#bio_compose.api.get_output"><code class="docutils literal notranslate"><span class="pre">get_output()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#bio_compose.api.run_simulation"><code class="docutils literal notranslate"><span class="pre">run_simulation()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#bio_compose.api.verify"><code class="docutils literal notranslate"><span class="pre">verify()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#bio_compose.api.visualize_observables"><code class="docutils literal notranslate"><span class="pre">visualize_observables()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#module-bio_compose.bundles">bio_compose.bundles</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="#bio_compose.bundles.BioBundle"><code class="docutils literal notranslate"><span class="pre">BioBundle</span></code></a></li>
 </ul>
@@ -209,6 +210,28 @@
 </dd>
 <dt class="field-even">Return type<span class="colon">:</span></dt>
 <dd class="field-even"><p><a class="reference internal" href="#bio_compose.verifier.VerificationResult" title="bio_compose.verifier.VerificationResult">bio_compose.verifier.VerificationResult</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="bio_compose.api.visualize_observables">
+<span class="sig-prename descclassname"><span class="pre">bio_compose.api.</span></span><span class="sig-name descname"><span class="pre">visualize_observables</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">job_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">save_dest</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">hspace</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0.25</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">use_grid</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/bio_compose/api.html#visualize_observables"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#bio_compose.api.visualize_observables" title="Link to this definition"></a></dt>
+<dd><p>Visualize simulation output (observables) data, not comparison data, with subplots for each species.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>job_id</strong> – (<cite>str</cite>) job id for the simulation observable output you wish to visualize.</p></li>
+<li><p><strong>save_dest</strong> – (<cite>str</cite>) path to save the figure. If this value is passed, the figure will be saved in pdf format to this location.</p></li>
+<li><p><strong>hspace</strong> – (<cite>float</cite>) horizontal spacing between subplots. Defaults to 0.25.</p></li>
+<li><p><strong>use_grid</strong> – (<cite>bool</cite>) whether to use a grid for each subplot. Defaults to False.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><cite>Tuple[matplotlib.Figure, Dict]</cite></p>
+</dd>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>matplotlib Figure and simulation observables indexed by simulator</p>
 </dd>
 </dl>
 </dd></dl>
