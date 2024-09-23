@@ -1,14 +1,14 @@
 [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/drive/1ip_gEiTvesO4tY2nFrOlZnG90z0Yq-uI#scrollTo=Fzaib0pdVccJ)
 ![GitHub CI](https://github.com/biosimulators/bio-compose/actions/workflows/ci.yaml/badge.svg)
 ![GitHub CD](https://github.com/biosimulators/bio-compose/actions/workflows/cd.yaml/badge.svg)
-[![Documentation](https://readthedocs.org/projects/bio-compose/badge/?version=latest)](https://bio-compose.readthedocs.io/en/latest/index.html)
+[![Documentation](https://readthedocs.org/projects/bio-compose/badge/?version=latest)](https://bio-compose.readthedocs.io/en/latest/)
 
 # **BioCompose**: Create, execute, and introspect reproducible composite simulations of dynamic biological systems.
 #### __This service utilizes separate containers for REST API management, job processing, and datastorage with MongoDB, ensuring scalable and robust performance.__
 
 ## **Documentation**: 
 
-The complete `BioCompose` documentation can be found here: https://bio-compose.readthedocs.io/en/latest/index.html
+The complete `BioCompose` documentation can be found here: https://bio-compose.readthedocs.io/en/latest/
 
 ## **Getting Started**:
 
