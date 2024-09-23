@@ -1,7 +1,7 @@
 # This project configuration should relate only to the high level notebook api (as primary deps).
 [tool.poetry]
 name = "bio-compose"
-version = "0.6.8"
+version = "0.6.9"
 description = "Create, execute, and introspect reproducible composite simulations of dynamic biological systems."
 authors = ["Alex Patrie <alexanderpatrie@gmail.com>"]
 readme = "README.md"

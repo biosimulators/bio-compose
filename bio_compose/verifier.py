@@ -465,15 +465,32 @@ class VerificationResult(dict):
         self.job_id = self.data.get('content').get('job_id')
         self.verifier = Verifier()
 
-    def get_rmse(self, *args, **kwargs):
-        """Visualize root-mean-square error scoring for this verification result data.
-        :param kwargs: (`Union[Tuple[int, int], List[str], str]`) kwargs for `Verifier.visualize_rmse`: fig_dimensions, color_mapping, save_dest.
-        
+    def get_rmse(self, save_dest: str = None, fig_dimensions: tuple[int, int] = None, color_mapping: list[str] = None):
         """
-        return self.verifier.visualize_rmse(self.job_id, **kwargs)
+        Visualize the root-mean-squared error between simulator verification outputs as a heatmap.
 
-    def get_output_observables(self, **kwargs):
-        return self.verifier.visualize_observables(job_id=self.job_id, **kwargs)
+        :param save_dest: `(str`) destination at which to save figure. Defaults to `None`.
+        :param fig_dimensions: (`Tuple[int, int], optional`) The value to use as the `figsize` parameter for a call to `matplotlib.pyplot.figure()`. If `None` is passed, default to (8, 6).
+        :param color_mapping: (`List[str], optional`) list of colors to use for each simulator in the grid. Defaults to None.
+        
+
+        :return: matplotlib Figure and simulator RMSE scores
+        :rtype: `Tuple[matplotlib.Figure, Dict]`
+        """
+        return self.verifier.visualize_rmse(job_id=self.job_id, save_dest=save_dest, fig_dimensions=fig_dimensions, color_mapping=color_mapping)
+
+    def get_output_observables(self, save_dest: str = None, hspace: float = 0.25, use_grid: bool = False):
+        """
+        Visualize simulation output (observables) data, not comparison data, with subplots for each species.
+
+        :param save_dest: (`str`) path to save the figure. If this value is passed, the figure will be saved in pdf format to this location.
+        :param hspace: (`float`) horizontal spacing between subplots. Defaults to 0.25.
+        :param use_grid: (`bool`) whether to use a grid for each subplot. Defaults to False.
+        
+        :return: matplotlib Figure and simulation observables indexed by simulator
+        :rtype: `Tuple[matplotlib.Figure, Dict]` 
+        """
+        return self.verifier.visualize_observables(job_id=self.job_id, save_dest=save_dest, hspace=hspace, use_grid=use_grid)
 
 
 # tests

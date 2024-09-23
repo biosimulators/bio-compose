@@ -199,4 +199,5 @@ def visualize_rmse(job_id: str, save_dest: str = None, fig_dimensions: tuple[int
     :rtype: `Tuple[matplotlib.Figure, Dict]`
     """
     return API_VERIFIER.visualize_rmse(job_id=job_id, save_dest=save_dest, fig_dimensions=fig_dimensions, color_mapping=color_mapping)
-    
+
+
