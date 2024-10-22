@@ -18,5 +18,6 @@ NOTES
 scratch.ipynb
 demos/.ipynb_checkpoints/
 .ipynb_checkpoints/
-NOTES
+.DS_Store
 .pytest_cache
+test_archive.ipynb

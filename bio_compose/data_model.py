@@ -19,6 +19,20 @@ class RequestError:
 
     def to_dict(self):
         return asdict(self)
+
+
+class DynamicJson:
+    def __init__(self, data: Dict[Any, Any]):
+        """
+        Dynamically create a JSON-like object from a dictionary/mapping of any shape.
+        """
+        for key, value in data.items():
+            if isinstance(value, dict):
+                value = DynamicData(value)
+            setattr(self, key, value)
+
+    def __repr__(self):
+        return f"{self.__dict__}"
     
 
 class Api(object):

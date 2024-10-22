@@ -298,7 +298,7 @@ class Verifier(Api):
         n_simulators = len(simulators)
 
         # create subplots
-        fig, axes = plt.subplots(nrows=n_simulators, ncols=1, figsize=(15, 5 * n_simulators))
+        fig, axes = plt.subplots(nrows=n_simulators, ncols=1, figsize=(4, 3 * n_simulators))
 
         # if only one simulator, `axes` won't be an array, so make it an array
         if n_simulators == 1:
@@ -465,7 +465,7 @@ class VerificationResult(dict):
         self.job_id = self.data.get('content').get('job_id')
         self.verifier = Verifier()
 
-    def get_rmse(self, save_dest: str = None, fig_dimensions: tuple[int, int] = None, color_mapping: list[str] = None):
+    def get_comparison(self, save_dest: str = None, fig_dimensions: tuple[int, int] = None, color_mapping: list[str] = None):
         """
         Visualize the root-mean-squared error between simulator verification outputs as a heatmap.
 
