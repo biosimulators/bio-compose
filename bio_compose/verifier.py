@@ -367,14 +367,14 @@ class Verifier(Api):
             color_mapping = ['#1E3A8A', '#D97706']
 
         # set up figure
-        dimensions = fig_dimensions or (8, 6)
+        dimensions = fig_dimensions or (4, 3)
         fig = plt.figure(figsize=dimensions)
         sns.heatmap(
             data=rmse_data,
             annot=True,
             xticklabels=simulators,
             yticklabels=simulators,
-            cmap=color_mapping,
+            # cmap=color_mapping,
             linewidths=1
         )
         # set up plot annotations
