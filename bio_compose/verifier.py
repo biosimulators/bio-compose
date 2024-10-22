@@ -364,7 +364,7 @@ class Verifier(Api):
                 rmse_data.append(score_vals)
 
         if color_mapping is None:
-            color_mapping = ['#1E3A8A', '#D97706']
+            color_mapping = "Blues"
 
         # set up figure
         dimensions = fig_dimensions or (4, 3)
@@ -374,7 +374,9 @@ class Verifier(Api):
             annot=True,
             xticklabels=simulators,
             yticklabels=simulators,
-            # cmap=color_mapping,
+            cmap=color_mapping,
+            vmin=-0,
+            vmax=1,
             linewidths=1
         )
         # set up plot annotations
