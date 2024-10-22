@@ -55,7 +55,7 @@ jobs:
     - name: Publish new version on PyPI
       run: |
         poetry build
-        poetry publish --username __token__ --password ${{ secrets.ADMIN_PYPI_TOKEN }}
+        poetry publish --username __token__ --password ${{ secrets.PYPI_TOKEN }}
 
     - name: Notify Deployment
       run: echo "Version ${{ env.VERSION }} as been published on PyPI with release ${{ github.ref }}"
