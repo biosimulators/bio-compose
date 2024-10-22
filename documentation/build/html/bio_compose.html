@@ -68,6 +68,7 @@
 </li>
 <li class="toctree-l3"><a class="reference internal" href="#module-bio_compose.data_model">bio_compose.data_model</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="#bio_compose.data_model.Api"><code class="docutils literal notranslate"><span class="pre">Api</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#bio_compose.data_model.DynamicJson"><code class="docutils literal notranslate"><span class="pre">DynamicJson</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#bio_compose.data_model.RequestError"><code class="docutils literal notranslate"><span class="pre">RequestError</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#bio_compose.data_model.fetch_job"><code class="docutils literal notranslate"><span class="pre">fetch_job()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#bio_compose.data_model.save_plot"><code class="docutils literal notranslate"><span class="pre">save_plot()</span></code></a></li>
@@ -413,6 +414,13 @@ treat instances of this class as quasi-singletons, although not necessary for fu
 </dd></dl>
 
 <dl class="py class">
+<dt class="sig sig-object py" id="bio_compose.data_model.DynamicJson">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">bio_compose.data_model.</span></span><span class="sig-name descname"><span class="pre">DynamicJson</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">Any</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/bio_compose/data_model.html#DynamicJson"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#bio_compose.data_model.DynamicJson" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Dynamically create a JSON-like object from a dictionary/mapping of any shape.</p>
+</dd></dl>
+
+<dl class="py class">
 <dt class="sig sig-object py" id="bio_compose.data_model.RequestError">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">bio_compose.data_model.</span></span><span class="sig-name descname"><span class="pre">RequestError</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">error</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/bio_compose/data_model.html#RequestError"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#bio_compose.data_model.RequestError" title="Link to this definition"></a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
@@ -600,6 +608,27 @@ save_dest: <cite>str</cite>: path to save the figure. If this value is passed, t
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">bio_compose.verifier.</span></span><span class="sig-name descname"><span class="pre">VerificationResult</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/bio_compose/verifier.html#VerificationResult"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#bio_compose.verifier.VerificationResult" title="Link to this definition"></a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></p>
 <dl class="py method">
+<dt class="sig sig-object py" id="bio_compose.verifier.VerificationResult.get_comparison">
+<span class="sig-name descname"><span class="pre">get_comparison</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">save_dest</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fig_dimensions</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">int</span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">color_mapping</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/bio_compose/verifier.html#VerificationResult.get_comparison"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#bio_compose.verifier.VerificationResult.get_comparison" title="Link to this definition"></a></dt>
+<dd><p>Visualize the root-mean-squared error between simulator verification outputs as a heatmap.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>save_dest</strong> – <cite>(str</cite>) destination at which to save figure. Defaults to <cite>None</cite>.</p></li>
+<li><p><strong>fig_dimensions</strong> – (<cite>Tuple[int, int], optional</cite>) The value to use as the <cite>figsize</cite> parameter for a call to <cite>matplotlib.pyplot.figure()</cite>. If <cite>None</cite> is passed, default to (8, 6).</p></li>
+<li><p><strong>color_mapping</strong> – (<cite>List[str], optional</cite>) list of colors to use for each simulator in the grid. Defaults to None.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>matplotlib Figure and simulator RMSE scores</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><cite>Tuple[matplotlib.Figure, Dict]</cite></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
 <dt class="sig sig-object py" id="bio_compose.verifier.VerificationResult.get_output_observables">
 <span class="sig-name descname"><span class="pre">get_output_observables</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">save_dest</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">hspace</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0.25</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">use_grid</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/bio_compose/verifier.html#VerificationResult.get_output_observables"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#bio_compose.verifier.VerificationResult.get_output_observables" title="Link to this definition"></a></dt>
 <dd><p>Visualize simulation output (observables) data, not comparison data, with subplots for each species.</p>
@@ -613,27 +642,6 @@ save_dest: <cite>str</cite>: path to save the figure. If this value is passed, t
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>matplotlib Figure and simulation observables indexed by simulator</p>
-</dd>
-<dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><cite>Tuple[matplotlib.Figure, Dict]</cite></p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="bio_compose.verifier.VerificationResult.get_rmse">
-<span class="sig-name descname"><span class="pre">get_rmse</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">save_dest</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fig_dimensions</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">int</span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">color_mapping</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/bio_compose/verifier.html#VerificationResult.get_rmse"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#bio_compose.verifier.VerificationResult.get_rmse" title="Link to this definition"></a></dt>
-<dd><p>Visualize the root-mean-squared error between simulator verification outputs as a heatmap.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>save_dest</strong> – <cite>(str</cite>) destination at which to save figure. Defaults to <cite>None</cite>.</p></li>
-<li><p><strong>fig_dimensions</strong> – (<cite>Tuple[int, int], optional</cite>) The value to use as the <cite>figsize</cite> parameter for a call to <cite>matplotlib.pyplot.figure()</cite>. If <cite>None</cite> is passed, default to (8, 6).</p></li>
-<li><p><strong>color_mapping</strong> – (<cite>List[str], optional</cite>) list of colors to use for each simulator in the grid. Defaults to None.</p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>matplotlib Figure and simulator RMSE scores</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p><cite>Tuple[matplotlib.Figure, Dict]</cite></p>
