@@ -66,6 +66,7 @@ jobs:
       run: |
         poetry build
         sudo rm -rf bio_compose/__pycache__
+        sudo rm -rf tests/__pycache__
         poetry publish --username __token__ --password ${{ secrets.ADMIN_PYPI_TOKEN }}
 
     - name: Notify Deployment
