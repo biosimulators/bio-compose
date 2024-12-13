@@ -14,6 +14,11 @@ DEFAULT_SBML_SIMULATORS = ['amici', 'copasi', 'tellurium']
 DEFAULT_SBML_TEST_FILE = './fixtures/sbml-core/BIOMD0000000001_url.xml'
 DEFAULT_OMEX_TEST_FILE = './fixtures/sbml-core/BIOMD0000000001.omex'
 
+BIOMODELS_TO_TEST = [
+    'BIOMD0000000013',
+    'BIOMD0000000019'
+]
+
 test_runner = SimulationRunner()
 test_verifier = Verifier()
 test_composer = Composer()
@@ -55,10 +60,11 @@ def test_run_composition():
     pass
 
 
-def test_get_biomodel():
-    biomd_id = 'BIOMD0000000044'
+def test_get_biomodel(multiple: bool = False):
+    model_query = 'BIOMD0000000044' if not multiple else BIOMODELS_TO_TEST
     dest = './tests/outputs'
-    fp = get_biomodel_archive(biomd_id, dest)
+    fp = get_biomodel_archive(model_query, dest)
     print(fp)
+
 
 
