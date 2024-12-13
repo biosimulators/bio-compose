@@ -1,4 +1,7 @@
+import os
+
 from bio_compose import get_compatible_verification_simulators
+from bio_compose.api import get_biomodel
 from bio_compose.verifier import Verifier
 from bio_compose.runner import SimulationRunner
 from bio_compose.composer import Composer
@@ -49,5 +52,14 @@ def test_verify_omex():
 
 
 def test_run_composition():
-    pass 
+    pass
+
+
+def test_get_biomodel():
+    biomd_id = 'BIOMD0000000044'
+    dest = '/Users/alexanderpatrie/Desktop/repos/bio-compose/tests/outputs'
+    fp = get_biomodel(biomd_id, dest)
+    # print(f'Biomodel {biomd_id} exists at {fp}: {os.path.exists(fp)}')
+    print(fp)
+
 

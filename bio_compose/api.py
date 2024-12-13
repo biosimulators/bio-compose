@@ -1,7 +1,10 @@
 import os
 import time
+import warnings
 from typing import *
 from functools import wraps
+
+import requests
 
 from bio_compose.processing_tools import get_job_signature
 from bio_compose.runner import SimulationRunner, SimulationResult
@@ -199,5 +202,41 @@ def visualize_rmse(job_id: str, save_dest: str = None, fig_dimensions: tuple[int
     :rtype: `Tuple[matplotlib.Figure, Dict]`
     """
     return API_VERIFIER.visualize_rmse(job_id=job_id, save_dest=save_dest, fig_dimensions=fig_dimensions, color_mapping=color_mapping)
+
+
+def get_biomodel(model_id: str, dest_dir: Optional[str] = None) -> str:
+    """
+    Visualize the root-mean-squared error between simulator verification outputs as a heatmap.
+
+    :param model_id: (`Union[str, List[str`]) A single biomodel id passed as a string, or a list of biomodel ids as strings.
+    :param dest_dir: (`str`) destination directory at which to save downloaded file. If `None` is passed, downloads to cwd. Defaults to `None`.
+
+    :return: Filepath of the    downloaded biomodel file
+    :rtype: `str`
+    """
+    url = "https://www.ebi.ac.uk/biomodels/search/download"
+    params = {"models": model_id}
+
+    try:
+        response = requests.get(url, params=params, stream=True)
+
+        # download the file if success, otherwise notify.
+        if response.status_code == 200:
+            file_name = f"{model_id}.omex"
+            dest = dest_dir or os.getcwd()
+            fp = os.path.join(dest, file_name)
+            with open(fp, "wb") as file:
+                for chunk in response.iter_content(chunk_size=8192):
+                    file.write(chunk)
+            warnings.warn(f"File downloaded successfully and saved as {fp}")
+            return fp
+        elif response.status_code == 400:
+            warnings.warn("Error 400: File Not Found")
+        elif response.status_code == 404:
+            warnings.warn("Error 404: Invalid Model ID Supplied")
+        else:
+            warnings.warn(f"Unexpected error: {response.status_code} - {response.text}")
+    except requests.RequestException as e:
+        return f"An error occurred: {e}"
 
 
