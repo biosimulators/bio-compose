@@ -57,9 +57,8 @@ def test_run_composition():
 
 def test_get_biomodel():
     biomd_id = 'BIOMD0000000044'
-    dest = './outputs'
+    dest = './tests/outputs'
     fp = get_biomodel_archive(biomd_id, dest)
-    # print(f'Biomodel {biomd_id} exists at {fp}: {os.path.exists(fp)}')
     print(fp)
 
 
