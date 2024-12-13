@@ -54,6 +54,7 @@ jobs:
 
     - name: Publish new version on PyPI
       run: |
+        sudo rm -rf bio_compose/__pycache__
         poetry build
         poetry publish --username __token__ --password ${{ secrets.ADMIN_PYPI_TOKEN }}
 
