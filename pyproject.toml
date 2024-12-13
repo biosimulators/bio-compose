@@ -22,12 +22,12 @@ antimony = "*"
 toml = "^0.10.2"
 process-bigraph = "^0.0.21"
 requests = "^2.32.3"
-sphinx-rtd-theme = "^3.0.2"
 
 
 [tool.poetry.group.docs.dependencies]
 sphinx = "^8.1.3"
 sphinx-autodoc-typehints = "^2.5.0"
+sphinx-rtd-theme = "^3.0.2"
 
 
 [tool.poetry.group.image.dependencies]
