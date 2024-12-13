@@ -204,25 +204,26 @@ def visualize_rmse(job_id: str, save_dest: str = None, fig_dimensions: tuple[int
     return API_VERIFIER.visualize_rmse(job_id=job_id, save_dest=save_dest, fig_dimensions=fig_dimensions, color_mapping=color_mapping)
 
 
-def get_biomodel_archive(model_id: str, dest_dir: Optional[str] = None) -> str:
+def get_biomodel_archive(model_query: Union[str, List[str]], dest_dir: Optional[str] = None) -> str:
     """
     Download an OMEX archive from the Biomodels REST API, optionally specifying a download destination.
 
-    :param model_id: (`str`) A single biomodel id.
+    :param model_query: (`Union[str, List[str]]`) A single biomodel id as a string or a list of biomodel ids as strings.
     :param dest_dir: (`str`) destination directory at which to save downloaded file. If `None` is passed, downloads to cwd. Defaults to `None`.
 
     :return: Filepath of the downloaded biomodel file
     :rtype: `str`
     """
     url = "https://www.ebi.ac.uk/biomodels/search/download"
-    params = {"models": model_id}
+    query = ",".join(model_query) if isinstance(model_query, list) else model_query
+    params = {"models": query}
 
     try:
         response = requests.get(url, params=params, stream=True)
 
         # download the file if success, otherwise notify.
         if response.status_code == 200:
-            file_name = f"{model_id}.omex"
+            file_name = f"{query.replace(',', '_')}.omex"
             dest = dest_dir or os.getcwd()
             fp = os.path.join(dest, file_name)
             with open(fp, "wb") as file:
