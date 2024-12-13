@@ -204,14 +204,14 @@ def visualize_rmse(job_id: str, save_dest: str = None, fig_dimensions: tuple[int
     return API_VERIFIER.visualize_rmse(job_id=job_id, save_dest=save_dest, fig_dimensions=fig_dimensions, color_mapping=color_mapping)
 
 
-def get_biomodel(model_id: str, dest_dir: Optional[str] = None) -> str:
+def get_biomodel_archive(model_id: str, dest_dir: Optional[str] = None) -> str:
     """
-    Visualize the root-mean-squared error between simulator verification outputs as a heatmap.
+    Download an OMEX archive from the Biomodels REST API, optionally specifying a download destination.
 
     :param model_id: (`str`) A single biomodel id.
     :param dest_dir: (`str`) destination directory at which to save downloaded file. If `None` is passed, downloads to cwd. Defaults to `None`.
 
-    :return: Filepath of the    downloaded biomodel file
+    :return: Filepath of the downloaded biomodel file
     :rtype: `str`
     """
     url = "https://www.ebi.ac.uk/biomodels/search/download"
