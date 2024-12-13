@@ -21,3 +21,4 @@ demos/.ipynb_checkpoints/
 .DS_Store
 .pytest_cache
 test_archive.ipynb
+poetry.lock
