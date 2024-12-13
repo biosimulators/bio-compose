@@ -208,7 +208,7 @@ def get_biomodel(model_id: str, dest_dir: Optional[str] = None) -> str:
     """
     Visualize the root-mean-squared error between simulator verification outputs as a heatmap.
 
-    :param model_id: (`Union[str, List[str`]) A single biomodel id passed as a string, or a list of biomodel ids as strings.
+    :param model_id: (`str`) A single biomodel id.
     :param dest_dir: (`str`) destination directory at which to save downloaded file. If `None` is passed, downloads to cwd. Defaults to `None`.
 
     :return: Filepath of the    downloaded biomodel file
