@@ -228,7 +228,7 @@ def get_biomodel_archive(model_id: str, dest_dir: Optional[str] = None) -> str:
             with open(fp, "wb") as file:
                 for chunk in response.iter_content(chunk_size=8192):
                     file.write(chunk)
-            warnings.warn(f"File downloaded successfully and saved as {fp}")
+            print(f"File downloaded successfully and saved as {fp}")
             return fp
         elif response.status_code == 400:
             warnings.warn("Error 400: File Not Found")
