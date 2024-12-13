@@ -1,7 +1,7 @@
 import os
 
 from bio_compose import get_compatible_verification_simulators
-from bio_compose.api import get_biomodel
+from bio_compose.api import get_biomodel_archive
 from bio_compose.verifier import Verifier
 from bio_compose.runner import SimulationRunner
 from bio_compose.composer import Composer
