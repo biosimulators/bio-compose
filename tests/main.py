@@ -1,12 +1,13 @@
 import os
 
 from bio_compose import get_compatible_verification_simulators
-from bio_compose.api import get_biomodel_archive
+from bio_compose.api import get_biomodel_file, get_biomodel_archive
 from bio_compose.verifier import Verifier
 from bio_compose.runner import SimulationRunner
 from bio_compose.composer import Composer
 
 
+TEST_DEST = './tests/outputs'
 DEFAULT_START = 0
 DEFAULT_DURATION = 10
 DEFAULT_NSTEPS = 100
@@ -60,11 +61,18 @@ def test_run_composition():
     pass
 
 
-def test_get_biomodel(multiple: bool = False):
+def test_get_biomodel_file(multiple: bool = False):
     model_query = 'BIOMD0000000044' if not multiple else BIOMODELS_TO_TEST
-    dest = './tests/outputs'
-    fp = get_biomodel_archive(model_query, dest)
+    fp = get_biomodel_file(model_query, TEST_DEST)
     print(fp)
+
+
+def test_get_biomodel_archives():
+    for model in BIOMODELS_TO_TEST:
+        fp = get_biomodel_archive(model, TEST_DEST)
+        print(f'For {model}: {fp}')
+
+
 
 
 

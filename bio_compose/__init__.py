@@ -4,6 +4,7 @@ import toml
 from bio_compose.api import (
     get_output,
     get_compatible_verification_simulators,
+    get_biomodel_file,
     get_biomodel_archive,
     verify,
     run_simulation,
@@ -25,5 +26,6 @@ __all__ = [
     'verify',
     'run_simulation',
     'visualize_observables',
-    'get_biomodel_archive'
+    'get_biomodel_file',
+    'get_biomodel_archive',
 ]
