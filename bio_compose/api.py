@@ -259,7 +259,7 @@ def get_biomodel_file(model_query: Union[str, List[str]], dest_dir: Optional[str
 
         # download the file if success, otherwise notify.
         if response.status_code == 200:
-            file_name = f"{query}.omex" if isinstance(model_query, str) else "multiple.zip"
+            file_name = f"{query}.xml" if isinstance(model_query, str) else "multiple.zip"
             dest = dest_dir or os.getcwd()
             fp = os.path.join(dest, file_name)
             with open(fp, "wb") as file:
