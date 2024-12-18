@@ -28,3 +28,15 @@ pip install bio-compose
 
 A convienient template notebook for converting the outputs of Smoldyn simulations to Simularium trajectories can be
 [found here.](https://colab.research.google.com/drive/17uMMRq3L3KqRIXnezahM6TtOtJYK8Cu6#scrollTo=6n5Wf58hthFm)
+
+
+### FOR DEVELOPERS:
+Poetry is used as the environment manager. Poetry uses a globally referenced configuration whose cache setup may lead to permission errors when running `poetry install`. In the event that such errors exist, run the following:
+```bash
+poetry config cache-dir ~/poetry-cache
+mkdir -p ~/poetry-cache
+chmod -R u+w ~/poetry-cache
+
+# then install the project:
+poetry install
+```

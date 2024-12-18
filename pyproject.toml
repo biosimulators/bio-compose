@@ -30,8 +30,8 @@ sphinx-autodoc-typehints = "^2.5.0"
 sphinx-rtd-theme = "^3.0.2"
 
 
-[tool.poetry.group.image.dependencies]
-jupyterlab = "^4.3.0"
+[tool.poetry.group.dev.dependencies]
+jupyterlab = "^4.3.4"
 
 
 [tool.pytest.ini_options]

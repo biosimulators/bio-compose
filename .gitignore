@@ -22,3 +22,4 @@ demos/.ipynb_checkpoints/
 .pytest_cache
 test_archive.ipynb
 poetry.lock
+.venv
