@@ -30,7 +30,8 @@ sphinx-autodoc-typehints = "^2.5.0"
 sphinx-rtd-theme = "^3.0.2"
 
 
-[tool.poetry.group.dev.dependencies]
+[tool.poetry.group.notebook.dependencies]
+ipykernel = "^6.29.5"
 jupyterlab = "^4.3.4"
 
 

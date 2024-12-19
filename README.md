@@ -11,12 +11,7 @@ The complete `BioCompose` documentation can be found here: https://bio-compose.r
 
 ## **Getting Started**:
 
-### _HIGH-LEVEL `bio_compose` API:_
-
-The primary method of user-facing interaction for this service is done through the use of a high-level "notebook" api called `bio_check`. 
-A convenient notebook demonstrating the functionality of this service is hosted on Google Colab and can be accessed by clicking the above "Open In Colab" badge.
-
-Installation of this tooling can be performed using PyPI as such:
+We recommend using poetry to install this tooling. Installation of this tooling can be performed using PyPI as such:
 
 ```bash
 pip install bio-compose
@@ -24,14 +19,8 @@ pip install bio-compose
 
 #### Alternatively, **the REST API can be accessed via Swagger UI here: [https://biochecknet.biosimulations.org/docs](https://biochecknet.biosimulations.org/docs)**
 
-## Smoldyn to Simularium conversion:
-
-A convienient template notebook for converting the outputs of Smoldyn simulations to Simularium trajectories can be
-[found here.](https://colab.research.google.com/drive/17uMMRq3L3KqRIXnezahM6TtOtJYK8Cu6#scrollTo=6n5Wf58hthFm)
-
-
-### FOR DEVELOPERS:
-Poetry is used as the environment manager. Poetry uses a globally referenced configuration whose cache setup may lead to permission errors when running `poetry install`. In the event that such errors exist, run the following:
+### **_IMPORTANT NOTES_**:
+- Poetry is used as the environment manager. Poetry uses a globally referenced configuration whose cache setup may lead to permission errors when running `poetry install`. In the event that such errors exist, run the following:
 ```bash
 poetry config cache-dir ~/poetry-cache
 mkdir -p ~/poetry-cache
@@ -40,3 +29,12 @@ chmod -R u+w ~/poetry-cache
 # then install the project:
 poetry install
 ```
+- If you are using the jupyter notebooks found within `/tests`, you must link the environment (in this case `poetry`) to the notebook's kernel. Take the following steps to ensure such linking occurs:
+```bash
+# in the case of running (poetry config virtualenvs.in-project true), the env name will be .venv
+poetry run python -m ipykernel install --user --name=$ENV_NAME --display-name "$ENV_NAME"
+```
+
+### Smoldyn to Simularium conversion:
+A convenient template notebook for converting the outputs of Smoldyn simulations to Simularium trajectories can be
+[found here.](https://colab.research.google.com/drive/17uMMRq3L3KqRIXnezahM6TtOtJYK8Cu6#scrollTo=6n5Wf58hthFm)
