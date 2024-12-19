@@ -77,6 +77,7 @@
 <span></span><span class="kn">import</span> <span class="nn">os</span>
 <span class="kn">import</span> <span class="nn">time</span>
 <span class="kn">import</span> <span class="nn">warnings</span>
+<span class="kn">import</span> <span class="nn">zipfile</span>
 <span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="o">*</span>
 <span class="kn">from</span> <span class="nn">functools</span> <span class="kn">import</span> <span class="n">wraps</span>
 
@@ -87,8 +88,27 @@
 <span class="kn">from</span> <span class="nn">bio_compose.verifier</span> <span class="kn">import</span> <span class="n">Verifier</span><span class="p">,</span> <span class="n">VerificationResult</span>
 
 
+<span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="s1">&#39;DEFAULT_SBML_SIMULATORS&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;DEFAULT_N_STEPS&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;DEFAULT_START_TIME&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;DEFAULT_STOP_TIME&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;get_biomodel_file&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;get_biomodel_archive&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;get_output&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;get_compatible_verification_simulators&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;verify&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;run_simulation&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;run_batch_verification&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;visualize_observables&#39;</span>
+<span class="p">]</span>
+
 <span class="n">API_VERIFIER</span> <span class="o">=</span> <span class="n">Verifier</span><span class="p">()</span>
 <span class="n">API_RUNNER</span> <span class="o">=</span> <span class="n">SimulationRunner</span><span class="p">()</span>
+<span class="n">DEFAULT_SBML_SIMULATORS</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;amici&#39;</span><span class="p">,</span> <span class="s1">&#39;copasi&#39;</span><span class="p">,</span> <span class="s1">&#39;pysces&#39;</span><span class="p">,</span> <span class="s1">&#39;tellurium&#39;</span><span class="p">]</span>
+<span class="n">DEFAULT_START_TIME</span> <span class="o">=</span> <span class="mi">0</span>
+<span class="n">DEFAULT_STOP_TIME</span> <span class="o">=</span> <span class="mi">10</span>
+<span class="n">DEFAULT_N_STEPS</span> <span class="o">=</span> <span class="mi">100</span>
 
 
 <div class="viewcode-block" id="get_output">
@@ -280,8 +300,6 @@
 
 
 
-<div class="viewcode-block" id="visualize_rmse">
-<a class="viewcode-back" href="../../bio_compose.html#bio_compose.api.visualize_rmse">[docs]</a>
 <span class="k">def</span> <span class="nf">visualize_rmse</span><span class="p">(</span><span class="n">job_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">save_dest</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">fig_dimensions</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">color_mapping</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Visualize the root-mean-squared error between simulator verification outputs as a heatmap.</span>
@@ -294,8 +312,7 @@
 <span class="sd">    :return: matplotlib Figure and simulator RMSE scores</span>
 <span class="sd">    :rtype: `Tuple[matplotlib.Figure, Dict]`</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">return</span> <span class="n">API_VERIFIER</span><span class="o">.</span><span class="n">visualize_rmse</span><span class="p">(</span><span class="n">job_id</span><span class="o">=</span><span class="n">job_id</span><span class="p">,</span> <span class="n">save_dest</span><span class="o">=</span><span class="n">save_dest</span><span class="p">,</span> <span class="n">fig_dimensions</span><span class="o">=</span><span class="n">fig_dimensions</span><span class="p">,</span> <span class="n">color_mapping</span><span class="o">=</span><span class="n">color_mapping</span><span class="p">)</span></div>
-
+    <span class="k">return</span> <span class="n">API_VERIFIER</span><span class="o">.</span><span class="n">visualize_rmse</span><span class="p">(</span><span class="n">job_id</span><span class="o">=</span><span class="n">job_id</span><span class="p">,</span> <span class="n">save_dest</span><span class="o">=</span><span class="n">save_dest</span><span class="p">,</span> <span class="n">fig_dimensions</span><span class="o">=</span><span class="n">fig_dimensions</span><span class="p">,</span> <span class="n">color_mapping</span><span class="o">=</span><span class="n">color_mapping</span><span class="p">)</span>
 
 
 <div class="viewcode-block" id="get_biomodel_archive">
@@ -346,26 +363,29 @@
 <span class="sd">    :param model_query: (`Union[str, List[str]]`) A single biomodel id as a string or a list of biomodel ids as strings.</span>
 <span class="sd">    :param dest_dir: (`str`) destination directory at which to save downloaded file. If `None` is passed, downloads to cwd. Defaults to `None`.</span>
 
-<span class="sd">    :return: Filepath of the downloaded biomodel file</span>
+<span class="sd">    :return: Filepath of the downloaded biomodel file as a .zip file.</span>
 <span class="sd">    :rtype: `str`</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">url</span> <span class="o">=</span> <span class="s2">&quot;https://www.ebi.ac.uk/biomodels/search/download&quot;</span>
     <span class="n">query</span> <span class="o">=</span> <span class="s2">&quot;,&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">model_query</span><span class="p">)</span> <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">model_query</span><span class="p">,</span> <span class="nb">list</span><span class="p">)</span> <span class="k">else</span> <span class="n">model_query</span>
     <span class="n">params</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;models&quot;</span><span class="p">:</span> <span class="n">query</span><span class="p">}</span>
 
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">dest_dir</span><span class="p">):</span>
+        <span class="n">os</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="n">dest_dir</span><span class="p">)</span>
+
     <span class="k">try</span><span class="p">:</span>
         <span class="n">response</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">params</span><span class="o">=</span><span class="n">params</span><span class="p">,</span> <span class="n">stream</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-
-        <span class="c1"># download the file if success, otherwise notify.</span>
         <span class="k">if</span> <span class="n">response</span><span class="o">.</span><span class="n">status_code</span> <span class="o">==</span> <span class="mi">200</span><span class="p">:</span>
-            <span class="n">file_name</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">query</span><span class="si">}</span><span class="s2">.omex&quot;</span> <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">model_query</span><span class="p">,</span> <span class="nb">str</span><span class="p">)</span> <span class="k">else</span> <span class="s2">&quot;multiple.zip&quot;</span>
+            <span class="n">file_name</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">query</span><span class="si">}</span><span class="s2">.zip&quot;</span> <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">model_query</span><span class="p">,</span> <span class="nb">str</span><span class="p">)</span> <span class="k">else</span> <span class="s2">&quot;multiple.zip&quot;</span>
             <span class="n">dest</span> <span class="o">=</span> <span class="n">dest_dir</span> <span class="ow">or</span> <span class="n">os</span><span class="o">.</span><span class="n">getcwd</span><span class="p">()</span>
-            <span class="n">fp</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">dest</span><span class="p">,</span> <span class="n">file_name</span><span class="p">)</span>
-            <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">fp</span><span class="p">,</span> <span class="s2">&quot;wb&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">file</span><span class="p">:</span>
+            <span class="n">zip_fp</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">dest</span><span class="p">,</span> <span class="n">file_name</span><span class="p">)</span>
+            <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">zip_fp</span><span class="p">,</span> <span class="s2">&quot;wb&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">file</span><span class="p">:</span>
                 <span class="k">for</span> <span class="n">chunk</span> <span class="ow">in</span> <span class="n">response</span><span class="o">.</span><span class="n">iter_content</span><span class="p">(</span><span class="n">chunk_size</span><span class="o">=</span><span class="mi">8192</span><span class="p">):</span>
                     <span class="n">file</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">chunk</span><span class="p">)</span>
-            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;File downloaded successfully and saved as </span><span class="si">{</span><span class="n">fp</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-            <span class="k">return</span> <span class="n">fp</span>
+            <span class="n">sbml_fp</span> <span class="o">=</span> <span class="n">extract_sbml_from_zip</span><span class="p">(</span><span class="n">zip_fp</span><span class="p">,</span> <span class="n">dest_dir</span><span class="p">)</span>
+            <span class="n">os</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">zip_fp</span><span class="p">)</span>
+
+            <span class="k">return</span> <span class="n">sbml_fp</span>
         <span class="k">elif</span> <span class="n">response</span><span class="o">.</span><span class="n">status_code</span> <span class="o">==</span> <span class="mi">400</span><span class="p">:</span>
             <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="s2">&quot;Error 400: File Not Found&quot;</span><span class="p">)</span>
         <span class="k">elif</span> <span class="n">response</span><span class="o">.</span><span class="n">status_code</span> <span class="o">==</span> <span class="mi">404</span><span class="p">:</span>
@@ -376,6 +396,69 @@
         <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;An error occurred: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span></div>
 
 
+
+<span class="k">def</span> <span class="nf">extract_sbml_from_zip</span><span class="p">(</span><span class="n">zip_path</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">output_dir</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Extract a single XML(SBML) file from a zip archive retrieved from BioModels to a specified directory.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">    :param zip_path: (`str`) Path to the zip file.</span>
+<span class="sd">    :param output_dir: (`str`) Directory where the extracted file will be saved.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="n">output_dir</span><span class="p">,</span> <span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+    <span class="k">with</span> <span class="n">zipfile</span><span class="o">.</span><span class="n">ZipFile</span><span class="p">(</span><span class="n">zip_path</span><span class="p">,</span> <span class="s1">&#39;r&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">zip_ref</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">file_name</span> <span class="ow">in</span> <span class="n">zip_ref</span><span class="o">.</span><span class="n">namelist</span><span class="p">():</span>
+            <span class="k">if</span> <span class="n">file_name</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s1">&#39;.xml&#39;</span><span class="p">):</span>
+                <span class="n">zip_ref</span><span class="o">.</span><span class="n">extract</span><span class="p">(</span><span class="n">file_name</span><span class="p">,</span> <span class="n">output_dir</span><span class="p">)</span>
+                <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Extracted </span><span class="si">{</span><span class="n">file_name</span><span class="si">}</span><span class="s2"> to </span><span class="si">{</span><span class="n">output_dir</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+                <span class="k">break</span>
+            <span class="k">return</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">output_dir</span><span class="p">,</span> <span class="n">file_name</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;No XML file found in the zip archive.&quot;</span><span class="p">)</span>
+
+
+<span class="k">def</span> <span class="nf">run_batch_sbml_verification</span><span class="p">(</span><span class="n">model_files</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span> <span class="n">start</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">stop</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">steps</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">VerificationResult</span><span class="p">]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Run several SBML verifications as a batch job.</span>
+
+<span class="sd">    :param model_files: (`list[str]`) A list of biomodel SBML files to verify.</span>
+<span class="sd">    :param start: (`int`) Simulation start time.</span>
+<span class="sd">    :param stop: (`int`) Simulation stop time.</span>
+<span class="sd">    :param steps: (`int`) Number of simulation steps to record.</span>
+
+<span class="sd">    :return: Verification results indexed by verification Job ID.</span>
+<span class="sd">    :rtype: `dict`</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">results</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="k">for</span> <span class="n">model_file</span> <span class="ow">in</span> <span class="n">model_files</span><span class="p">:</span>
+        <span class="n">verification</span> <span class="o">=</span> <span class="n">verify</span><span class="p">(</span><span class="n">model_file</span><span class="p">,</span> <span class="n">start</span><span class="p">,</span> <span class="n">stop</span><span class="p">,</span> <span class="n">steps</span><span class="p">)</span>
+        <span class="n">results</span><span class="p">[</span><span class="n">verification</span><span class="o">.</span><span class="n">job_id</span><span class="p">]</span> <span class="o">=</span> <span class="n">verification</span>
+
+    <span class="k">return</span> <span class="n">results</span>
+
+
+<div class="viewcode-block" id="run_batch_verification">
+<a class="viewcode-back" href="../../bio_compose.html#bio_compose.api.run_batch_verification">[docs]</a>
+<span class="k">def</span> <span class="nf">run_batch_verification</span><span class="p">(</span><span class="n">model_files</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span> <span class="o">*</span><span class="n">args</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">VerificationResult</span><span class="p">]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Run a batch of verifications</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">    :param model_files: (`list[str]`) A list of biomodel SBML files to verify.</span>
+
+<span class="sd">    Positional arguments:</span>
+<span class="sd">    :param args: (`list | tuple`) Positional arguments to pass to `run_batch_verification`: if sbml verifications, start, stop, steps.</span>
+
+<span class="sd">    :return: Verification results indexed by verification Job ID.</span>
+<span class="sd">    :rtype: `dict`</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">results</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="k">for</span> <span class="n">model_file</span> <span class="ow">in</span> <span class="n">model_files</span><span class="p">:</span>
+        <span class="n">verification</span> <span class="o">=</span> <span class="n">verify</span><span class="p">(</span><span class="n">model_file</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">)</span>
+        <span class="n">results</span><span class="p">[</span><span class="n">verification</span><span class="o">.</span><span class="n">job_id</span><span class="p">]</span> <span class="o">=</span> <span class="n">verification</span>
+
+    <span class="k">return</span> <span class="n">results</span></div>
 
 </pre></div>
 

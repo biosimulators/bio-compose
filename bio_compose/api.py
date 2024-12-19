@@ -1,6 +1,7 @@
 import os
 import time
 import warnings
+import zipfile
 from typing import *
 from functools import wraps
 
@@ -11,8 +12,27 @@ from bio_compose.runner import SimulationRunner, SimulationResult
 from bio_compose.verifier import Verifier, VerificationResult
 
 
+__all__ = [
+    'DEFAULT_SBML_SIMULATORS',
+    'DEFAULT_N_STEPS',
+    'DEFAULT_START_TIME',
+    'DEFAULT_STOP_TIME',
+    'get_biomodel_file',
+    'get_biomodel_archive',
+    'get_output',
+    'get_compatible_verification_simulators',
+    'verify',
+    'run_simulation',
+    'run_batch_verification',
+    'visualize_observables'
+]
+
 API_VERIFIER = Verifier()
 API_RUNNER = SimulationRunner()
+DEFAULT_SBML_SIMULATORS = ['amici', 'copasi', 'pysces', 'tellurium']
+DEFAULT_START_TIME = 0
+DEFAULT_STOP_TIME = 10
+DEFAULT_N_STEPS = 100
 
 
 def get_output(job_id: str, download_dest: str = None, filename: str = None) -> Dict:
@@ -247,26 +267,29 @@ def get_biomodel_file(model_query: Union[str, List[str]], dest_dir: Optional[str
     :param model_query: (`Union[str, List[str]]`) A single biomodel id as a string or a list of biomodel ids as strings.
     :param dest_dir: (`str`) destination directory at which to save downloaded file. If `None` is passed, downloads to cwd. Defaults to `None`.
 
-    :return: Filepath of the downloaded biomodel file
+    :return: Filepath of the downloaded biomodel file as a .zip file.
     :rtype: `str`
     """
     url = "https://www.ebi.ac.uk/biomodels/search/download"
     query = ",".join(model_query) if isinstance(model_query, list) else model_query
     params = {"models": query}
 
+    if not os.path.exists(dest_dir):
+        os.mkdir(dest_dir)
+
     try:
         response = requests.get(url, params=params, stream=True)
-
-        # download the file if success, otherwise notify.
         if response.status_code == 200:
-            file_name = f"{query}.xml" if isinstance(model_query, str) else "multiple.zip"
+            file_name = f"{query}.zip" if isinstance(model_query, str) else "multiple.zip"
             dest = dest_dir or os.getcwd()
-            fp = os.path.join(dest, file_name)
-            with open(fp, "wb") as file:
+            zip_fp = os.path.join(dest, file_name)
+            with open(zip_fp, "wb") as file:
                 for chunk in response.iter_content(chunk_size=8192):
                     file.write(chunk)
-            print(f"File downloaded successfully and saved as {fp}")
-            return fp
+            sbml_fp = extract_sbml_from_zip(zip_fp, dest_dir)
+            os.remove(zip_fp)
+
+            return sbml_fp
         elif response.status_code == 400:
             warnings.warn("Error 400: File Not Found")
         elif response.status_code == 404:
@@ -277,3 +300,63 @@ def get_biomodel_file(model_query: Union[str, List[str]], dest_dir: Optional[str
         return f"An error occurred: {e}"
 
 
+def extract_sbml_from_zip(zip_path: str, output_dir: str):
+    """
+    Extract a single XML(SBML) file from a zip archive retrieved from BioModels to a specified directory.
+
+    Args:
+    :param zip_path: (`str`) Path to the zip file.
+    :param output_dir: (`str`) Directory where the extracted file will be saved.
+    """
+    os.makedirs(output_dir, exist_ok=True)
+
+    with zipfile.ZipFile(zip_path, 'r') as zip_ref:
+        for file_name in zip_ref.namelist():
+            if file_name.endswith('.xml'):
+                zip_ref.extract(file_name, output_dir)
+                print(f"Extracted {file_name} to {output_dir}")
+                break
+            return os.path.join(output_dir, file_name)
+        else:
+            print("No XML file found in the zip archive.")
+
+
+def run_batch_sbml_verification(model_files: list[str], start: int, stop: int, steps: int) -> Dict[str, VerificationResult]:
+    """
+    Run several SBML verifications as a batch job.
+
+    :param model_files: (`list[str]`) A list of biomodel SBML files to verify.
+    :param start: (`int`) Simulation start time.
+    :param stop: (`int`) Simulation stop time.
+    :param steps: (`int`) Number of simulation steps to record.
+
+    :return: Verification results indexed by verification Job ID.
+    :rtype: `dict`
+    """
+    results = {}
+    for model_file in model_files:
+        verification = verify(model_file, start, stop, steps)
+        results[verification.job_id] = verification
+
+    return results
+
+
+def run_batch_verification(model_files: list[str], *args) -> Dict[str, VerificationResult]:
+    """
+    Run a batch of verifications
+
+    Args:
+    :param model_files: (`list[str]`) A list of biomodel SBML files to verify.
+
+    Positional arguments:
+    :param args: (`list | tuple`) Positional arguments to pass to `run_batch_verification`: if sbml verifications, start, stop, steps.
+
+    :return: Verification results indexed by verification Job ID.
+    :rtype: `dict`
+    """
+    results = {}
+    for model_file in model_files:
+        verification = verify(model_file, *args)
+        results[verification.job_id] = verification
+
+    return results

@@ -2,23 +2,22 @@ import os
 import tempfile
 from typing import *
 from uuid import uuid4
-from dataclasses import dataclass, asdict
 
-import numpy as np 
-import pandas as pd
+import numpy as np
 import requests
 import seaborn as sns
 import antimony
 from matplotlib import pyplot as plt
-from matplotlib.axes import Axes
-from matplotlib.backends.backend_pdf import PdfPages
 from matplotlib.figure import Figure
-from requests import Response
-from requests.exceptions import RequestException
 from requests_toolbelt.multipart.encoder import MultipartEncoder
 
-from bio_compose.processing_tools import generate_color_gradient
 from bio_compose.data_model import Api, RequestError, save_plot
+
+
+__all__ = [
+    'Verifier',
+    'VerificationResult'
+]
 
 
 class Verifier(Api):

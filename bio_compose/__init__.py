@@ -1,15 +1,19 @@
 import os
 import toml
 
-from bio_compose.api import (
-    get_output,
-    get_compatible_verification_simulators,
-    get_biomodel_file,
-    get_biomodel_archive,
-    verify,
-    run_simulation,
-    visualize_observables
-)
+# from bio_compose.verifier import Verifier, VerificationResult
+# from bio_compose.api import (
+#     get_output,
+#     get_compatible_verification_simulators,
+#     get_biomodel_file,
+#     get_biomodel_archive,
+#     verify,
+#     run_simulation,
+#     visualize_observables,
+#     run_batch_verification
+# )
+from bio_compose.verifier import *
+from bio_compose.api import *
 
 
 pyproject_file_path = os.path.join(os.path.dirname(__file__), '..', 'pyproject.toml')
@@ -28,4 +32,7 @@ __all__ = [
     'visualize_observables',
     'get_biomodel_file',
     'get_biomodel_archive',
+    'run_batch_verification',
+    'Verifier',
+    'VerificationResult'
 ]

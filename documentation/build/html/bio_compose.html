@@ -54,10 +54,10 @@
 <li class="toctree-l3"><a class="reference internal" href="#bio_compose.api.get_biomodel_file"><code class="docutils literal notranslate"><span class="pre">get_biomodel_file()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#bio_compose.api.get_compatible_verification_simulators"><code class="docutils literal notranslate"><span class="pre">get_compatible_verification_simulators()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#bio_compose.api.get_output"><code class="docutils literal notranslate"><span class="pre">get_output()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#bio_compose.api.run_batch_verification"><code class="docutils literal notranslate"><span class="pre">run_batch_verification()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#bio_compose.api.run_simulation"><code class="docutils literal notranslate"><span class="pre">run_simulation()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#bio_compose.api.verify"><code class="docutils literal notranslate"><span class="pre">verify()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#bio_compose.api.visualize_observables"><code class="docutils literal notranslate"><span class="pre">visualize_observables()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="#bio_compose.api.visualize_rmse"><code class="docutils literal notranslate"><span class="pre">visualize_rmse()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#module-bio_compose.bundles">bio_compose.bundles</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="#bio_compose.bundles.BioBundle"><code class="docutils literal notranslate"><span class="pre">BioBundle</span></code></a></li>
 </ul>
@@ -87,7 +87,6 @@
 <li class="toctree-l3"><a class="reference internal" href="#module-bio_compose.verifier">bio_compose.verifier</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="#bio_compose.verifier.VerificationResult"><code class="docutils literal notranslate"><span class="pre">VerificationResult</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#bio_compose.verifier.Verifier"><code class="docutils literal notranslate"><span class="pre">Verifier</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#bio_compose.verifier.test_verifier"><code class="docutils literal notranslate"><span class="pre">test_verifier()</span></code></a></li>
 </ul>
 </li>
 </ul>
@@ -155,7 +154,7 @@
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>Filepath of the downloaded biomodel file</p>
+<dd class="field-even"><p>Filepath of the downloaded biomodel file as a .zip file.</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p><cite>str</cite></p>
@@ -200,6 +199,24 @@
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p><cite>Dict</cite></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="bio_compose.api.run_batch_verification">
+<span class="sig-prename descclassname"><span class="pre">bio_compose.api.</span></span><span class="sig-name descname"><span class="pre">run_batch_verification</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model_files</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="#bio_compose.verifier.VerificationResult" title="bio_compose.verifier.VerificationResult"><span class="pre">VerificationResult</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/bio_compose/api.html#run_batch_verification"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#bio_compose.api.run_batch_verification" title="Link to this definition"></a></dt>
+<dd><p>Run a batch of verifications</p>
+<p>Args:
+:param model_files: (<cite>list[str]</cite>) A list of biomodel SBML files to verify.</p>
+<p>Positional arguments:
+:param args: (<cite>list | tuple</cite>) Positional arguments to pass to <cite>run_batch_verification</cite>: if sbml verifications, start, stop, steps.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Verification results indexed by verification Job ID.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><cite>dict</cite></p>
 </dd>
 </dl>
 </dd></dl>
@@ -271,28 +288,6 @@
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>matplotlib Figure and simulation observables indexed by simulator</p>
-</dd>
-<dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><cite>Tuple[matplotlib.Figure, Dict]</cite></p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="bio_compose.api.visualize_rmse">
-<span class="sig-prename descclassname"><span class="pre">bio_compose.api.</span></span><span class="sig-name descname"><span class="pre">visualize_rmse</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">job_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">save_dest</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fig_dimensions</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">int</span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">color_mapping</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/bio_compose/api.html#visualize_rmse"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#bio_compose.api.visualize_rmse" title="Link to this definition"></a></dt>
-<dd><p>Visualize the root-mean-squared error between simulator verification outputs as a heatmap.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>job_id</strong> – (<cite>str</cite>) verification job id. This value can be easily derived from either of <cite>Verifier</cite>’s <cite>.verify_…</cite> methods.</p></li>
-<li><p><strong>save_dest</strong> – <cite>(str</cite>) destination at which to save figure. Defaults to <cite>None</cite>.</p></li>
-<li><p><strong>fig_dimensions</strong> – (<cite>Tuple[int, int], optional</cite>) The value to use as the <cite>figsize</cite> parameter for a call to <cite>matplotlib.pyplot.figure()</cite>. If <cite>None</cite> is passed, default to (8, 6).</p></li>
-<li><p><strong>color_mapping</strong> – (<cite>List[str], optional</cite>) list of colors to use for each simulator in the grid. Defaults to None.</p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>matplotlib Figure and simulator RMSE scores</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p><cite>Tuple[matplotlib.Figure, Dict]</cite></p>
@@ -851,11 +846,6 @@ save_dest: <cite>str</cite>: path to save the figure. If this value is passed, t
 </dd></dl>
 
 </dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="bio_compose.verifier.test_verifier">
-<span class="sig-prename descclassname"><span class="pre">bio_compose.verifier.</span></span><span class="sig-name descname"><span class="pre">test_verifier</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/bio_compose/verifier.html#test_verifier"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#bio_compose.verifier.test_verifier" title="Link to this definition"></a></dt>
-<dd></dd></dl>
 
 </section>
 </section>
