@@ -38,3 +38,4 @@ poetry run python -m ipykernel install --user --name=$ENV_NAME --display-name "$
 ### Smoldyn to Simularium conversion:
 A convenient template notebook for converting the outputs of Smoldyn simulations to Simularium trajectories can be
 [found here.](https://colab.research.google.com/drive/17uMMRq3L3KqRIXnezahM6TtOtJYK8Cu6#scrollTo=6n5Wf58hthFm)
+

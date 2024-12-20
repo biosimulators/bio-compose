@@ -3,7 +3,6 @@ import time
 import warnings
 import zipfile
 from typing import *
-from functools import wraps
 
 import requests
 
@@ -85,7 +84,7 @@ def verify(*args) -> VerificationResult:
     elif len(args) == 5:
         simulators = args[4]
     else:
-        simulators = ['amici', 'copasi', 'tellurium']
+        simulators = DEFAULT_SBML_SIMULATORS
 
     run_sbml = False
     for arg in args:
@@ -103,7 +102,8 @@ def verify(*args) -> VerificationResult:
 
     # fetch params
     submission = submission_generator(*args)
-    job_id = submission.get('job_id')
+    time.sleep(1)
+    job_id = submission.get('job_id') if submission else None
 
     # poll gateway for results
     n_attempts = 0
@@ -132,6 +132,8 @@ def verify(*args) -> VerificationResult:
             else:
                 output = verifier.get_output(job_id=job_id)
                 break
+    else:
+        return VerificationResult({'content': {'job_id': 'A job ID could not be identified.'}})
 
     return VerificationResult(data=output)
 
@@ -139,7 +141,7 @@ def verify(*args) -> VerificationResult:
 def run_simulation(*args, **kwargs) -> SimulationResult:
     """Run a simulation with BioCompose.
 
-    :param args: Positional arguments
+    :param args: Positional arguments to be unpacked
 
     * 1 argument: smoldyn simulation configuration in which time parameters (dt, duration) are already defined. **Smoldyn simulation only**.
     * 3 arguments: smoldyn configuration file, smoldyn simulation duration, smoldyn simulation dt. **Smoldyn simulation only**.
@@ -304,7 +306,6 @@ def extract_sbml_from_zip(zip_path: str, output_dir: str):
     """
     Extract a single XML(SBML) file from a zip archive retrieved from BioModels to a specified directory.
 
-    Args:
     :param zip_path: (`str`) Path to the zip file.
     :param output_dir: (`str`) Directory where the extracted file will be saved.
     """
@@ -341,22 +342,19 @@ def run_batch_sbml_verification(model_files: list[str], start: int, stop: int, s
     return results
 
 
-def run_batch_verification(model_files: list[str], *args) -> Dict[str, VerificationResult]:
+def run_batch_verification(input_files: list[str], *args) -> Dict[str, VerificationResult]:
     """
-    Run a batch of verifications
+    Run several verifications as a synchronous batch, returning a dictionary of verification results indexed by verification job ID.
 
-    Args:
-    :param model_files: (`list[str]`) A list of biomodel SBML files to verify.
-
-    Positional arguments:
-    :param args: (`list | tuple`) Positional arguments to pass to `run_batch_verification`: if sbml verifications, start, stop, steps.
+    :param input_files: (`list[str]`) A list of biomodel SBML files to verify.
+    :param args: Positional arguments to use as unpacked arguments in `run_batch_verification` related to the verification scope (SBML-only/OMEX): if sbml verifications, start, stop, steps.
 
     :return: Verification results indexed by verification Job ID.
     :rtype: `dict`
     """
     results = {}
-    for model_file in model_files:
-        verification = verify(model_file, *args)
+    for input_file in input_files:
+        verification = verify(input_file, *args)
         results[verification.job_id] = verification
 
     return results

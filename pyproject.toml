@@ -5,7 +5,7 @@ version = "0.8.7"
 description = "Create, execute, and introspect reproducible composite simulations of dynamic biological systems."
 authors = ["Alex Patrie <alexanderpatrie@gmail.com>"]
 readme = "README.md"
-packages = [{include = "bio_compose"}, {include = "tests"}]
+packages = [{include = "bio_compose"}, {include = "tests"}, {include = "biosimulations_runutils"}]
 include = ["pyproject.toml"]
 
 
@@ -34,6 +34,10 @@ sphinx-rtd-theme = "^3.0.2"
 ipykernel = "^6.29.5"
 jupyterlab = "^4.3.4"
 
+
+
+[tool.poetry.group.dev.dependencies]
+pip-autoremove = "^0.10.0"
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
