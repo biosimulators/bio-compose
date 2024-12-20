@@ -5,6 +5,8 @@ import zipfile
 from pathlib import Path
 from tarfile import AbsolutePathError
 from typing import *
+
+import h5py
 from dotenv import load_dotenv
 
 import typer
@@ -15,7 +17,7 @@ from biosimulations_runutils.biosim_pipeline.datamodels import Simulator, Simula
 
 from bio_compose import get_biomodel_archive
 from biosimulations_runutils.common.api_utils import download_file
-
+from tests.utils import read_report_outputs, BiosimulationsRunOutputData, explore_hdf5_data, read_report_outputs_with_labels
 
 load_dotenv('.env')
 
@@ -190,18 +192,39 @@ def test_generate_omex_outputs():
             simulator_output_zippath = download_runs(omex_src_dir=omex_src_dirpath, out_dir=output_dirpath)
             print(f"> Downloaded files for {simulator} at {simulator_output_zippath}")
 
-            # unzip output files
-            with zipfile.ZipFile(simulator_output_zippath, 'r') as zip_ref:
-                zip_ref.extractall(output_dirpath)
+            # get the simulators output data
+            output_data[simulator] = read_simulator_output_data(simulator_output_zippath, output_dirpath)
 
-            # read report.h5
-            for filepath in os.listdir(output_dirpath):
-                if filepath.endswith(".h5"):
+            return output_data
+
+
+def read_simulator_output_data(simulator_output_zippath: os.PathLike[str], output_dirpath: os.PathLike[str]) -> BiosimulationsRunOutputData | dict[str, str]:
+    # unzip and extract output files
+    with zipfile.ZipFile(simulator_output_zippath, 'r') as zip_ref:
+        zip_ref.extractall(output_dirpath)
+
+    # find report and get data
+    for filepath in os.listdir(output_dirpath):
+        if "output" in filepath:
+            for outfile in os.listdir(os.path.join(output_dirpath, filepath)):
+                if outfile.endswith(".h5"):
                     # call io method here
-                    print(f"Report File: {filepath}")
+                    report_path = os.path.join(str(output_dirpath), filepath, outfile)
+                    # simulator_outputs = read_report_outputs(report_file_path=report_path)
+                    data = explore_hdf5_data(report_path)
+                    dataset_keys = data.keys()
+                    dataset_path = list(data.keys()).pop() if len(dataset_keys) == 1 else list(data.keys())[0]
+                    labeled_data = read_report_outputs_with_labels(report_file_path=report_path, dataset_path=dataset_path)
+
+                    return labeled_data
 
 
-test_generate_omex_outputs()
+# test_generate_omex_outputs()
+
+sim = 'vcell'
+zippath = f'fixtures/verification_request/results/BIOMD0000000399/{sim}/BIOMD0000000399/{sim}/7.7.0.13/results.zip'
+output_dirpath = f'fixtures/verification_request/results/BIOMD0000000399/{sim}/BIOMD0000000399/{sim}/7.7.0.13'
+# read_simulator_output_data(zippath, output_dirpath)
 
 
 

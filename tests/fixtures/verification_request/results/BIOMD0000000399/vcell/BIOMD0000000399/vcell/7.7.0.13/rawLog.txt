@@ -1,0 +1,335 @@
+[0;36mThank you for using runBioSimulations![0m
+
+[0;36m================================================ Loading Singularity ================================================[0m
+
+[0;36m=================================================== Set up storage ==================================================[0m
+
+[0;36m========================================== Downloading COMBINE/OMEX archive =========================================[0m
+  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0100   138  100   138    0     0    445      0 --:--:-- --:--:-- --:--:--   446
+ 22 5237k   22 1187k    0     0  2631k      0  0:00:01 --:--:--  0:00:01 2631k100 5237k  100 5237k    0     0  10.5M      0 --:--:-- --:--:-- --:--:--  112M
+
+[0;36m=========================================== Executing COMBINE/OMEX archive ==========================================[0m
+INFO:    Using cached SIF image
+docker: Command recieved::<-i /root/archive.omex -o /root/outputs>
+<-i>
+Default case selected
+VCell shall execute <biosimulations -i /root/archive.omex -o /root/outputs>
+WARN StatusConsoleListener The use of package scanning to locate plugins is deprecated and will be removed in a future release
+WARN StatusConsoleListener The use of package scanning to locate plugins is deprecated and will be removed in a future release
+WARN StatusConsoleListener The use of package scanning to locate plugins is deprecated and will be removed in a future release
+WARN StatusConsoleListener The use of package scanning to locate plugins is deprecated and will be removed in a future release
+ INFO (CLIStandalone:36) - Starting Vcell... []{}
+ INFO (BiosimulationsCommand:94) - Beginning execution []{}
+ INFO (CLIPythonManager:128) - Initializing Python... []{}
+ INFO (CLIPythonManager:153) - Python initialization success! []{}
+ INFO (ExecuteImpl:137) - Preparing output directory... []{}
+SED-ML version level not supported, import may fail
+SED-ML version level not supported, import may fail
+ INFO (ExecutionJob:87) - Executing OMEX archive `archive.omex` []{}
+ INFO (ExecutionJob:88) - Archive location: /root/archive.omex []{}
+-----------------------------------------------------------------------------------------------------
+ INFO (RunUtils:476) - TempPath Created: /tmp/vcell_temp_af4b7149-9b01-4790-8da4-c011ba2eca7715377032827697317602 []{}
+ INFO (RunUtils:476) - TempPath Created: /tmp/vcell_temp_225ee63f-e3c9-4647-9494-1a3a830da9e55235537770380621139 []{}
+ WARN (OmexHandler:144) - No SED-MLs are marked as master, so will run them all []{}
+ WARN (OmexHandler:144) - No SED-MLs are marked as master, so will run them all []{}
+ INFO (SedmlJob:109) - Initializing SED-ML document... []{}
+SED-ML version level not supported, import may fail
+SED-ML version level not supported, import may fail
+ INFO (SedmlJob:125) - Processing SED-ML: BIOMD0000000399_url.sedml []{}
+ INFO (SedmlJob:161) - Found one SED-ML document with 1 model(s), 1 simulation(s), 1 task(s), 1  report(s),  1 plot2D(s), and 0 plot3D(s)
+ []{}
+ INFO (SedmlJob:166) - Successful translation of SED-ML file : BIOMD0000000399_url.sedml []{}
+-----------------------------------------------------------------------------------------------------
+ INFO (SedmlJob:170) - Creating pseudo SED-ML for HDF5 conversion... []{}
+ INFO (SedmlJob:186) - Creating Biomodel from pseudo SED-ML []{}
+SED-ML version level not supported, import may fail
+SED-ML version level not supported, import may fail
+ INFO (SedmlJob:261) - Building solvers and starting simulation of all tasks...  []{}
+SED-ML version level not supported, import may fail
+SED-ML version level not supported, import may fail
+ERROR (SBMLImporter:1362) - unexpected assignment rule target 'SpeciesContext@3ac3f6f(id=null, name='Ras_GTP', species='Ras_GTP', structure='c2', sbmlName='t_Ras_GTP')', adding as assignment rule - minimal support provided []{}
+ERROR (SBMLImporter:1363) - need to create a VCLogger event []{}
+ERROR (SBMLImporter:1362) - unexpected assignment rule target 'SpeciesContext@1abebef3(id=null, name='MEK_PP', species='MEK_PP', structure='c2', sbmlName='t_MEK_PP')', adding as assignment rule - minimal support provided []{}
+ERROR (SBMLImporter:1363) - need to create a VCLogger event []{}
+ERROR (SBMLImporter:1362) - unexpected assignment rule target 'SpeciesContext@18f55704(id=null, name='ERK_PP', species='ERK_PP', structure='c2', sbmlName='t_ERK_PP')', adding as assignment rule - minimal support provided []{}
+ERROR (SBMLImporter:1363) - need to create a VCLogger event []{}
+ERROR (SBMLImporter:1362) - unexpected assignment rule target 'SpeciesContext@24eb65e3(id=null, name='Raf_act', species='Raf_act', structure='c2', sbmlName='t_Raf*')', adding as assignment rule - minimal support provided []{}
+ERROR (SBMLImporter:1363) - need to create a VCLogger event []{}
+ERROR (SBMLImporter:1362) - unexpected assignment rule target 'SpeciesContext@67cefd84(id=null, name='SHC_P_t', species='SHC_P_t', structure='c2', sbmlName='t_SHC_P_t')', adding as assignment rule - minimal support provided []{}
+ERROR (SBMLImporter:1363) - need to create a VCLogger event []{}
+ERROR (SBMLImporter:1362) - unexpected assignment rule target 'SpeciesContext@5fbe155(id=null, name='EGF_EGFR_act', species='EGF_EGFR_act', structure='c2', sbmlName='t_EGF_EGFR*')', adding as assignment rule - minimal support provided []{}
+ERROR (SBMLImporter:1363) - need to create a VCLogger event []{}
+ WARN (SBMLImporter:2877) - failed to transform lumped reaction v1 to distributed: linear factor was null, lumped reaction v1 could not be transformed to distributed []{}
+ WARN (SBMLImporter:2877) - failed to transform lumped reaction v2 to distributed: linear factor was null, lumped reaction v2 could not be transformed to distributed []{}
+ WARN (SBMLImporter:2877) - failed to transform lumped reaction v3 to distributed: linear factor was null, lumped reaction v3 could not be transformed to distributed []{}
+ WARN (SBMLImporter:2877) - failed to transform lumped reaction v4 to distributed: linear factor was null, lumped reaction v4 could not be transformed to distributed []{}
+ WARN (SBMLImporter:2877) - failed to transform lumped reaction v5 to distributed: linear factor was null, lumped reaction v5 could not be transformed to distributed []{}
+ WARN (SBMLImporter:2877) - failed to transform lumped reaction v6 to distributed: linear factor was null, lumped reaction v6 could not be transformed to distributed []{}
+ WARN (SBMLImporter:2877) - failed to transform lumped reaction v7 to distributed: linear factor was null, lumped reaction v7 could not be transformed to distributed []{}
+ WARN (SBMLImporter:2877) - failed to transform lumped reaction v8 to distributed: linear factor was null, lumped reaction v8 could not be transformed to distributed []{}
+ WARN (SBMLImporter:2877) - failed to transform lumped reaction v9 to distributed: linear factor was null, lumped reaction v9 could not be transformed to distributed []{}
+ WARN (SBMLImporter:2877) - failed to transform lumped reaction v10 to distributed: linear factor was null, lumped reaction v10 could not be transformed to distributed []{}
+ WARN (SBMLImporter:2877) - failed to transform lumped reaction v11 to distributed: linear factor was null, lumped reaction v11 could not be transformed to distributed []{}
+ WARN (SBMLImporter:2877) - failed to transform lumped reaction v12 to distributed: linear factor was null, lumped reaction v12 could not be transformed to distributed []{}
+ WARN (SBMLImporter:2877) - failed to transform lumped reaction v13 to distributed: linear factor was null, lumped reaction v13 could not be transformed to distributed []{}
+ WARN (SBMLImporter:2877) - failed to transform lumped reaction v14 to distributed: linear factor was null, lumped reaction v14 could not be transformed to distributed []{}
+ WARN (SBMLImporter:2877) - failed to transform lumped reaction v15 to distributed: linear factor was null, lumped reaction v15 could not be transformed to distributed []{}
+ WARN (SBMLImporter:2877) - failed to transform lumped reaction v16 to distributed: linear factor was null, lumped reaction v16 could not be transformed to distributed []{}
+ WARN (SBMLImporter:2877) - failed to transform lumped reaction v17 to distributed: linear factor was null, lumped reaction v17 could not be transformed to distributed []{}
+ WARN (SBMLImporter:2877) - failed to transform lumped reaction v18 to distributed: linear factor was null, lumped reaction v18 could not be transformed to distributed []{}
+ WARN (SBMLImporter:2877) - failed to transform lumped reaction v19 to distributed: linear factor was null, lumped reaction v19 could not be transformed to distributed []{}
+ WARN (SBMLImporter:2877) - failed to transform lumped reaction v20 to distributed: linear factor was null, lumped reaction v20 could not be transformed to distributed []{}
+ WARN (SBMLImporter:2877) - failed to transform lumped reaction v21 to distributed: linear factor was null, lumped reaction v21 could not be transformed to distributed []{}
+ WARN (SBMLImporter:2877) - failed to transform lumped reaction v22 to distributed: linear factor was null, lumped reaction v22 could not be transformed to distributed []{}
+ WARN (SBMLImporter:2877) - failed to transform lumped reaction v23 to distributed: linear factor was null, lumped reaction v23 could not be transformed to distributed []{}
+ WARN (SBMLImporter:2877) - failed to transform lumped reaction v24 to distributed: linear factor was null, lumped reaction v24 could not be transformed to distributed []{}
+ WARN (SBMLImporter:2877) - failed to transform lumped reaction v25 to distributed: linear factor was null, lumped reaction v25 could not be transformed to distributed []{}
+ WARN (SBMLImporter:2877) - failed to transform lumped reaction v26 to distributed: linear factor was null, lumped reaction v26 could not be transformed to distributed []{}
+ WARN (SBMLImporter:2877) - failed to transform lumped reaction v27 to distributed: linear factor was null, lumped reaction v27 could not be transformed to distributed []{}
+ WARN (SBMLImporter:2877) - failed to transform lumped reaction v28 to distributed: linear factor was null, lumped reaction v28 could not be transformed to distributed []{}
+ WARN (SBMLImporter:2877) - failed to transform lumped reaction v29 to distributed: linear factor was null, lumped reaction v29 could not be transformed to distributed []{}
+ WARN (SBMLImporter:2877) - failed to transform lumped reaction v30 to distributed: linear factor was null, lumped reaction v30 could not be transformed to distributed []{}
+ WARN (SBMLImporter:2877) - failed to transform lumped reaction v31 to distributed: linear factor was null, lumped reaction v31 could not be transformed to distributed []{}
+ WARN (SBMLImporter:2877) - failed to transform lumped reaction v32 to distributed: linear factor was null, lumped reaction v32 could not be transformed to distributed []{}
+ WARN (SBMLImporter:2877) - failed to transform lumped reaction v33 to distributed: linear factor was null, lumped reaction v33 could not be transformed to distributed []{}
+ WARN (SBMLImporter:2877) - failed to transform lumped reaction v34 to distributed: linear factor was null, lumped reaction v34 could not be transformed to distributed []{}
+ WARN (SBMLImporter:2877) - failed to transform lumped reaction v35 to distributed: linear factor was null, lumped reaction v35 could not be transformed to distributed []{}
+ WARN (SBMLImporter:2877) - failed to transform lumped reaction v36 to distributed: linear factor was null, lumped reaction v36 could not be transformed to distributed []{}
+ WARN (SBMLImporter:2877) - failed to transform lumped reaction v37 to distributed: linear factor was null, lumped reaction v37 could not be transformed to distributed []{}
+ WARN (SBMLImporter:2877) - failed to transform lumped reaction v38 to distributed: linear factor was null, lumped reaction v38 could not be transformed to distributed []{}
+ WARN (SBMLImporter:2877) - failed to transform lumped reaction v39 to distributed: linear factor was null, lumped reaction v39 could not be transformed to distributed []{}
+ WARN (SBMLImporter:2877) - failed to transform lumped reaction v40 to distributed: linear factor was null, lumped reaction v40 could not be transformed to distributed []{}
+ WARN (SBMLImporter:2877) - failed to transform lumped reaction v41 to distributed: linear factor was null, lumped reaction v41 could not be transformed to distributed []{}
+ WARN (SBMLImporter:2877) - failed to transform lumped reaction v42 to distributed: linear factor was null, lumped reaction v42 could not be transformed to distributed []{}
+ WARN (SBMLImporter:2877) - failed to transform lumped reaction v43 to distributed: linear factor was null, lumped reaction v43 could not be transformed to distributed []{}
+ WARN (SBMLImporter:2877) - failed to transform lumped reaction v44 to distributed: linear factor was null, lumped reaction v44 could not be transformed to distributed []{}
+ WARN (SBMLImporter:2877) - failed to transform lumped reaction v45 to distributed: linear factor was null, lumped reaction v45 could not be transformed to distributed []{}
+ WARN (SBMLImporter:2877) - failed to transform lumped reaction v46 to distributed: linear factor was null, lumped reaction v46 could not be transformed to distributed []{}
+ WARN (SBMLImporter:2877) - failed to transform lumped reaction v47 to distributed: linear factor was null, lumped reaction v47 could not be transformed to distributed []{}
+ WARN (SBMLImporter:2877) - failed to transform lumped reaction v48 to distributed: linear factor was null, lumped reaction v48 could not be transformed to distributed []{}
+ WARN (SBMLImporter:2877) - failed to transform lumped reaction v49 to distributed: linear factor was null, lumped reaction v49 could not be transformed to distributed []{}
+ WARN (SBMLImporter:2877) - failed to transform lumped reaction v50 to distributed: linear factor was null, lumped reaction v50 could not be transformed to distributed []{}
+ WARN (SBMLImporter:2877) - failed to transform lumped reaction v51 to distributed: linear factor was null, lumped reaction v51 could not be transformed to distributed []{}
+ WARN (SBMLImporter:2877) - failed to transform lumped reaction v52 to distributed: linear factor was null, lumped reaction v52 could not be transformed to distributed []{}
+ WARN (SBMLImporter:2877) - failed to transform lumped reaction v53 to distributed: linear factor was null, lumped reaction v53 could not be transformed to distributed []{}
+ WARN (SBMLImporter:2877) - failed to transform lumped reaction v54 to distributed: linear factor was null, lumped reaction v54 could not be transformed to distributed []{}
+ WARN (SBMLImporter:2877) - failed to transform lumped reaction v55 to distributed: linear factor was null, lumped reaction v55 could not be transformed to distributed []{}
+ WARN (SBMLImporter:2877) - failed to transform lumped reaction v56 to distributed: linear factor was null, lumped reaction v56 could not be transformed to distributed []{}
+ WARN (SBMLImporter:2877) - failed to transform lumped reaction v57 to distributed: linear factor was null, lumped reaction v57 could not be transformed to distributed []{}
+ WARN (SBMLImporter:2877) - failed to transform lumped reaction v58 to distributed: linear factor was null, lumped reaction v58 could not be transformed to distributed []{}
+ WARN (SBMLImporter:2877) - failed to transform lumped reaction v59 to distributed: linear factor was null, lumped reaction v59 could not be transformed to distributed []{}
+ WARN (SBMLImporter:2877) - failed to transform lumped reaction v60 to distributed: linear factor was null, lumped reaction v60 could not be transformed to distributed []{}
+ WARN (SBMLImporter:2877) - failed to transform lumped reaction v61 to distributed: linear factor was null, lumped reaction v61 could not be transformed to distributed []{}
+ WARN (SBMLImporter:2877) - failed to transform lumped reaction v62 to distributed: linear factor was null, lumped reaction v62 could not be transformed to distributed []{}
+ WARN (SBMLImporter:2877) - failed to transform lumped reaction v63 to distributed: linear factor was null, lumped reaction v63 could not be transformed to distributed []{}
+ WARN (SBMLImporter:2877) - failed to transform lumped reaction v64 to distributed: linear factor was null, lumped reaction v64 could not be transformed to distributed []{}
+ WARN (SBMLImporter:2877) - failed to transform lumped reaction v65 to distributed: linear factor was null, lumped reaction v65 could not be transformed to distributed []{}
+ WARN (SBMLImporter:2877) - failed to transform lumped reaction v66 to distributed: linear factor was null, lumped reaction v66 could not be transformed to distributed []{}
+ WARN (SBMLImporter:2877) - failed to transform lumped reaction v67 to distributed: linear factor was null, lumped reaction v67 could not be transformed to distributed []{}
+ WARN (SBMLImporter:2877) - failed to transform lumped reaction v68 to distributed: linear factor was null, lumped reaction v68 could not be transformed to distributed []{}
+ WARN (SBMLImporter:2877) - failed to transform lumped reaction v69 to distributed: linear factor was null, lumped reaction v69 could not be transformed to distributed []{}
+ WARN (SBMLImporter:2877) - failed to transform lumped reaction v70 to distributed: linear factor was null, lumped reaction v70 could not be transformed to distributed []{}
+ WARN (SBMLImporter:2877) - failed to transform lumped reaction v71 to distributed: linear factor was null, lumped reaction v71 could not be transformed to distributed []{}
+ WARN (SBMLImporter:2877) - failed to transform lumped reaction v72 to distributed: linear factor was null, lumped reaction v72 could not be transformed to distributed []{}
+ WARN (SBMLImporter:2877) - failed to transform lumped reaction v73 to distributed: linear factor was null, lumped reaction v73 could not be transformed to distributed []{}
+ WARN (SBMLImporter:2877) - failed to transform lumped reaction v74 to distributed: linear factor was null, lumped reaction v74 could not be transformed to distributed []{}
+ WARN (SBMLImporter:2877) - failed to transform lumped reaction v75 to distributed: linear factor was null, lumped reaction v75 could not be transformed to distributed []{}
+ WARN (SBMLImporter:2877) - failed to transform lumped reaction v76 to distributed: linear factor was null, lumped reaction v76 could not be transformed to distributed []{}
+ WARN (SBMLImporter:2877) - failed to transform lumped reaction v77 to distributed: linear factor was null, lumped reaction v77 could not be transformed to distributed []{}
+ WARN (SBMLImporter:2877) - failed to transform lumped reaction v78 to distributed: linear factor was null, lumped reaction v78 could not be transformed to distributed []{}
+ WARN (SBMLImporter:2877) - failed to transform lumped reaction v79 to distributed: linear factor was null, lumped reaction v79 could not be transformed to distributed []{}
+ WARN (SBMLImporter:2877) - failed to transform lumped reaction v80 to distributed: linear factor was null, lumped reaction v80 could not be transformed to distributed []{}
+ WARN (SBMLImporter:2877) - failed to transform lumped reaction v81 to distributed: linear factor was null, lumped reaction v81 could not be transformed to distributed []{}
+ WARN (SBMLImporter:2877) - failed to transform lumped reaction v82 to distributed: linear factor was null, lumped reaction v82 could not be transformed to distributed []{}
+ WARN (SBMLImporter:2877) - failed to transform lumped reaction v83 to distributed: linear factor was null, lumped reaction v83 could not be transformed to distributed []{}
+ WARN (SBMLImporter:2877) - failed to transform lumped reaction v84 to distributed: linear factor was null, lumped reaction v84 could not be transformed to distributed []{}
+ WARN (SBMLImporter:2877) - failed to transform lumped reaction v85 to distributed: linear factor was null, lumped reaction v85 could not be transformed to distributed []{}
+ WARN (SBMLImporter:2877) - failed to transform lumped reaction v86 to distributed: linear factor was null, lumped reaction v86 could not be transformed to distributed []{}
+ WARN (SBMLImporter:2877) - failed to transform lumped reaction v87 to distributed: linear factor was null, lumped reaction v87 could not be transformed to distributed []{}
+ WARN (SBMLImporter:2877) - failed to transform lumped reaction v88 to distributed: linear factor was null, lumped reaction v88 could not be transformed to distributed []{}
+ WARN (SBMLImporter:2877) - failed to transform lumped reaction v89 to distributed: linear factor was null, lumped reaction v89 could not be transformed to distributed []{}
+ WARN (SBMLImporter:2877) - failed to transform lumped reaction v90 to distributed: linear factor was null, lumped reaction v90 could not be transformed to distributed []{}
+ WARN (SBMLImporter:2877) - failed to transform lumped reaction v91 to distributed: linear factor was null, lumped reaction v91 could not be transformed to distributed []{}
+ WARN (SBMLImporter:2877) - failed to transform lumped reaction v92 to distributed: linear factor was null, lumped reaction v92 could not be transformed to distributed []{}
+ WARN (SBMLImporter:2877) - failed to transform lumped reaction v93 to distributed: linear factor was null, lumped reaction v93 could not be transformed to distributed []{}
+ WARN (SBMLImporter:2877) - failed to transform lumped reaction v94 to distributed: linear factor was null, lumped reaction v94 could not be transformed to distributed []{}
+ WARN (SBMLImporter:2877) - failed to transform lumped reaction v95 to distributed: linear factor was null, lumped reaction v95 could not be transformed to distributed []{}
+ WARN (SBMLImporter:2877) - failed to transform lumped reaction v96 to distributed: linear factor was null, lumped reaction v96 could not be transformed to distributed []{}
+ WARN (SBMLImporter:2877) - failed to transform lumped reaction v97 to distributed: linear factor was null, lumped reaction v97 could not be transformed to distributed []{}
+ WARN (SBMLImporter:2877) - failed to transform lumped reaction v98 to distributed: linear factor was null, lumped reaction v98 could not be transformed to distributed []{}
+ WARN (SBMLImporter:2877) - failed to transform lumped reaction v99 to distributed: linear factor was null, lumped reaction v99 could not be transformed to distributed []{}
+ WARN (SBMLImporter:2877) - failed to transform lumped reaction v100 to distributed: linear factor was null, lumped reaction v100 could not be transformed to distributed []{}
+ WARN (SBMLImporter:2877) - failed to transform lumped reaction v101 to distributed: linear factor was null, lumped reaction v101 could not be transformed to distributed []{}
+ WARN (SBMLImporter:2877) - failed to transform lumped reaction v102 to distributed: linear factor was null, lumped reaction v102 could not be transformed to distributed []{}
+ WARN (SBMLImporter:2877) - failed to transform lumped reaction v103 to distributed: linear factor was null, lumped reaction v103 could not be transformed to distributed []{}
+ WARN (SBMLImporter:2877) - failed to transform lumped reaction v104 to distributed: linear factor was null, lumped reaction v104 could not be transformed to distributed []{}
+ WARN (SBMLImporter:2877) - failed to transform lumped reaction v105 to distributed: linear factor was null, lumped reaction v105 could not be transformed to distributed []{}
+ WARN (SBMLImporter:2877) - failed to transform lumped reaction v106 to distributed: linear factor was null, lumped reaction v106 could not be transformed to distributed []{}
+ WARN (SBMLImporter:2877) - failed to transform lumped reaction v107 to distributed: linear factor was null, lumped reaction v107 could not be transformed to distributed []{}
+ WARN (SBMLImporter:2877) - failed to transform lumped reaction v108 to distributed: linear factor was null, lumped reaction v108 could not be transformed to distributed []{}
+ WARN (SBMLImporter:2877) - failed to transform lumped reaction v109 to distributed: linear factor was null, lumped reaction v109 could not be transformed to distributed []{}
+ WARN (SBMLImporter:2877) - failed to transform lumped reaction v110 to distributed: linear factor was null, lumped reaction v110 could not be transformed to distributed []{}
+ WARN (SBMLImporter:2877) - failed to transform lumped reaction v111 to distributed: linear factor was null, lumped reaction v111 could not be transformed to distributed []{}
+ WARN (SBMLImporter:2877) - failed to transform lumped reaction v112 to distributed: linear factor was null, lumped reaction v112 could not be transformed to distributed []{}
+ WARN (SBMLImporter:2877) - failed to transform lumped reaction v113 to distributed: linear factor was null, lumped reaction v113 could not be transformed to distributed []{}
+ WARN (SBMLImporter:2877) - failed to transform lumped reaction v114 to distributed: linear factor was null, lumped reaction v114 could not be transformed to distributed []{}
+ WARN (SBMLImporter:2877) - failed to transform lumped reaction v115 to distributed: linear factor was null, lumped reaction v115 could not be transformed to distributed []{}
+ WARN (SBMLImporter:2877) - failed to transform lumped reaction v116 to distributed: linear factor was null, lumped reaction v116 could not be transformed to distributed []{}
+ WARN (SBMLImporter:2877) - failed to transform lumped reaction v117 to distributed: linear factor was null, lumped reaction v117 could not be transformed to distributed []{}
+ WARN (SBMLImporter:2877) - failed to transform lumped reaction v118 to distributed: linear factor was null, lumped reaction v118 could not be transformed to distributed []{}
+ WARN (SBMLImporter:2877) - failed to transform lumped reaction v119 to distributed: linear factor was null, lumped reaction v119 could not be transformed to distributed []{}
+ WARN (SBMLImporter:2877) - failed to transform lumped reaction v120 to distributed: linear factor was null, lumped reaction v120 could not be transformed to distributed []{}
+ WARN (SBMLImporter:2877) - failed to transform lumped reaction v121 to distributed: linear factor was null, lumped reaction v121 could not be transformed to distributed []{}
+ WARN (SBMLImporter:2877) - failed to transform lumped reaction v122 to distributed: linear factor was null, lumped reaction v122 could not be transformed to distributed []{}
+ WARN (SBMLImporter:2877) - failed to transform lumped reaction v123 to distributed: linear factor was null, lumped reaction v123 could not be transformed to distributed []{}
+ WARN (SBMLImporter:2877) - failed to transform lumped reaction v124 to distributed: linear factor was null, lumped reaction v124 could not be transformed to distributed []{}
+ WARN (SBMLImporter:2877) - failed to transform lumped reaction v125 to distributed: linear factor was null, lumped reaction v125 could not be transformed to distributed []{}
+ INFO (SimulationContext:3289) - mathMapping: message = transforming the Rate Rules... []{}
+ WARN (AbstractMathMapping:1130) - Unit exception: Incompatible units [molecules.min-1.pl-2] and [molecules.min-1.pl-1] in Expression: ((k1 * x1 * x2) - (kr1 * x3)) []{}
+ WARN (AbstractMathMapping:1130) - Unit exception: Incompatible units [molecules.min-1.pl-2] and [molecules.min-1.pl-1] in Expression: ((k2 * x3 * x3) - (kr2 * x4)) []{}
+ WARN (AbstractMathMapping:1130) - Unit exception: Incompatible units [molecules.min-1.pl-2] and [molecules.min-1.pl-1] in Expression: ((k4 * x23 * x12) - (kr4 * x7)) []{}
+ WARN (AbstractMathMapping:1130) - Unit exception: Incompatible units [molecules.min-1.pl-2] and [molecules.min-1.pl-1] in Expression: ((k8 * x5 * x14) - (kr8 * x15)) []{}
+ WARN (AbstractMathMapping:1130) - Unit exception: Incompatible units [molecules.min-1.pl-2] and [molecules.min-1.pl-1] in Expression: ((k10 * x6 * x16) - (kr10 * x10)) []{}
+ WARN (AbstractMathMapping:1130) - Unit exception: Incompatible units [molecules.min-1.pl-2] and [molecules.min-1.pl-1] in Expression: ((k2 * x10 * x10) - (kr2 * x11)) []{}
+ WARN (AbstractMathMapping:1130) - Unit exception: Incompatible units [molecules.min-1.pl-2] and [molecules.min-1.pl-1] in Expression: ((k14 * x8 * x14) - (kr14 * x17)) []{}
+ WARN (AbstractMathMapping:1130) - Unit exception: Incompatible units [molecules.min-1.pl-2] and [molecules.min-1.pl-1] in Expression: ((k16 * x22 * x15) - (kr16 * x23)) []{}
+ WARN (AbstractMathMapping:1130) - Unit exception: Incompatible units [molecules.min-1.pl-2] and [molecules.min-1.pl-1] in Expression: ((k17 * x24 * x23) - (kr17 * x25)) []{}
+ WARN (AbstractMathMapping:1130) - Unit exception: Incompatible units [molecules.min-1.pl-2] and [molecules.min-1.pl-1] in Expression: ((k18 * x26 * x25) - (kr18 * x27)) []{}
+ WARN (AbstractMathMapping:1130) - Unit exception: Incompatible units [molecules.min-1.pl-1] and [molecules.min-1.pl-2] in Expression: ((k19 * x27) - (kr19 * x28 * x25)) []{}
+ WARN (AbstractMathMapping:1130) - Unit exception: Incompatible units [molecules.min-1.pl-2] and [molecules.min-1.pl-1] in Expression: ((k20 * x25 * x43) - (kr20 * x29)) []{}
+ WARN (AbstractMathMapping:1130) - Unit exception: Incompatible units [molecules.min-1.pl-1] and [molecules.min-1.pl-2] in Expression: ((k21 * x29) - (kr21 * x25 * x26)) []{}
+ WARN (AbstractMathMapping:1130) - Unit exception: Incompatible units [molecules.min-1.pl-2] and [molecules.min-1.pl-1] in Expression: ((k22 * x31 * x15) - (kr22 * x32)) []{}
+ WARN (AbstractMathMapping:1130) - Unit exception: Incompatible units [molecules.min-1.pl-2] and [molecules.min-1.pl-1] in Expression: ((k24 * x22 * x33) - (kr24 * x34)) []{}
+ WARN (AbstractMathMapping:1130) - Unit exception: Incompatible units [molecules.min-1.pl-2] and [molecules.min-1.pl-1] in Expression: ((k25 * x24 * x34) - (kr25 * x35)) []{}
+ WARN (AbstractMathMapping:1130) - Unit exception: Incompatible units [molecules.min-1.pl-2] and [molecules.min-1.pl-1] in Expression: ((k18 * x26 * x35) - (kr18 * x36)) []{}
+ WARN (AbstractMathMapping:1130) - Unit exception: Incompatible units [molecules.min-1.pl-1] and [molecules.min-1.pl-2] in Expression: ((k19 * x36) - (kr19 * x35 * x28)) []{}
+ WARN (AbstractMathMapping:1130) - Unit exception: Incompatible units [molecules.min-1.pl-2] and [molecules.min-1.pl-1] in Expression: ((k28 * x28 * x41) - (kr28 * x42)) []{}
+ WARN (AbstractMathMapping:1130) - Unit exception: Incompatible units [molecules.min-1.pl-1] and [molecules.min-1.pl-2] in Expression: ((k29 * x42) - (kr29 * x43 * x45)) []{}
+ WARN (AbstractMathMapping:1130) - Unit exception: Incompatible units [molecules.min-1.pl-2] and [molecules.min-1.pl-1] in Expression: ((k20 * x35 * x43) - (kr20 * x37)) []{}
+ WARN (AbstractMathMapping:1130) - Unit exception: Incompatible units [molecules.min-1.pl-1] and [molecules.min-1.pl-2] in Expression: ((k21 * x37) - (kr21 * x35 * x26)) []{}
+ WARN (AbstractMathMapping:1130) - Unit exception: Incompatible units [molecules.min-1.pl-1] and [molecules.min-1.pl-2] in Expression: ((k32 * x35) - (kr32 * x15 * x38)) []{}
+ WARN (AbstractMathMapping:1130) - Unit exception: Incompatible units [molecules.min-1.pl-1] and [molecules.min-1.pl-2] in Expression: ((k33 * x38) - (kr33 * x40 * x30)) []{}
+ WARN (AbstractMathMapping:1130) - Unit exception: Incompatible units [molecules.min-1.pl-1] and [molecules.min-1.pl-2] in Expression: ((k34 * x25) - (kr34 * x15 * x30)) []{}
+ WARN (AbstractMathMapping:1130) - Unit exception: Incompatible units [molecules.min-1.pl-1] and [molecules.min-1.pl-2] in Expression: ((k35 * x30) - (kr35 * x24 * x22)) []{}
+ WARN (AbstractMathMapping:1130) - Unit exception: Incompatible units [molecules] and [molecules.pl-1] in Expression: (Km36 + x40) []{}
+ WARN (AbstractMathMapping:1130) - Unit exception: Incompatible units [molecules.min-1.pl-1] and [molecules.min-1.pl-2] in Expression: ((k37 * x33) - (kr37 * x15 * x40)) []{}
+ WARN (AbstractMathMapping:1130) - Unit exception: Incompatible units [molecules.min-1.pl-2] and [molecules.min-1.pl-1] in Expression: ((k24 * x22 * x40) - (kr24 * x39)) []{}
+ WARN (AbstractMathMapping:1130) - Unit exception: Incompatible units [molecules.min-1.pl-1] and [molecules.min-1.pl-2] in Expression: ((k37 * x34) - (kr37 * x15 * x39)) []{}
+ WARN (AbstractMathMapping:1130) - Unit exception: Incompatible units [molecules.min-1.pl-2] and [molecules.min-1.pl-1] in Expression: ((k40 * x24 * x39) - (kr40 * x38)) []{}
+ WARN (AbstractMathMapping:1130) - Unit exception: Incompatible units [molecules.min-1.pl-2] and [molecules.min-1.pl-1] in Expression: ((k41 * x30 * x33) - (kr41 * x35)) []{}
+ WARN (AbstractMathMapping:1130) - Unit exception: Incompatible units [molecules.min-1.pl-2] and [molecules.min-1.pl-1] in Expression: ((k42 * x44 * x45) - (kr42 * x46)) []{}
+ WARN (AbstractMathMapping:1130) - Unit exception: Incompatible units [molecules.min-1.pl-2] and [molecules.min-1.pl-1] in Expression: ((k44 * x47 * x45) - (kr44 * x48)) []{}
+ WARN (AbstractMathMapping:1130) - Unit exception: Incompatible units [molecules.min-1.pl-2] and [molecules.min-1.pl-1] in Expression: ((k44 * x49 * x45) - (kr44 * x50)) []{}
+ WARN (AbstractMathMapping:1130) - Unit exception: Incompatible units [molecules.min-1.pl-2] and [molecules.min-1.pl-1] in Expression: ((k48 * x51 * x53) - (kr48 * x52)) []{}
+ WARN (AbstractMathMapping:1130) - Unit exception: Incompatible units [molecules.min-1.pl-2] and [molecules.min-1.pl-1] in Expression: ((k50 * x53 * x49) - (kr50 * x54)) []{}
+ WARN (AbstractMathMapping:1130) - Unit exception: Incompatible units [molecules.min-1.pl-2] and [molecules.min-1.pl-1] in Expression: ((k52 * x55 * x51) - (kr52 * x56)) []{}
+ WARN (AbstractMathMapping:1130) - Unit exception: Incompatible units [molecules.min-1.pl-2] and [molecules.min-1.pl-1] in Expression: ((k52 * x51 * x57) - (kr52 * x58)) []{}
+ WARN (AbstractMathMapping:1130) - Unit exception: Incompatible units [molecules.min-1.pl-2] and [molecules.min-1.pl-1] in Expression: ((k56 * x59 * x60) - (kr56 * x61)) []{}
+ WARN (AbstractMathMapping:1130) - Unit exception: Incompatible units [molecules.min-1.pl-2] and [molecules.min-1.pl-1] in Expression: ((k58 * x60 * x57) - (kr58 * x62)) []{}
+ WARN (AbstractMathMapping:1130) - Unit exception: Incompatible units [molecules.min-1.pl-2] and [molecules.min-1.pl-1] in Expression: ((k16 * x17 * x22) - (kr16 * x18)) []{}
+ WARN (AbstractMathMapping:1130) - Unit exception: Incompatible units [molecules.min-1.pl-2] and [molecules.min-1.pl-1] in Expression: ((k17 * x24 * x18) - (kr17 * x19)) []{}
+ WARN (AbstractMathMapping:1130) - Unit exception: Incompatible units [molecules.min-1.pl-2] and [molecules.min-1.pl-1] in Expression: ((k18 * x26 * x19) - (kr18 * x20)) []{}
+ WARN (AbstractMathMapping:1130) - Unit exception: Incompatible units [molecules.min-1.pl-1] and [molecules.min-1.pl-2] in Expression: ((k19 * x20) - (kr19 * x69 * x19)) []{}
+ WARN (AbstractMathMapping:1130) - Unit exception: Incompatible units [molecules.min-1.pl-2] and [molecules.min-1.pl-1] in Expression: ((k20 * x71 * x19) - (kr20 * x21)) []{}
+ WARN (AbstractMathMapping:1130) - Unit exception: Incompatible units [molecules.min-1.pl-1] and [molecules.min-1.pl-2] in Expression: ((k21 * x21) - (kr21 * x19 * x26)) []{}
+ WARN (AbstractMathMapping:1130) - Unit exception: Incompatible units [molecules.min-1.pl-2] and [molecules.min-1.pl-1] in Expression: ((k22 * x31 * x17) - (kr22 * x63)) []{}
+ WARN (AbstractMathMapping:1130) - Unit exception: Incompatible units [molecules.min-1.pl-2] and [molecules.min-1.pl-1] in Expression: ((k24 * x22 * x64) - (kr24 * x65)) []{}
+ WARN (AbstractMathMapping:1130) - Unit exception: Incompatible units [molecules.min-1.pl-2] and [molecules.min-1.pl-1] in Expression: ((k25 * x24 * x65) - (kr25 * x66)) []{}
+ WARN (AbstractMathMapping:1130) - Unit exception: Incompatible units [molecules.min-1.pl-2] and [molecules.min-1.pl-1] in Expression: ((k18 * x26 * x66) - (kr18 * x67)) []{}
+ WARN (AbstractMathMapping:1130) - Unit exception: Incompatible units [molecules.min-1.pl-1] and [molecules.min-1.pl-2] in Expression: ((k19 * x67) - (kr19 * x66 * x69)) []{}
+ WARN (AbstractMathMapping:1130) - Unit exception: Incompatible units [molecules.min-1.pl-2] and [molecules.min-1.pl-1] in Expression: ((k28 * x69 * x41) - (kr28 * x70)) []{}
+ WARN (AbstractMathMapping:1130) - Unit exception: Incompatible units [molecules.min-1.pl-1] and [molecules.min-1.pl-2] in Expression: ((k29 * x70) - (kr29 * x71 * x72)) []{}
+ WARN (AbstractMathMapping:1130) - Unit exception: Incompatible units [molecules.min-1.pl-2] and [molecules.min-1.pl-1] in Expression: ((k20 * x71 * x66) - (kr20 * x68)) []{}
+ WARN (AbstractMathMapping:1130) - Unit exception: Incompatible units [molecules.min-1.pl-1] and [molecules.min-1.pl-2] in Expression: ((k21 * x68) - (kr21 * x66 * x26)) []{}
+ WARN (AbstractMathMapping:1130) - Unit exception: Incompatible units [molecules.min-1.pl-1] and [molecules.min-1.pl-2] in Expression: ((k32 * x66) - (kr32 * x17 * x38)) []{}
+ WARN (AbstractMathMapping:1130) - Unit exception: Incompatible units [molecules.min-1.pl-1] and [molecules.min-1.pl-2] in Expression: ((k34 * x19) - (kr34 * x17 * x30)) []{}
+ WARN (AbstractMathMapping:1130) - Unit exception: Incompatible units [molecules.min-1.pl-1] and [molecules.min-1.pl-2] in Expression: ((k37 * x64) - (kr37 * x17 * x40)) []{}
+ WARN (AbstractMathMapping:1130) - Unit exception: Incompatible units [molecules.min-1.pl-1] and [molecules.min-1.pl-2] in Expression: ((k37 * x65) - (kr37 * x17 * x39)) []{}
+ WARN (AbstractMathMapping:1130) - Unit exception: Incompatible units [molecules.min-1.pl-2] and [molecules.min-1.pl-1] in Expression: ((k41 * x30 * x64) - (kr41 * x66)) []{}
+ WARN (AbstractMathMapping:1130) - Unit exception: Incompatible units [molecules.min-1.pl-2] and [molecules.min-1.pl-1] in Expression: ((k42 * x44 * x72) - (kr42 * x73)) []{}
+ WARN (AbstractMathMapping:1130) - Unit exception: Incompatible units [molecules.min-1.pl-2] and [molecules.min-1.pl-1] in Expression: ((k44 * x47 * x72) - (kr44 * x74)) []{}
+ WARN (AbstractMathMapping:1130) - Unit exception: Incompatible units [molecules.min-1.pl-2] and [molecules.min-1.pl-1] in Expression: ((k44 * x72 * x75) - (kr44 * x76)) []{}
+ WARN (AbstractMathMapping:1130) - Unit exception: Incompatible units [molecules.min-1.pl-2] and [molecules.min-1.pl-1] in Expression: ((k48 * x77 * x53) - (kr48 * x78)) []{}
+ WARN (AbstractMathMapping:1130) - Unit exception: Incompatible units [molecules.min-1.pl-2] and [molecules.min-1.pl-1] in Expression: ((k50 * x53 * x75) - (kr50 * x79)) []{}
+ WARN (AbstractMathMapping:1130) - Unit exception: Incompatible units [molecules.min-1.pl-2] and [molecules.min-1.pl-1] in Expression: ((k52 * x55 * x77) - (kr52 * x80)) []{}
+ WARN (AbstractMathMapping:1130) - Unit exception: Incompatible units [molecules.min-1.pl-2] and [molecules.min-1.pl-1] in Expression: ((k52 * x77 * x81) - (kr52 * x82)) []{}
+ WARN (AbstractMathMapping:1130) - Unit exception: Incompatible units [molecules.min-1.pl-2] and [molecules.min-1.pl-1] in Expression: ((k56 * x83 * x60) - (kr56 * x84)) []{}
+ WARN (AbstractMathMapping:1130) - Unit exception: Incompatible units [molecules.min-1.pl-2] and [molecules.min-1.pl-1] in Expression: ((k58 * x60 * x81) - (kr58 * x85)) []{}
+ WARN (AbstractMathMapping:1130) - Unit exception: Incompatible units [molecules.min-1.pl-2] and [molecules.min-1.pl-1] in Expression: ((k4 * x25 * x12) - (kr4 * x88)) []{}
+ WARN (AbstractMathMapping:1130) - Unit exception: Incompatible units [molecules.min-1.pl-2] and [molecules.min-1.pl-1] in Expression: ((k4 * x27 * x12) - (kr4 * x89)) []{}
+ WARN (AbstractMathMapping:1130) - Unit exception: Incompatible units [molecules.min-1.pl-2] and [molecules.min-1.pl-1] in Expression: ((k4 * x29 * x12) - (kr4 * x90)) []{}
+ WARN (AbstractMathMapping:1130) - Unit exception: Incompatible units [molecules.min-1.pl-2] and [molecules.min-1.pl-1] in Expression: ((k4 * x34 * x12) - (kr4 * x91)) []{}
+ WARN (AbstractMathMapping:1130) - Unit exception: Incompatible units [molecules.min-1.pl-2] and [molecules.min-1.pl-1] in Expression: ((k4 * x35 * x12) - (kr4 * x92)) []{}
+ WARN (AbstractMathMapping:1130) - Unit exception: Incompatible units [molecules.min-1.pl-2] and [molecules.min-1.pl-1] in Expression: ((k4 * x36 * x12) - (kr4 * x93)) []{}
+ WARN (AbstractMathMapping:1130) - Unit exception: Incompatible units [molecules.min-1.pl-2] and [molecules.min-1.pl-1] in Expression: ((k4 * x37 * x12) - (kr4 * x94)) []{}
+ INFO (AbstractMathMapping:1457) - WARNING:::: MathMapping.refreshMathDescription() ... assigning boundary condition types not unique []{}
+ INFO (AbstractMathMapping:1457) - WARNING:::: MathMapping.refreshMathDescription() ... assigning boundary condition types not unique []{}
+ WARN (SolverUtilities:168) - KISAO - bad format, skipping []{}
+ WARN (SolverUtilities:168) - KISAO - bad format, skipping []{}
+ WARN (SolverUtilities:168) - KISAO - bad format, skipping []{}
+ INFO (SEDMLImporter:183) - Task (id='task1') is compatible, solver match found in ontology: 'KISAO:0000694' matched to CVODE []{}
+taskToSimulationMap: 1
+taskToListOfSubTasksMap: 1
+taskToVariableMap: 1
+topTaskToBaseTask: 1
+ INFO (SolverHandler:432) - Solver: cbit.vcell.solver.ode.CVodeSolverStandalone@4dabb3b1 []{}
+ INFO (SolverHandler:433) - Status: Finished: SOLVER_FINISHED:completed []{}
+ INFO (SolverHandler:479) - Succesful execution: Model 'archive_BIOMD0000000399_url.sedml_BIOMD0000000399_url' Task 'task1'. []{}
+ INFO (SolverHandler:491) - Running simulation task1_task1, 1254 ms []{}
+-----------------------------------------------------------------------------------------------------
+ INFO (SolverHandler:614) - Ran 1 simulation jobs for 1 biomodels. []{}
+ INFO (SedmlJob:302) - Generating outputs...  []{}
+ INFO (SedmlJob:358) - Generating CSV file...  []{}
+ INFO (RunUtils:196) - Ignoring unsupported output `autogen_plot_for_task1` while CSV generation. []{}
+ INFO (RunUtils:202) - Generating report `autogen_report_for_task1`. []{}
+ INFO (RunUtils:381) - created csv file for report autogen_report_for_task1: /tmp/VCell_CLI_193e56f13947731691420846988822/BIOMD0000000399_url.sedml/autogen_report_for_task1.csv []{}
+ INFO (RunUtils:202) - Generating report `__plot__autogen_plot_for_task1`. []{}
+ INFO (RunUtils:381) - created csv file for report __plot__autogen_plot_for_task1: /tmp/VCell_CLI_193e56f13947731691420846988822/BIOMD0000000399_url.sedml/__plot__autogen_plot_for_task1.csv []{}
+ INFO (SedmlJob:381) - Generating Plots...  []{}
+ WARN (CLIPythonManager:173) - Error calling python: null []{}
+ WARN (CLIPythonManager:174) - Attempting to acknowledge warnings / prompts. []{}
+ WARN (CLIPythonManager:184) - Error on second attempt calling python: null []{}
+ WARN (CLIPythonManager:185) - Attempting last resort []{}
+ WARN (CLIPythonManager:328) - Temp out file didn't delete properly []{}
+ WARN (CLIPythonManager:329) - Temp error file didn't delete properly []{}
+ INFO (CLIPythonManager:336) - Success!
+ []{}
+ INFO (CLIPythonManager:188) - Last python attempt successful! []{}
+ INFO (SedmlJob:392) - Generating HDF5 file...  []{}
+ INFO (NonspatialResultsConverter:204) - Ignoring unsupported output `autogen_plot_for_task1` while CSV generation. []{}
+ INFO (SedmlJob:343) - Archiving result files []{}
+ INFO (RunUtils:450) - Archiving resultant PDF files to `plots.zip`. []{}
+ INFO (RunUtils:450) - Archiving resultant CSV files to `reports.zip`. []{}
+ INFO (SedmlJob:351) - SED-ML : BIOMD0000000399_url.sedml successfully completed []{}
+ INFO (ExecutionJob:148) - Processing of SedML succeeded.
+	> 1 model
+	> 1 simulation
+	> 1 task
+	> 2 outputs
+		>> 1 report
+		>> 1 2D plot
+		>> 0 3D plots
+	> Does not have Math Overrides
+	> Does not have Parameter Scans []{}
+ INFO (BiosimulationsHdf5Writer:39) - Creating hdf5 file `reports.h5` in/tmp/VCell_CLI_193e56f13947731691420846988822 []{}
+ WARN (WritableHdfFile:50) - Writing files is in alpha. Check files carefully! []{}
+ INFO (BiosimulationsHdf5Writer:122) - HDF5 file successfully written to. []{}
+ INFO (ExecutionJob:178) - Omex archive.omex processing completed (96.46s) []{}
+
+[0;36m===================================================== Saving log ====================================================[0m
+Completed 43.4 KiB/43.4 KiB (314.5 KiB/s) with 1 file(s) remainingupload: ./rawLog.txt to s3://files.biosimulations.org/simulations/6765be3367468f9f3fc2199b/rawLog.txt
+
+[0;36m===================================================== Saving Structured log ==========================================[0m
+Completed 24.6 KiB/24.6 KiB (197.1 KiB/s) with 1 file(s) remainingupload: outputs/log.yml to s3://files.biosimulations.org/simulations/6765be3367468f9f3fc2199b/outputs/log.yml
+
+[0;36m================================================== Zipping outputs ==================================================[0m
+  adding: outputs/ (stored 0%)
+  adding: outputs/BIOMD0000000399_url.sedml/ (stored 0%)
+  adding: outputs/BIOMD0000000399_url.sedml/autogen_plot_for_task1.pdf (deflated 19%)
+  adding: outputs/BIOMD0000000399_url.sedml/autogen_plot_for_task1.csv (deflated 53%)
+  adding: outputs/BIOMD0000000399_url.sedml/autogen_report_for_task1.csv (deflated 62%)
+  adding: outputs/log.yml (deflated 93%)
+  adding: outputs/reports.zip (stored 0%)
+  adding: outputs/reports.h5 (deflated 29%)

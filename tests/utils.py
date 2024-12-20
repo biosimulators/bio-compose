@@ -4,7 +4,7 @@ import re
 import chardet
 from dataclasses import dataclass, asdict
 from typing import *
-from pprint import pformat
+from pprint import pformat, pp
 
 import numpy as np
 import h5py
@@ -33,7 +33,10 @@ def read_report_outputs(report_file_path: str, dataset_label: str = None) -> Uni
     outputs = []
     with h5py.File(report_file_path, 'r') as f:
         k = list(f.keys())
+        print(f'Report keys: {k}')
         group_path = k[0] + '/report'
+        print(f)
+
         if group_path in f:
             group = f[group_path]
             label = dataset_label or 'sedmlDataSetLabels'
@@ -47,6 +50,58 @@ def read_report_outputs(report_file_path: str, dataset_label: str = None) -> Uni
             return BiosimulationsRunOutputData(report_path=report_file_path, data=outputs)
         else:
             return {'report_path': report_file_path, 'data': f"Group '{group_path}' not found in the file."}
+
+
+def read_report_outputs_with_labels(report_file_path, dataset_path, format_to_datamodel=False, data_label=None):
+    with h5py.File(report_file_path, 'r') as f:
+        # access the dataset
+        dataset = f[dataset_path]
+
+        # check if dataset has attributes for labels
+        if format_to_datamodel:
+            outputs = []
+            label = data_label or 'sedmlDataSetLabels'
+            ds_labels = [label.decode('utf-8') for label in dataset.attrs[label]]
+            for label in ds_labels:
+                dataset_index = list(ds_labels).index(label)
+                data = dataset[()]
+                specific_data = data[dataset_index]
+                output = BiosimulationsReportOutput(dataset_label=label, data=specific_data)
+                outputs.append(output)
+            return BiosimulationsRunOutputData(report_path=report_file_path, data=outputs)
+        else:
+            if 'sedmlDataSetLabels' in dataset.attrs:
+                labels = [label.decode('utf-8') for label in dataset.attrs['sedmlDataSetLabels']]
+            else:
+                raise ValueError("No dataset labels found in the attributes.")
+            data = dataset[()]
+
+            return {label: data[idx] for idx, label in enumerate(labels)}
+
+
+def explore_hdf5_data(report_file_path: str, keyword: str = "report"):
+    with h5py.File(report_file_path, 'r') as f:
+        # initialize a dictionary to store all datasets matching the keyword
+        matching_datasets = {}
+
+        # recursively explore the HDF5 file structure
+        def find_datasets(group, group_path=""):
+            for name, obj in group.items():
+                if isinstance(obj, h5py.Group):
+                    # Recursively search within groups
+                    find_datasets(obj, group_path=f"{group_path}/{name}")
+                elif isinstance(obj, h5py.Dataset) and keyword in name:
+                    # Add dataset to the results if it matches the keyword
+                    matching_datasets[f"{group_path}/{name}".strip("/")] = obj[()]
+
+        # start searching from the root group
+        find_datasets(f)
+
+        data = {
+            'data': f"No datasets containing '{keyword}' found in the file." if not matching_datasets
+            else matching_datasets
+        }
+        return data.get('data')
 
 
 def detect_encoding(file_path):
