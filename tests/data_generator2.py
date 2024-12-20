@@ -1,6 +1,7 @@
 import os
 import time
 import urllib
+import zipfile
 from pathlib import Path
 from tarfile import AbsolutePathError
 from typing import *
@@ -146,7 +147,7 @@ def test_generate_omex_outputs():
     test_biomodel_output_dir = f'./fixtures/verification_request/results/{test_biomodel_id}'
     # simulators = list(Simulator.__members__.keys())
     simulators = ['vcell']
-    buffer = 5
+    buffer = 7
 
     os.mkdir(test_biomodel_output_dir) if not os.path.exists(test_biomodel_output_dir) else None
 
@@ -163,8 +164,8 @@ def test_generate_omex_outputs():
     time.sleep(buffer)
 
     output_data = {}
-    for path in output_dirpaths:
-        status_updates = refresh_status(omex_src_dir=omex_src_dirpath, out_dir=path, return_status=True)
+    for output_dirpath in output_dirpaths:
+        status_updates = refresh_status(omex_src_dir=omex_src_dirpath, out_dir=output_dirpath, return_status=True)
 
         # iterate over each simulation in the status updates
         for sim_id in status_updates:
@@ -172,22 +173,32 @@ def test_generate_omex_outputs():
             terminal_statuses = ['succeeded', 'failed']
             simulator = status_data['simulator']
             while status_data['status'].lower() not in terminal_statuses:
-                # status not ready, wait
+                # status not ready, wait and re-fetch status
                 print(
                     f"...{SKY_BLUE}{simulator}:{RESET} {LIGHT_PURPLE}{status_data['status']}{RESET}. Attempting another refresh..."
                 )
-                time.sleep(buffer)
-
-                # re-fetch status
-                status_updates = refresh_status(omex_src_dir=omex_src_dirpath, out_dir=path, return_status=True)
+                for n in range(buffer):
+                    print(n)
+                    time.sleep(1)
+                status_updates = refresh_status(omex_src_dir=omex_src_dirpath, out_dir=output_dirpath, return_status=True)
                 status_data = status_updates.get(sim_id, status_data)
+
+            # status check is complete
             print(f"> Status check complete for {SKY_BLUE}{simulator}:{RESET} {LIGHT_PURPLE}{status_data.get('status')}{RESET}.\n")
 
             # download files
-            simulator_output_zippath = download_runs(omex_src_dir=omex_src_dirpath, out_dir=path)
+            simulator_output_zippath = download_runs(omex_src_dir=omex_src_dirpath, out_dir=output_dirpath)
             print(f"> Downloaded files for {simulator} at {simulator_output_zippath}")
 
-            # parse with hdf5
+            # unzip output files
+            with zipfile.ZipFile(simulator_output_zippath, 'r') as zip_ref:
+                zip_ref.extractall(output_dirpath)
+
+            # read report.h5
+            for filepath in os.listdir(output_dirpath):
+                if filepath.endswith(".h5"):
+                    # call io method here
+                    print(f"Report File: {filepath}")
 
 
 test_generate_omex_outputs()
