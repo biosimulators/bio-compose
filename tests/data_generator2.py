@@ -7,6 +7,7 @@ from tarfile import AbsolutePathError
 from typing import *
 
 import h5py
+import numpy as np
 from dotenv import load_dotenv
 
 import typer
@@ -144,11 +145,11 @@ def generate_omex_outputs(entrypoint: str, dest_dir: str | Path, simulators: Lis
     return output_filepaths, omex_src_dir
 
 
-def test_generate_omex_outputs():
+def test_generate_omex_outputs() -> BiosimulationsRunOutputData | dict[str, dict[str, np.ndarray | list[float]]]:
     test_biomodel_id = 'BIOMD0000000399'
     test_biomodel_output_dir = f'./fixtures/verification_request/results/{test_biomodel_id}'
     # simulators = list(Simulator.__members__.keys())
-    simulators = ['vcell']
+    simulators = ['copasi', 'vcell']
     buffer = 7
 
     os.mkdir(test_biomodel_output_dir) if not os.path.exists(test_biomodel_output_dir) else None
@@ -219,12 +220,12 @@ def read_simulator_output_data(simulator_output_zippath: os.PathLike[str], outpu
                     return labeled_data
 
 
-# test_generate_omex_outputs()
-
-sim = 'vcell'
-zippath = f'fixtures/verification_request/results/BIOMD0000000399/{sim}/BIOMD0000000399/{sim}/7.7.0.13/results.zip'
-output_dirpath = f'fixtures/verification_request/results/BIOMD0000000399/{sim}/BIOMD0000000399/{sim}/7.7.0.13'
+# sim = 'vcell'
+# zippath = f'fixtures/verification_request/results/BIOMD0000000399/{sim}/BIOMD0000000399/{sim}/7.7.0.13/results.zip'
+# output_dirpath = f'fixtures/verification_request/results/BIOMD0000000399/{sim}/BIOMD0000000399/{sim}/7.7.0.13'
 # read_simulator_output_data(zippath, output_dirpath)
+
+simulator_outputs = test_generate_omex_outputs()
 
 
 
