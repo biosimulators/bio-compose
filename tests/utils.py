@@ -7,6 +7,7 @@ import chardet
 from dataclasses import dataclass, asdict
 from typing import *
 from pprint import pformat, pp
+import pprint
 
 import numpy as np
 import h5py
@@ -29,6 +30,18 @@ class BiosimulationsReportOutput(BaseClass):
 class BiosimulationsRunOutputData(BaseClass):
     report_path: str
     data: List[BiosimulationsReportOutput]
+
+
+SKY_BLUE = "\033[38;5;117m"  # Sky blue color
+LIGHT_PURPLE = "\033[38;5;183m"
+ERROR_RED = "\033[31m"
+RESET = "\033[0m"
+
+
+def printc(msg: Any, alert: str = '', error=False):
+    prefix = f"> {SKY_BLUE if not error else ERROR_RED}{alert if not error else 'AN ERROR OCCURRED'}:{RESET}"
+    message = f"{LIGHT_PURPLE if not error else ERROR_RED}{msg}{RESET}\n"
+    print(f"> {prefix if alert else None} {message}")
 
 
 def read_report_outputs(report_file_path: str, dataset_label: str = None) -> Union[BiosimulationsRunOutputData, dict[str, str]]:
@@ -54,21 +67,21 @@ def read_report_outputs(report_file_path: str, dataset_label: str = None) -> Uni
 
 def read_report_outputs_with_labels(
         report_file_path: str,
-        dataset_path: str,
+        # dataset_path: str,
         return_as_dict: bool = True,
         dataset_label_id: str = 'sedmlDataSetLabels'
-) -> dict[str, np.ndarray] | BiosimulationsRunOutputData:
+):  # -> dict[str, np.ndarray] | BiosimulationsRunOutputData:
+    import h5py
     with h5py.File(report_file_path, 'r') as f:
         # access the dataset
+        dataset_path = get_report_dataset_path(report_file_path)
         dataset = f[dataset_path]
-
         # check if dataset has attributes for labels
         if return_as_dict:
             if dataset_label_id in dataset.attrs:
                 labels = [label.decode('utf-8') for label in dataset.attrs[dataset_label_id]]
             else:
                 raise ValueError(f"No dataset labels found in the attributes with the name '{dataset_label_id}'.")
-
             data = dataset[()]
             return {label: data[idx] for idx, label in enumerate(labels)}
         else:
@@ -84,25 +97,23 @@ def read_report_outputs_with_labels(
             return BiosimulationsRunOutputData(report_path=report_file_path, data=outputs)
 
 
-def explore_hdf5_data(report_file_path: str, keyword: str = "report") -> dict:
-    with h5py.File(report_file_path, 'r') as f:
-
-        def find_datasets(group, group_path=""):
-            matching_datasets = {}
-            for name, obj in group.items():
-                if isinstance(obj, h5py.Group):
-                    # search within groups
-                    find_datasets(obj, group_path=f"{group_path}/{name}")
-                elif isinstance(obj, h5py.Dataset) and keyword in name:
-                    # Add dataset to the results if it matches the keyword
-                    matching_datasets[f"{group_path}/{name}".strip("/")] = obj[()]
-            return matching_datasets
-
-        matching_datasets = find_datasets(f)
-        if not matching_datasets:
-            raise ValueError(f"No datasets containing '{keyword}' found in the file.")
+def find_datasets(group, group_path=""):
+    matching_datasets = {}
+    for name, obj in group.items():
+        full_path = f"{group_path}/{name}" if group_path else name
+        if "report" in full_path:
+            matching_datasets[full_path] = obj[()]
         else:
-            return matching_datasets
+            if isinstance(obj, h5py.Group):
+                matching_datasets.update(find_datasets(obj, full_path))
+    return matching_datasets
+
+
+def get_report_dataset_path(report_file_path: str, keyword: str = "report") -> str:
+    with h5py.File(report_file_path, 'r') as f:
+        report_ds = find_datasets(f)
+        ds_paths = list(report_ds.keys())
+        return ds_paths.pop() if len(ds_paths) < 2 else list(sorted(ds_paths))[0]   # TODO: make this better
 
 
 def detect_encoding(file_path: PathLike[str]):

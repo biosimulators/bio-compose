@@ -21,19 +21,11 @@ from biosimulations_runutils.biosim_pipeline.datamodels import Simulator, Simula
 
 from bio_compose import get_biomodel_archive
 from biosimulations_runutils.common.api_utils import download_file
-from tests.utils import read_report_outputs, BiosimulationsRunOutputData, explore_hdf5_data, read_report_outputs_with_labels
+# from tests.utils import read_report_outputs, BiosimulationsRunOutputData, explore_hdf5_data, read_report_outputs_with_labels, printc
+from tests.utils import *
+
 
 load_dotenv('.env')
-
-
-SKY_BLUE = "\033[38;5;117m"  # Sky blue color
-LIGHT_PURPLE = "\033[38;5;183m"
-ERROR_RED = "\033[31m"
-RESET = "\033[0m"
-
-
-def printc(msg: Any, alert: str = '', error=False):
-    print(f"> {SKY_BLUE if not error else ERROR_RED}{alert if not error else 'AN ERROR OCCURRED'}:{RESET} {LIGHT_PURPLE if not error else ERROR_RED}{pprint.pformat(msg)}{RESET}\n")
 
 
 def generate_omex_outputs(
