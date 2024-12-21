@@ -70,18 +70,19 @@ def read_report_outputs_with_labels(
         # dataset_path: str,
         return_as_dict: bool = True,
         dataset_label_id: str = 'sedmlDataSetLabels'
-):  # -> dict[str, np.ndarray] | BiosimulationsRunOutputData:
-    import h5py
-    with h5py.File(report_file_path, 'r') as f:
-        # access the dataset
+) -> dict[str, np.ndarray] | BiosimulationsRunOutputData:
+    with h5py.File(report_file_path, 'r') as sedml_group:
+        # get the dataset path for reports within sedml group
         dataset_path = get_report_dataset_path(report_file_path)
-        dataset = f[dataset_path]
-        # check if dataset has attributes for labels
+        dataset = sedml_group[dataset_path]
+
         if return_as_dict:
+            # check if dataset has attributes for labels
             if dataset_label_id in dataset.attrs:
                 labels = [label.decode('utf-8') for label in dataset.attrs[dataset_label_id]]
             else:
                 raise ValueError(f"No dataset labels found in the attributes with the name '{dataset_label_id}'.")
+
             data = dataset[()]
             return {label: data[idx] for idx, label in enumerate(labels)}
         else:
@@ -97,7 +98,7 @@ def read_report_outputs_with_labels(
             return BiosimulationsRunOutputData(report_path=report_file_path, data=outputs)
 
 
-def find_datasets(group, group_path=""):
+def find_datasets(group: h5py.File | h5py.Group, group_path=""):
     matching_datasets = {}
     for name, obj in group.items():
         full_path = f"{group_path}/{name}" if group_path else name
