@@ -32,6 +32,18 @@ class BiosimulationsRunOutputData(BaseClass):
     data: List[BiosimulationsReportOutput]
 
 
+class ReportDataSet(dict):
+    pass
+
+
+class ReportDataSetPath(str):
+    pass
+
+
+class SbmlSpeciesMapping(dict):
+    pass
+
+
 SKY_BLUE = "\033[38;5;117m"  # Sky blue color
 LIGHT_PURPLE = "\033[38;5;183m"
 ERROR_RED = "\033[31m"
@@ -98,7 +110,7 @@ def read_report_outputs_with_labels(
             return BiosimulationsRunOutputData(report_path=report_file_path, data=outputs)
 
 
-def find_datasets(group: h5py.File | h5py.Group, group_path=""):
+def find_datasets(group: h5py.File | h5py.Group, group_path="") -> dict[str, np.ndarray]:
     matching_datasets = {}
     for name, obj in group.items():
         full_path = f"{group_path}/{name}" if group_path else name
@@ -107,14 +119,17 @@ def find_datasets(group: h5py.File | h5py.Group, group_path=""):
         else:
             if isinstance(obj, h5py.Group):
                 matching_datasets.update(find_datasets(obj, full_path))
+
     return matching_datasets
 
 
-def get_report_dataset_path(report_file_path: str, keyword: str = "report") -> str:
+def get_report_dataset_path(report_file_path: str, keyword: str = "report") -> ReportDataSetPath:
     with h5py.File(report_file_path, 'r') as f:
         report_ds = find_datasets(f)
         ds_paths = list(report_ds.keys())
-        return ds_paths.pop() if len(ds_paths) < 2 else list(sorted(ds_paths))[0]   # TODO: make this better
+        report_ds_path = ds_paths.pop() if len(ds_paths) < 2 else list(sorted(ds_paths))[0]   # TODO: make this better
+
+        return ReportDataSetPath(report_ds_path)
 
 
 def detect_encoding(file_path: PathLike[str]):
@@ -130,7 +145,7 @@ def handle_sbml_exception() -> str:
     return error_message
 
 
-def get_sbml_species_mapping(sbml_fp: str) -> dict:
+def get_sbml_species_mapping(sbml_fp: str) -> dict | SbmlSpeciesMapping:
     # read file
     sbml_reader = libsbml.SBMLReader()
     sbml_doc = sbml_reader.readSBML(sbml_fp)
@@ -147,7 +162,7 @@ def get_sbml_species_mapping(sbml_fp: str) -> dict:
     names = list(map(lambda s: s.name, sbml_species_ids))
     species_ids = [spec.getId() for spec in sbml_species_ids]
 
-    return dict(zip(names, species_ids))
+    return SbmlSpeciesMapping(zip(names, species_ids))
 
 
 def fix_non_ascii_characters(file_path: PathLike[str], output_file: PathLike[str]):
