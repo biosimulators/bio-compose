@@ -36,6 +36,10 @@ class ReportDataSet(dict):
     pass
 
 
+class SimulatorReportData(dict):
+    pass
+
+
 class ReportDataSetPath(str):
     pass
 
@@ -56,7 +60,7 @@ def printc(msg: Any, alert: str = '', error=False):
     print(f"> {prefix if alert else None} {message}")
 
 
-def read_report_outputs(report_file_path: str, dataset_label: str = None) -> Union[BiosimulationsRunOutputData, dict[str, str]]:
+def __read_report_outputs(report_file_path: str, dataset_label: str = None) -> Union[BiosimulationsRunOutputData, dict[str, str]]:
     outputs = []
     with h5py.File(report_file_path, 'r') as f:
         k = list(f.keys())
@@ -77,11 +81,10 @@ def read_report_outputs(report_file_path: str, dataset_label: str = None) -> Uni
             return {'report_path': report_file_path, 'data': f"Group '{group_path}' not found in the file."}
 
 
-def read_report_outputs_with_labels(
+def get_simulator_report_data(
         report_file_path: str,
-        # dataset_path: str,
         return_as_dict: bool = True,
-        dataset_label_id: str = 'sedmlDataSetLabels'
+        dataset_label_id: str = 'sedmlDataSetLabels',
 ) -> dict[str, np.ndarray] | BiosimulationsRunOutputData:
     with h5py.File(report_file_path, 'r') as sedml_group:
         # get the dataset path for reports within sedml group
@@ -95,9 +98,11 @@ def read_report_outputs_with_labels(
             else:
                 raise ValueError(f"No dataset labels found in the attributes with the name '{dataset_label_id}'.")
 
+            # get labeled data from report
             data = dataset[()]
             return {label: data[idx] for idx, label in enumerate(labels)}
         else:
+            # return as datamodel
             outputs = []
             ds_labels = [label.decode('utf-8') for label in dataset.attrs[dataset_label_id]]
             for label in ds_labels:
