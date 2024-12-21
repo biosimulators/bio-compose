@@ -33,7 +33,7 @@ RESET = "\033[0m"
 
 
 def printc(msg: Any, alert: str = '', error=False):
-    pprint.pp(f"{SKY_BLUE}{alert}:{RESET} {LIGHT_PURPLE if not error else ERROR_RED}{msg}{RESET}")
+    print(f"> {SKY_BLUE if not error else ERROR_RED}{alert if not error else 'AN ERROR OCCURRED'}:{RESET} {LIGHT_PURPLE if not error else ERROR_RED}{pprint.pformat(msg)}{RESET}\n")
 
 
 def generate_omex_outputs(
@@ -199,7 +199,7 @@ def submit_omex_simulations(
             omex_src_dir=omex_src_dir,
             out_dir=sim_output_dest_path,
         )
-        printc(f"Simulation submitted for {simulator}. Waiting for {buffer} seconds...\n")
+        printc(f"> Simulation submitted for {simulator}. Waiting for {buffer} seconds...\n")
 
         # wait and then refresh status
         time.sleep(buffer)
