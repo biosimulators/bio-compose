@@ -1,3 +1,4 @@
+import os
 import traceback
 import unicodedata
 import re
@@ -82,10 +83,20 @@ def __read_report_outputs(report_file_path: str, dataset_label: str = None) -> U
 
 
 def get_simulator_report_data(
-        report_file_path: str,
+        report_file_path: os.PathLike[str] | str,
         return_as_dict: bool = True,
         dataset_label_id: str = 'sedmlDataSetLabels',
-) -> SimulatorReportData | BiosimulationsRunOutputData:
+) -> Union[SimulatorReportData, BiosimulationsRunOutputData]:
+    """
+    Get the output/observables data for the specified report, derived from a simulator run submission.
+
+    :param report_file_path: Path to the report file.
+    :param return_as_dict: If True, return a dictionary containing the simulator report data, otherwise return a BiosimulationsRunOutputData object (See documentation for more details).
+    :param dataset_label_id: Dataset label ID. Defaults to 'sedmlDataSetLabels'.
+
+    :return: Report data for the specified simulator output report indexed by observable/species name.
+    :rtype: Union[SimulatorReportData, BiosimulationsRunOutputData]
+    """
     with h5py.File(report_file_path, 'r') as sedml_group:
         # get the dataset path for reports within sedml group
         dataset_path = get_report_dataset_path(report_file_path)
@@ -115,29 +126,34 @@ def get_simulator_report_data(
             return BiosimulationsRunOutputData(report_path=report_file_path, data=outputs)
 
 
-def find_datasets(group: h5py.File | h5py.Group, group_path="") -> dict[str, np.ndarray]:
+def find_datasets(
+        group: Union[h5py.File, h5py.Group],
+        group_path: Optional[str] = None
+) -> dict[str, np.ndarray]:
     matching_datasets = {}
     for name, obj in group.items():
+        gp = group_path or ""
         full_path = f"{group_path}/{name}" if group_path else name
         if "report" in full_path:
             matching_datasets[full_path] = obj[()]
         else:
             if isinstance(obj, h5py.Group):
                 matching_datasets.update(find_datasets(obj, full_path))
-
     return matching_datasets
 
 
-def get_report_dataset_path(report_file_path: str, keyword: str = "report") -> ReportDataSetPath:
+def get_report_dataset_path(
+        report_file_path: str,
+        keyword: str = "report"
+) -> ReportDataSetPath:
     with h5py.File(report_file_path, 'r') as f:
         report_ds = find_datasets(f)
         ds_paths = list(report_ds.keys())
         report_ds_path = ds_paths.pop() if len(ds_paths) < 2 else list(sorted(ds_paths))[0]   # TODO: make this better
-
         return ReportDataSetPath(report_ds_path)
 
 
-def detect_encoding(file_path: PathLike[str]):
+def detect_encoding(file_path: PathLike[str]) -> dict:
     with open(file_path, 'rb') as f:
         raw_data = f.read()
         result = chardet.detect(raw_data)
@@ -150,8 +166,7 @@ def handle_sbml_exception() -> str:
     return error_message
 
 
-def get_sbml_species_mapping(sbml_fp: str) -> dict | SbmlSpeciesMapping:
-    # read file
+def get_sbml_species_mapping(sbml_fp: str) -> SbmlSpeciesMapping:
     sbml_reader = libsbml.SBMLReader()
     sbml_doc = sbml_reader.readSBML(sbml_fp)
     sbml_model_object = sbml_doc.getModel()
@@ -170,7 +185,7 @@ def get_sbml_species_mapping(sbml_fp: str) -> dict | SbmlSpeciesMapping:
     return SbmlSpeciesMapping(zip(names, species_ids))
 
 
-def fix_non_ascii_characters(file_path: PathLike[str], output_file: PathLike[str]):
+def fix_non_ascii_characters(file_path: PathLike[str], output_file: PathLike[str]) -> None:
     with open(file_path, "r", encoding="utf-8") as f:
         content = f.read()
 
