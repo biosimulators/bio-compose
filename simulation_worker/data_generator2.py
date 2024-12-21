@@ -13,14 +13,29 @@ from biosimulations_runutils.biosim_pipeline.datamodels import Simulator, Simula
 
 from bio_compose import get_biomodel_archive
 from biosimulations_runutils.common.api_utils import download_file
-# from tests.utils import read_report_outputs, BiosimulationsRunOutputData, explore_hdf5_data, read_report_outputs_with_labels, printc
 from simulation_worker.utils import *
+
+
+__all__ = [
+    "generate_omex_output_data",
+    "generate_sbml_output_data",
+    "STATUS_SCHEMA"
+]
+
+
+STATUS_SCHEMA = {
+    "$run_id(str)": {
+        "status": "str",
+        "out_dir": "PathLike[str]",
+        "simulator": "Simulator"
+    }
+}
 
 
 load_dotenv('../tests/.env')
 
 
-def generate_omex_outputs(
+def generate_omex_output_data(
         biomodel_entrypoint: str | os.PathLike[str],
         out_dir: str | Path,
         simulators: list[str | tuple[str, str]],
@@ -41,6 +56,16 @@ def generate_omex_outputs(
     time.sleep(fetch_buffer)
 
     return fetch_simulator_output(output_dirpaths, omex_src_dirpath, fetch_buffer)
+
+
+def generate_sbml_output_data(
+        sbml_entrypoint: str | os.PathLike[str],
+        start: int,
+        stop: int,
+        num_steps: int,
+        simulators: list[str | tuple[str, str]],
+):
+    pass
 
 
 def download_runs(
@@ -80,15 +105,6 @@ def download_runs(
             printc(alert="Failure:", msg=e, error=True)
 
 
-STATUS_SCHEMA = {
-    "$run_id(str)": {
-        "status": "str",
-        "out_dir": "PathLike[str]",
-        "simulator": "Simulator"
-    }
-}
-
-
 def refresh_status(
         omex_src_dir: Path,
         out_dir: Path,
@@ -116,7 +132,6 @@ def upload_omex(
         out_dir: Path = None
 ) -> None:
     data_manager = DataManager(omex_src_dir=omex_src_dir, out_dir=out_dir)
-
     projects = data_manager.read_projects()
 
     for source_omex in data_manager.get_source_omex_archives():
@@ -141,13 +156,14 @@ def read_simulator_output_data(simulator_output_zippath: os.PathLike[str], outpu
                 if outfile.endswith(".h5"):
                     # call io method here
                     report_path = os.path.join(str(output_dirpath), filepath, outfile)
-                    # simulator_outputs = read_report_outputs(report_file_path=report_path)
-                    data = explore_hdf5_data(report_path)
-                    dataset_keys = data.keys()
-                    dataset_path = list(data.keys()).pop() if len(dataset_keys) == 1 else list(data.keys())[0]
-                    labeled_data = read_report_outputs_with_labels(report_file_path=report_path, dataset_path=dataset_path)
+                    return get_simulator_report_data(report_path)
 
-                    return labeled_data
+# simulator_outputs = read_report_outputs(report_file_path=report_path)
+# data = explore_hdf5_data(report_path)
+# dataset_keys = data.keys()
+# dataset_path = list(data.keys()).pop() if len(dataset_keys) == 1 else list(data.keys())[0]
+# labeled_data = read_report_outputs_with_labels(report_file_path=report_path, dataset_path=dataset_path)
+# return labeled_data
 
 
 def submit_omex_simulations(
@@ -241,24 +257,6 @@ def fetch_simulator_output(output_dirpaths: list[Path], omex_src_dirpath: Path, 
             output_data[simulator] = sim_data
 
         return output_data
-
-
-def test_generate_omex_outputs():
-    # sim = 'vcell'
-    # zippath = f'fixtures/verification_request/results/BIOMD0000000399/{sim}/BIOMD0000000399/{sim}/7.7.0.13/results.zip'
-    # output_dirpath = f'fixtures/verification_request/results/BIOMD0000000399/{sim}/BIOMD0000000399/{sim}/7.7.0.13'
-    # read_simulator_output_data(zippath, output_dirpath)
-
-    # simulators = list(sorted(Simulator.__members__.keys()))
-    # simulators = simulators[int(len(simulators) / 2):len(simulators)]  # latter half of list
-    simulators = ['vcell']
-    buffer = 2
-    test_biomodel_id = 'BIOMD0000000013'
-    test_biomodel_output_dir = f'./fixtures/verification_request/results/{test_biomodel_id}'
-
-    simulator_outputs = generate_omex_outputs(test_biomodel_id, test_biomodel_output_dir, simulators, buffer)
-
-    printc(simulator_outputs, "The final outputs")
 
 
 

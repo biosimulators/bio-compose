@@ -2,13 +2,10 @@ import os
 import traceback
 import unicodedata
 import re
-from os import PathLike
-
 import chardet
 from dataclasses import dataclass, asdict
 from typing import *
-from pprint import pformat, pp
-import pprint
+from pprint import pformat
 
 import numpy as np
 import h5py
@@ -153,7 +150,7 @@ def get_report_dataset_path(
         return ReportDataSetPath(report_ds_path)
 
 
-def detect_encoding(file_path: PathLike[str]) -> dict:
+def detect_encoding(file_path: os.PathLike[str]) -> dict:
     with open(file_path, 'rb') as f:
         raw_data = f.read()
         result = chardet.detect(raw_data)
@@ -185,7 +182,7 @@ def get_sbml_species_mapping(sbml_fp: str) -> SbmlSpeciesMapping:
     return SbmlSpeciesMapping(zip(names, species_ids))
 
 
-def fix_non_ascii_characters(file_path: PathLike[str], output_file: PathLike[str]) -> None:
+def fix_non_ascii_characters(file_path: os.PathLike[str], output_file: os.PathLike[str]) -> None:
     with open(file_path, "r", encoding="utf-8") as f:
         content = f.read()
 
