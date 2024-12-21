@@ -1,6 +1,8 @@
 import traceback
 import unicodedata
 import re
+from os import PathLike
+
 import chardet
 from dataclasses import dataclass, asdict
 from typing import *
@@ -33,10 +35,7 @@ def read_report_outputs(report_file_path: str, dataset_label: str = None) -> Uni
     outputs = []
     with h5py.File(report_file_path, 'r') as f:
         k = list(f.keys())
-        print(f'Report keys: {k}')
         group_path = k[0] + '/report'
-        print(f)
-
         if group_path in f:
             group = f[group_path]
             label = dataset_label or 'sedmlDataSetLabels'
@@ -47,64 +46,66 @@ def read_report_outputs(report_file_path: str, dataset_label: str = None) -> Uni
                 specific_data = data[dataset_index]
                 output = BiosimulationsReportOutput(dataset_label=label, data=specific_data)
                 outputs.append(output)
+
             return BiosimulationsRunOutputData(report_path=report_file_path, data=outputs)
         else:
             return {'report_path': report_file_path, 'data': f"Group '{group_path}' not found in the file."}
 
 
-def read_report_outputs_with_labels(report_file_path, dataset_path, format_to_datamodel=False, data_label=None):
+def read_report_outputs_with_labels(
+        report_file_path: str,
+        dataset_path: str,
+        return_as_dict: bool = True,
+        dataset_label_id: str = 'sedmlDataSetLabels'
+) -> dict[str, np.ndarray] | BiosimulationsRunOutputData:
     with h5py.File(report_file_path, 'r') as f:
         # access the dataset
         dataset = f[dataset_path]
 
         # check if dataset has attributes for labels
-        if format_to_datamodel:
+        if return_as_dict:
+            if dataset_label_id in dataset.attrs:
+                labels = [label.decode('utf-8') for label in dataset.attrs[dataset_label_id]]
+            else:
+                raise ValueError(f"No dataset labels found in the attributes with the name '{dataset_label_id}'.")
+
+            data = dataset[()]
+            return {label: data[idx] for idx, label in enumerate(labels)}
+        else:
             outputs = []
-            label = data_label or 'sedmlDataSetLabels'
-            ds_labels = [label.decode('utf-8') for label in dataset.attrs[label]]
+            ds_labels = [label.decode('utf-8') for label in dataset.attrs[dataset_label_id]]
             for label in ds_labels:
                 dataset_index = list(ds_labels).index(label)
                 data = dataset[()]
                 specific_data = data[dataset_index]
                 output = BiosimulationsReportOutput(dataset_label=label, data=specific_data)
                 outputs.append(output)
+
             return BiosimulationsRunOutputData(report_path=report_file_path, data=outputs)
-        else:
-            if 'sedmlDataSetLabels' in dataset.attrs:
-                labels = [label.decode('utf-8') for label in dataset.attrs['sedmlDataSetLabels']]
-            else:
-                raise ValueError("No dataset labels found in the attributes.")
-            data = dataset[()]
-
-            return {label: data[idx] for idx, label in enumerate(labels)}
 
 
-def explore_hdf5_data(report_file_path: str, keyword: str = "report"):
+def explore_hdf5_data(report_file_path: str, keyword: str = "report") -> dict:
     with h5py.File(report_file_path, 'r') as f:
-        # initialize a dictionary to store all datasets matching the keyword
-        matching_datasets = {}
 
-        # recursively explore the HDF5 file structure
         def find_datasets(group, group_path=""):
+            matching_datasets = {}
             for name, obj in group.items():
                 if isinstance(obj, h5py.Group):
-                    # Recursively search within groups
+                    # search within groups
                     find_datasets(obj, group_path=f"{group_path}/{name}")
                 elif isinstance(obj, h5py.Dataset) and keyword in name:
                     # Add dataset to the results if it matches the keyword
                     matching_datasets[f"{group_path}/{name}".strip("/")] = obj[()]
+            return matching_datasets
 
-        # start searching from the root group
-        find_datasets(f)
-
-        data = {
-            'data': f"No datasets containing '{keyword}' found in the file." if not matching_datasets
-            else matching_datasets
-        }
-        return data.get('data')
+        matching_datasets = find_datasets(f)
+        if not matching_datasets:
+            raise ValueError(f"No datasets containing '{keyword}' found in the file.")
+        else:
+            return matching_datasets
 
 
-def detect_encoding(file_path):
+def detect_encoding(file_path: PathLike[str]):
     with open(file_path, 'rb') as f:
         raw_data = f.read()
         result = chardet.detect(raw_data)
@@ -118,14 +119,6 @@ def handle_sbml_exception() -> str:
 
 
 def get_sbml_species_mapping(sbml_fp: str) -> dict:
-    """
-
-    Args:
-        - sbml_fp: `str`: path to the SBML model file.
-
-    Returns:
-        Dictionary mapping of {sbml_species_names(usually the actual observable name): sbml_species_ids(ids used in the solver)}
-    """
     # read file
     sbml_reader = libsbml.SBMLReader()
     sbml_doc = sbml_reader.readSBML(sbml_fp)
@@ -145,13 +138,11 @@ def get_sbml_species_mapping(sbml_fp: str) -> dict:
     return dict(zip(names, species_ids))
 
 
-def fix_non_ascii_characters(file_path, output_file):
+def fix_non_ascii_characters(file_path: PathLike[str], output_file: PathLike[str]):
     with open(file_path, "r", encoding="utf-8") as f:
         content = f.read()
 
     non_ascii_chars = set(re.findall(r'[^\x00-\x7F]', content))
-    print(f"Found non-ASCII characters: {non_ascii_chars}")
-
     replacements = {}
     for char in non_ascii_chars:
         ascii_name = unicodedata.name(char, None)
@@ -168,3 +159,4 @@ def fix_non_ascii_characters(file_path, output_file):
         f.write(content)
 
     print(f"Fixed file saved to {output_file}")
+

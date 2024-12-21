@@ -1,7 +1,9 @@
 import asyncio
 import os
+import pprint
 import time
 import urllib
+import warnings
 import zipfile
 from pathlib import Path
 from tarfile import AbsolutePathError
@@ -26,7 +28,35 @@ load_dotenv('.env')
 
 SKY_BLUE = "\033[38;5;117m"  # Sky blue color
 LIGHT_PURPLE = "\033[38;5;183m"
+ERROR_RED = "\033[31m"
 RESET = "\033[0m"
+
+
+def printc(msg: Any, alert: str = '', error=False):
+    pprint.pp(f"{SKY_BLUE}{alert}:{RESET} {LIGHT_PURPLE if not error else ERROR_RED}{msg}{RESET}")
+
+
+def generate_omex_outputs(
+        biomodel_entrypoint: str | os.PathLike[str],
+        out_dir: str | Path,
+        simulators: list[str | tuple[str, str]],
+        fetch_buffer: int = 2
+) -> BiosimulationsRunOutputData | dict[str, dict[str, np.ndarray | list[float]]]:
+    os.mkdir(out_dir) if not os.path.exists(out_dir) else None
+
+    # submit run
+    output_dirpaths, omex_src_dirpath = submit_omex_simulations(
+        entrypoint=biomodel_entrypoint,
+        dest_dir=out_dir,
+        simulators=simulators,
+        buffer=fetch_buffer,
+    )
+
+    # refresh status for each output
+    printc(f"> Waiting {fetch_buffer} seconds before refreshing status...\n")
+    time.sleep(fetch_buffer)
+
+    return fetch_simulator_output(output_dirpaths, omex_src_dirpath, fetch_buffer)
 
 
 def download_runs(
@@ -50,7 +80,7 @@ def download_runs(
         if run.status is not None and run.status.lower() != "succeeded":
             continue
 
-        print("> Retrieving", run.model_dump_json())
+        printc(alert="> Retrieving simulation run: ", msg=run.model_dump_json())
 
         simdir = data_manager.get_run_output_dir(run)
         if os.path.exists(simdir / "results.zip"):
@@ -63,14 +93,23 @@ def download_runs(
 
             return out_filepath
         except urllib.error.HTTPError as e:
-            print("Failure:", e)
+            printc(alert="Failure:", msg=e, error=True)
+
+
+STATUS_SCHEMA = {
+    "$run_id(str)": {
+        "status": "str",
+        "out_dir": "PathLike[str]",
+        "simulator": "Simulator"
+    }
+}
 
 
 def refresh_status(
         omex_src_dir: Path,
         out_dir: Path,
         return_status: bool = False,
-) -> None | dict[str, str]:
+) -> dict[str, dict[str, Path | str | None | Simulator]]:
     statuses = {}
     data_manager = DataManager(omex_src_dir=omex_src_dir, out_dir=out_dir)
     runs: list[SimulationRun] = data_manager.read_run_requests()
@@ -98,149 +137,12 @@ def upload_omex(
 
     for source_omex in data_manager.get_source_omex_archives():
         if source_omex.project_id in projects:
-            print(f"> project {source_omex.project_id} is already validated and published")
+            printc(f"> project {source_omex.project_id} is already validated and published")
             continue
         if project_id is not None and source_omex.project_id != project_id:
             continue
-        print(source_omex.project_id)
+        printc(source_omex.project_id, "Project ID: ")
         run_project(source_omex=source_omex, simulator=simulator, simulator_version=simulator_version, data_manager=data_manager)
-
-
-async def submit_simulator_simulation(simulator: str | tuple[str, str], dest_dir: str | Path, omex_src_dir: str | Path, buffer: int = 5) -> Path:
-    # parse simulator version
-    version = "latest"
-    if isinstance(simulator, tuple):
-        if len(simulator) == 2:
-            version = simulator[1]
-
-    # create dedicated output dir for each simulator
-    output_dest = os.path.join(dest_dir, simulator)
-    if not os.path.exists(output_dest):
-        os.mkdir(output_dest)
-    sim_output_dest_path = Path(output_dest)
-
-    # run the simulation
-    print(f"> Submitting simulation with {simulator}...\n")
-    upload_omex(
-        simulator=Simulator[f'{simulator}'],
-        simulator_version=version,
-        omex_src_dir=omex_src_dir,
-        out_dir=sim_output_dest_path,
-    )
-    print(f"Simulation submitted for {simulator}. Waiting for {buffer} seconds...\n")
-
-    # wait and then refresh status
-    time.sleep(buffer)
-    print("> Refreshing status...\n")
-    refresh_status(omex_src_dir=omex_src_dir, out_dir=sim_output_dest_path)
-
-    # record output filepath
-    # output_filepaths.append(sim_output_dest_path)
-    print(f'> Simulation submission completed for {simulator}.\n')
-    return sim_output_dest_path
-
-
-def generate_omex_outputs(entrypoint: str, dest_dir: str | Path, simulators: List[Union[Tuple[str, str], str]], buffer: int = 2):
-    fp = get_biomodel_archive(entrypoint, dest_dir)  # if not entrypoint.endswith('.omex') else entrypoint
-    omex_src_dir = Path(os.path.dirname(fp))
-    # submit a simulation for each simulator specified
-    output_filepaths = []
-    for simulator in simulators:
-        simulator_output_dirpath = asyncio.run(submit_simulator_simulation(simulator, dest_dir, omex_src_dir, buffer))
-        output_filepaths.append(simulator_output_dirpath)
-
-        # parse simulator version
-        # version = "latest"
-        # if isinstance(simulator, tuple):
-        #     if len(simulator) == 2:
-        #         version = simulator[1]
-        # # create dedicated output dir for each simulator
-        # output_dest = os.path.join(dest_dir, simulator)
-        # if not os.path.exists(output_dest):
-        #     os.mkdir(output_dest)
-        # sim_output_dest_path = Path(output_dest)
-        # # run the simulation
-        # print(f"> Submitting simulation of {entrypoint} with {simulator}...\n")
-        # upload_omex(
-        #     simulator=Simulator[f'{simulator}'],
-        #     simulator_version=version,
-        #     omex_src_dir=omex_src_dir,
-        #     out_dir=sim_output_dest_path,
-        # )
-        # print(f"Simulation submitted for {simulator}. Waiting for {buffer} seconds...\n")
-        # # wait and then refresh status
-        # time.sleep(buffer)
-        # print("> Refreshing status...\n")
-        # refresh_status(omex_src_dir=omex_src_dir, out_dir=sim_output_dest_path)
-        # # record output filepath
-        # output_filepaths.append(sim_output_dest_path)
-        # print(f'> Simulation submission completed for {simulator}.\n')
-
-    return output_filepaths, omex_src_dir
-
-
-def test_generate_omex_outputs() -> BiosimulationsRunOutputData | dict[str, dict[str, np.ndarray | list[float]]]:
-    test_biomodel_id = 'BIOMD0000000019'
-    test_biomodel_output_dir = f'./fixtures/verification_request/results/{test_biomodel_id}'
-    simulators = list(Simulator.__members__.keys())
-    # simulators = ['vcell', 'tellurium', 'copasi']
-    buffer = 2
-
-    os.mkdir(test_biomodel_output_dir) if not os.path.exists(test_biomodel_output_dir) else None
-
-    # submit run
-    output_dirpaths, omex_src_dirpath = generate_omex_outputs(
-        entrypoint=test_biomodel_id,
-        dest_dir=test_biomodel_output_dir,
-        simulators=simulators,
-        buffer=buffer,
-    )
-
-    # refresh status for each output
-    print(f"> Waiting {buffer} seconds before refreshing status...\n")
-    time.sleep(buffer)
-
-    output_data = {}
-    for output_dirpath in output_dirpaths:
-        status_updates = refresh_status(omex_src_dir=omex_src_dirpath, out_dir=output_dirpath, return_status=True)
-        # iterate over each simulation in the status updates
-        for sim_id in status_updates:
-            print(f'Simulation status update: {sim_id}')
-            status_data = status_updates[sim_id]
-            terminal_statuses = ['succeeded', 'failed']
-            simulator = status_data['simulator']
-
-            while status_data['status'].lower() not in terminal_statuses:
-                # status not ready, wait and re-fetch status
-                print(
-                    f"...{SKY_BLUE}{simulator}:{RESET} {LIGHT_PURPLE}{status_data['status']}{RESET}. Attempting another refresh..."
-                )
-                for n in range(buffer):
-                    print(n)
-                    time.sleep(1)
-                status_updates = refresh_status(omex_src_dir=omex_src_dirpath, out_dir=output_dirpath, return_status=True)
-                status_data = status_updates.get(sim_id, status_data)
-
-            # status check is complete
-            final_simulation_status = status_data['status'].lower()
-            print(f"> Status check complete for {SKY_BLUE}{simulator}:{RESET} {LIGHT_PURPLE}{final_simulation_status}{RESET}.\n")
-
-            # download files and get data
-            sim_data = {}
-            if 'failed' not in final_simulation_status:
-                print(f"> Downloading files for {SKY_BLUE}{simulator}:{RESET} {LIGHT_PURPLE}{status_data.get('status')}{RESET}.\n")
-                simulator_output_zippath = download_runs(omex_src_dir=omex_src_dirpath, out_dir=output_dirpath)
-                print(f"> Downloaded files for {simulator} at {simulator_output_zippath}")
-
-                # get the simulators output data
-                sim_data = read_simulator_output_data(simulator_output_zippath, output_dirpath)
-            else:
-                print(f'STATUS: {final_simulation_status}\n')
-
-            # assign simulator data
-            output_data[simulator] = sim_data
-
-            return output_data
 
 
 def read_simulator_output_data(simulator_output_zippath: os.PathLike[str], output_dirpath: os.PathLike[str]) -> BiosimulationsRunOutputData | dict[str, str]:
@@ -264,13 +166,114 @@ def read_simulator_output_data(simulator_output_zippath: os.PathLike[str], outpu
                     return labeled_data
 
 
+def submit_omex_simulations(
+        entrypoint: str | os.PathLike[str],
+        dest_dir: str | Path,
+        simulators: List[Union[Tuple[str, str], str]],
+        buffer: int = 2
+) -> tuple[list[Path], Path]:
+    fp = get_biomodel_archive(entrypoint, dest_dir)  # if not entrypoint.endswith('.omex') else entrypoint
+    omex_src_dir = Path(os.path.dirname(fp))
+
+    # submit a simulation for each simulator specified
+    output_filepaths = []
+    for simulator in simulators:
+
+        # parse simulator version
+        version = "latest"
+        if isinstance(simulator, tuple):
+            if len(simulator) == 2:
+                version = simulator[1]
+
+        # create dedicated output dir for each simulator
+        output_dest = os.path.join(dest_dir, simulator)
+        if not os.path.exists(output_dest):
+            os.mkdir(output_dest)
+        sim_output_dest_path = Path(output_dest)
+
+        # run the simulation
+        printc(f"> Submitting simulation of {entrypoint} with {simulator}...\n")
+        upload_omex(
+            simulator=Simulator[f'{simulator}'],
+            simulator_version=version,
+            omex_src_dir=omex_src_dir,
+            out_dir=sim_output_dest_path,
+        )
+        printc(f"Simulation submitted for {simulator}. Waiting for {buffer} seconds...\n")
+
+        # wait and then refresh status
+        time.sleep(buffer)
+        printc("> Refreshing status...\n")
+        refresh_status(omex_src_dir=omex_src_dir, out_dir=sim_output_dest_path)
+
+        # record output filepath
+        output_filepaths.append(sim_output_dest_path)
+        printc(f'> Simulation submission completed for {simulator}.\n')
+
+    return output_filepaths, omex_src_dir
+
+
+def fetch_simulator_output(output_dirpaths: list[Path], omex_src_dirpath: Path, buffer: int = 2) -> dict[str, BiosimulationsRunOutputData | dict[str, str] | dict]:
+    output_data = {}
+    for output_dirpath in output_dirpaths:
+        status_updates = refresh_status(omex_src_dir=omex_src_dirpath, out_dir=output_dirpath, return_status=True)
+
+        # iterate over each simulation in the status updates
+        for sim_id in status_updates:
+            print(f'Simulation status update: {sim_id}')
+            status_data = status_updates[sim_id]
+            terminal_statuses = ['succeeded', 'failed']
+            simulator = status_data['simulator']
+
+            while status_data['status'].lower() not in terminal_statuses:
+                # status not ready, wait and re-fetch status
+                print(
+                    f"...{SKY_BLUE}{simulator}:{RESET} {LIGHT_PURPLE}{status_data['status']}{RESET}. Attempting another refresh..."
+                )
+
+                for n in range(buffer):
+                    print(n)
+                    time.sleep(1)
+
+                status_updates = refresh_status(omex_src_dir=omex_src_dirpath, out_dir=output_dirpath, return_status=True)
+                status_data = status_updates.get(sim_id, status_data)
+
+            # status check is complete
+            final_simulation_status = status_data['status'].lower()
+            printc(alert=f"> Status check complete for {simulator}:", msg=f"{LIGHT_PURPLE}{final_simulation_status}{RESET}.\n")
+
+            # download files and get data
+            sim_data = {}
+            if 'failed' not in final_simulation_status:
+                print(f"> Run for {SKY_BLUE}{simulator}:{RESET} was successful! Now downloading simulation files...\n")
+                simulator_output_zippath = download_runs(omex_src_dir=omex_src_dirpath, out_dir=output_dirpath)
+                print(f"> Downloaded files for {SKY_BLUE}{simulator}{RESET} at {LIGHT_PURPLE}{simulator_output_zippath}{RESET}")
+                # get the simulators output data
+                sim_data = read_simulator_output_data(simulator_output_zippath, output_dirpath)
+            else:
+                printc(final_simulation_status, alert="AN ERROR OCCURRED: ", error=True)
+
+            # assign simulator data
+            output_data[simulator] = sim_data
+
+        return output_data
+
+
 # sim = 'vcell'
 # zippath = f'fixtures/verification_request/results/BIOMD0000000399/{sim}/BIOMD0000000399/{sim}/7.7.0.13/results.zip'
 # output_dirpath = f'fixtures/verification_request/results/BIOMD0000000399/{sim}/BIOMD0000000399/{sim}/7.7.0.13'
 # read_simulator_output_data(zippath, output_dirpath)
 
-simulator_outputs = test_generate_omex_outputs()
-print(simulator_outputs.keys())
+# simulators = list(sorted(Simulator.__members__.keys()))
+# simulators = simulators[int(len(simulators) / 2):len(simulators)]  # latter half of list
+simulators = ['vcell']
+buffer = 2
+test_biomodel_id = 'BIOMD0000000013'
+test_biomodel_output_dir = f'./fixtures/verification_request/results/{test_biomodel_id}'
+
+simulator_outputs = generate_omex_outputs()
+
+printc(simulator_outputs, "The final outputs")
 
 
 
