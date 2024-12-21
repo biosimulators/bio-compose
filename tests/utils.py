@@ -85,7 +85,7 @@ def get_simulator_report_data(
         report_file_path: str,
         return_as_dict: bool = True,
         dataset_label_id: str = 'sedmlDataSetLabels',
-) -> dict[str, np.ndarray] | BiosimulationsRunOutputData:
+) -> SimulatorReportData | BiosimulationsRunOutputData:
     with h5py.File(report_file_path, 'r') as sedml_group:
         # get the dataset path for reports within sedml group
         dataset_path = get_report_dataset_path(report_file_path)
@@ -100,7 +100,7 @@ def get_simulator_report_data(
 
             # get labeled data from report
             data = dataset[()]
-            return {label: data[idx] for idx, label in enumerate(labels)}
+            return SimulatorReportData({label: data[idx] for idx, label in enumerate(labels)})
         else:
             # return as datamodel
             outputs = []
