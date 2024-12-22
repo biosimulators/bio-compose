@@ -141,7 +141,7 @@ class TimeCourseDataGenerator(DataGenerator):
                 omex_src_dir=omex_src_dir,
                 out_dir=sim_output_dest_path,
             )
-            printc(f"> Simulation submitted for {simulator}. Waiting for {buffer} seconds...\n")
+            printc(f"Simulation submitted. Waiting for {buffer} seconds...", simulator)
 
             # wait and then refresh status
             time.sleep(buffer)
@@ -168,10 +168,10 @@ class TimeCourseDataGenerator(DataGenerator):
 
             # iterate over each simulation in the status updates
             for sim_id in status_updates:
-                print(f'Simulation status update: {sim_id}')
                 status_data = status_updates[sim_id]
                 terminal_statuses = ['succeeded', 'failed']
                 simulator = status_data['simulator']
+                printc(sim_id, f"{simulator}-->Fetching status updates")
 
                 while status_data['status'].lower() not in terminal_statuses:
                     # status not ready, wait and re-fetch status
@@ -180,7 +180,7 @@ class TimeCourseDataGenerator(DataGenerator):
                     el = f'{sim_id} not yet ready '
                     for _ in range(buffer):
                         el += '.'
-                        printc(el)
+                        printc(el, simulator)
                         time.sleep(1)
                     # time.sleep(buffer)
 
@@ -213,6 +213,6 @@ class TimeCourseDataGenerator(DataGenerator):
                 # assign simulator data
                 output_data[str(simulator).split('.')[-1]] = sim_data
 
-            return output_data
+        return output_data
 
 

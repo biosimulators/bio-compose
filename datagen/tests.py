@@ -33,10 +33,10 @@ BIOMODEL_IDS = [
 
 def batch_generate_omex_outputs(biomodel_ids: list[str]):
     simulators = list(sorted(Simulator.__members__.keys()))
-    # simulators = simulators[int(len(simulators) / 2):len(simulators)]  # latter half of list
-    simulators = ['vcell']
+    simulators = simulators[int(len(simulators) / 2):len(simulators)]  # latter half of list
+    # simulators = ['vcell']
 
-    buffer = 4
+    buffer = 10
     test_biomodel_id = biomodel_ids[0]
     test_biomodel_output_dir = f'./verification_request/results/{test_biomodel_id}'
 
