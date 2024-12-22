@@ -23,3 +23,4 @@ demos/.ipynb_checkpoints/
 test_archive.ipynb
 poetry.lock
 .venv
+datagen/verification_request

@@ -9,7 +9,7 @@ packages = [
     {include = "bio_compose"},
     {include = "tests"},
     {include = "biosimulations_runutils"},
-    {include = "simulation_worker"}
+    {include = "datagen"}
 ]
 
 
