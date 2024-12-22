@@ -73,7 +73,6 @@ class DataGenerator:
         # submit a simulation for each simulator specified
         output_filepaths = []
         for simulator in simulators:
-
             # parse simulator version
             version = "latest"
             if isinstance(simulator, tuple):
@@ -115,6 +114,7 @@ class DataGenerator:
     ) -> dict[str, BiosimulationsRunOutputData | dict[str, str] | dict]:
         output_data = {}
         for output_dirpath in output_dirpaths:
+            printc(output_dirpath, "Fetching data for output dirpath: ")
             status_updates = RunUtilsIO.refresh_status(omex_src_dir=omex_src_dirpath, out_dir=output_dirpath, return_status=True)
 
             # iterate over each simulation in the status updates

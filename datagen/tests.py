@@ -18,7 +18,11 @@ def test_generate_omex_outputs():
 
     simulator_outputs = data_generator.generate_omex_output_data(test_biomodel_id, test_biomodel_output_dir, simulators, buffer)
 
-    printc(simulator_outputs, "The final outputs")
+    # printc(simulator_outputs, "The final outputs")
+    printc(simulator_outputs.keys(), "The final output keys")
+    import json
+    with open(f'./verification_request/results/{test_biomodel_id}-outputs.json', 'w') as json_file:
+        json.dump(simulator_outputs, json_file, indent=4)
 
 
 if __name__ == '__main__':

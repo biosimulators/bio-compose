@@ -82,10 +82,8 @@ class IOBase(object):
         report_fp = None
         for filepath in os.listdir(output_dirpath):
             if "output" in filepath:
-                printc(filepath, " -- FILEPATH in OUTPUT DIR")
                 output_dir = os.path.join(output_dirpath, filepath)
                 for outfile in os.listdir(output_dir):
-                    printc(outfile, " -- OUTFILE")
                     out_path = os.path.join(output_dir, outfile)
                     if out_path.endswith(".h5"):
                         report_fp = out_path
@@ -142,7 +140,7 @@ class IOBase(object):
 
                 # get labeled data from report
                 data = dataset[()]
-                return SimulatorReportData({label: data[idx] for idx, label in enumerate(labels)})
+                return SimulatorReportData({label: data[idx].tolist() for idx, label in enumerate(labels)})
             else:
                 # return as datamodel
                 outputs = []
