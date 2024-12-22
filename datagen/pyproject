@@ -6,8 +6,6 @@ authors = ["Alex Patrie <alexanderpatrie@gmail.com>"]
 readme = "README.md"
 include = ["pyproject.toml"]
 packages = [
-    {include = "bio_compose"},
-    {include = "tests"},
     {include = "biosimulations_runutils"},
     {include = "datagen"}
 ]

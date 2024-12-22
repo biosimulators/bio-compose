@@ -1,10 +1,7 @@
-name: Continuous Integration
+name: Submit Simulation Batch
 
 on:
   workflow_dispatch:
-  # push:
-  #   branches:
-  #     - main
 
 jobs:
   CI:
@@ -21,9 +18,8 @@ jobs:
     - name: Install dependencies
       run: |
         python -m pip install --upgrade pip
-        python -m pip install -r requirements.datagen.txt
         pip install .
 
-    - name: Run Batch
+    - name: Test BioCompose
       run: |
-        cd datagen
+        pytest tests/main.py

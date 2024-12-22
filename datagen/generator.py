@@ -2,6 +2,7 @@ import abc
 import asyncio
 import time
 import os
+import uuid
 from tempfile import mkdtemp
 from shutil import rmtree
 from typing import *
@@ -19,11 +20,24 @@ from datagen.data_model import *
 
 __all__ = [
     "DataGenerator",
-    "TimeCourseDataGenerator"
+    "TimeCourseDataGenerator",
+    "batch_generate_omex_outputs"
 ]
 
 
 load_dotenv('../tests/.env')
+
+
+def batch_generate_omex_outputs(biomodel_ids: list[str], output_dir: str | Path, json_fp: str, simulators, buffer):
+    data_generator = TimeCourseDataGenerator()
+    for biomodel_id in biomodel_ids:
+        omex_outputs = data_generator.generate_omex_output_data(biomodel_id, output_dir, simulators, buffer, use_instance_dir=True)
+
+        printc(omex_outputs.keys(), f"{biomodel_id} --> the final output keys for {biomodel_id}")
+
+        outputfile_id = min(str(uuid.uuid4()).split('-'))
+        # json_fp = f'./verification_request/output_data/{test_biomodel_id}-outputs-{outputfile_id}.json'
+        data_generator.export_data(omex_outputs, json_fp, verbose=True)
 
 
 class DataGenerator(abc.ABC):
@@ -209,6 +223,7 @@ class TimeCourseDataGenerator(DataGenerator):
                 # run failed
                 else:
                     printc(final_simulation_status, "WARNING: ")
+                    sim_data = {"ERROR": "Simulation failed."}
 
                 # assign simulator data
                 output_data[str(simulator).split('.')[-1]] = sim_data
