@@ -1,5 +1,9 @@
+import abc
+import asyncio
 import time
 import os
+from tempfile import mkdtemp
+from shutil import rmtree
 from typing import *
 from pathlib import Path
 
@@ -15,40 +19,57 @@ from datagen.data_model import *
 
 __all__ = [
     "DataGenerator",
+    "TimeCourseDataGenerator"
 ]
 
 
 load_dotenv('../tests/.env')
 
 
-class DataGenerator:
+class DataGenerator(abc.ABC):
+    def __init__(self,
+                 out_dir: Optional[str | Path | os.PathLike[str]] = None):
+        self.out_dir = out_dir or mkdtemp(self.__repr__())
+
+    def __repr__(self):
+        return f"{self.__class__.__name__}"
+
+    def __del__(self):
+        if self.__repr__() in self.out_dir:
+            rmtree(self.out_dir)
+
+    @abc.abstractmethod
+    async def _generate(self):
+        pass
+
+
+class TimeCourseDataGenerator(DataGenerator):
     def __init__(self,
                  out_dir: Optional[str | Path | os.PathLike[str]] = None):
         """Singleton-like data generator used to generate time-series data for verification."""
-        self.out_dir = out_dir
+        super().__init__(out_dir)
+
+    def export_data(self, omex_outputs: dict[str, dict[str, np.ndarray | list[float]]], fp: os.PathLike[str] | str, verbose: bool = False):
+        import json
+        with open(fp, 'w') as json_file:
+            json.dump(omex_outputs, json_file, indent=4)
+            if verbose:
+                printc(fp, "Wrote data to JSON @")
+                print(f'EXISTS({fp}): {os.path.exists(fp)}')
 
     def generate_omex_output_data(
             self,
             biomodel_entrypoint: str | os.PathLike[str],
             out_dir: str | Path,
             simulators: list[str | tuple[str, str]],
-            fetch_buffer: int = 2
+            fetch_buffer: int = 2,
+            use_instance_dir: bool = True,
     ) -> BiosimulationsRunOutputData | dict[str, dict[str, np.ndarray | list[float]]]:
-        os.makedirs(out_dir) if not os.path.exists(out_dir) else None
-
-        # submit run
-        output_dirpaths, omex_src_dirpath = self._submit_omex_simulations(
-            entrypoint=biomodel_entrypoint,
-            dest_dir=out_dir,
-            simulators=simulators,
-            buffer=fetch_buffer,
+        dest = self.out_dir if use_instance_dir else out_dir
+        output_data = asyncio.run(
+            self._generate(biomodel_entrypoint, dest, simulators, fetch_buffer, mode="omex")
         )
-
-        # refresh status for each output
-        printc(f"> Waiting {fetch_buffer} seconds before refreshing status...\n")
-        time.sleep(fetch_buffer)
-
-        return self._fetch_simulator_outputs(output_dirpaths, omex_src_dirpath, fetch_buffer)
+        return output_data
 
     def generate_sbml_output_data(
             self,
@@ -60,7 +81,34 @@ class DataGenerator:
     ):
         pass
 
-    def _submit_omex_simulations(
+    async def _generate(
+            self,
+            biomodel_entrypoint: str | os.PathLike[str],
+            out_dir: str | Path,
+            simulators: list[str | tuple[str, str]],
+            fetch_buffer: int = 2,
+            mode: str = "omex"
+    ) -> BiosimulationsRunOutputData | dict[str, dict[str, np.ndarray | list[float]]]:
+        os.makedirs(out_dir) if not os.path.exists(out_dir) else None
+
+        # submit run
+        output_dirpaths, omex_src_dirpath = await self.submit_omex_simulations(
+            entrypoint=biomodel_entrypoint,
+            dest_dir=out_dir,
+            simulators=simulators,
+            buffer=fetch_buffer,
+        )
+
+        # refresh status for each output
+        printc(f"> Waiting {fetch_buffer} seconds before refreshing status...\n")
+        time.sleep(fetch_buffer)
+
+        # async fetch outputs
+        output_data = await self.fetch_simulator_report_outputs(output_dirpaths, omex_src_dirpath, fetch_buffer)
+
+        return output_data
+
+    async def submit_omex_simulations(
             self,
             entrypoint: str | os.PathLike[str],
             dest_dir: str | Path,
@@ -106,11 +154,12 @@ class DataGenerator:
 
         return output_filepaths, omex_src_dir
 
-    def _fetch_simulator_outputs(
+    async def fetch_simulator_report_outputs(
             self,
             output_dirpaths: list[Path],
             omex_src_dirpath: Path,
-            buffer: int = 2
+            buffer: int = 2,
+            verbose: bool = False
     ) -> dict[str, BiosimulationsRunOutputData | dict[str, str] | dict]:
         output_data = {}
         for output_dirpath in output_dirpaths:
@@ -126,8 +175,14 @@ class DataGenerator:
 
                 while status_data['status'].lower() not in terminal_statuses:
                     # status not ready, wait and re-fetch status
-                    # printc(f"\033[5m{status_data.get('status').upper()} Attempting another refresh...\033[0m\n", f'\033[5m{simulator}\033[0m')
-                    time.sleep(buffer)
+                    if verbose:
+                        printc(f"\033[5m{status_data.get('status')} Attempting another refresh...\n", f'\033[5m{simulator}')
+                    el = f'{sim_id} not yet ready '
+                    for _ in range(buffer):
+                        el += '.'
+                        printc(el)
+                        time.sleep(1)
+                    # time.sleep(buffer)
 
                     status_updates = RunUtilsIO.refresh_status(omex_src_dir=omex_src_dirpath, out_dir=output_dirpath, return_status=True)
                     status_data = status_updates.get(sim_id, status_data)
