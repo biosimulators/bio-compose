@@ -156,7 +156,7 @@ class DataGenerator:
                     printc(final_simulation_status, "WARNING: ")
 
                 # assign simulator data
-                output_data[str(simulator)] = sim_data
+                output_data[str(simulator).split('.')[-1]] = sim_data
 
             return output_data
 
