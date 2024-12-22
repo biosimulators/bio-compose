@@ -1,6 +1,0 @@
-requests-toolbelt
-toml
-seaborn
-antimony
-process-bigraph
-pytest

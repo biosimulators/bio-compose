@@ -1,12 +1,16 @@
-# This project configuration should relate only to the high level notebook api (as primary deps).
 [tool.poetry]
 name = "bio-compose"
 version = "0.8.7"
 description = "Create, execute, and introspect reproducible composite simulations of dynamic biological systems."
 authors = ["Alex Patrie <alexanderpatrie@gmail.com>"]
 readme = "README.md"
-packages = [{include = "bio_compose"}, {include = "tests"}]
 include = ["pyproject.toml"]
+packages = [
+    {include = "bio_compose"},
+    {include = "tests"},
+    {include = "biosimulations_runutils"},
+    {include = "datagen"}
+]
 
 
 [tool.poetry.scripts]
@@ -33,6 +37,10 @@ sphinx-rtd-theme = "^3.0.2"
 [tool.poetry.group.notebook.dependencies]
 ipykernel = "^6.29.5"
 jupyterlab = "^4.3.4"
+
+
+[tool.poetry.group.dev.dependencies]
+pip-autoremove = "^0.10.0"
 
 
 [tool.pytest.ini_options]
